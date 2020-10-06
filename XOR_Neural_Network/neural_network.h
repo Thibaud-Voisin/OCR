@@ -3,8 +3,10 @@
 
 #include <stdio.h>
 #include <math.h>
-#include "tools.h"
+#include <stdlib.h>
+#include <time.h>
 
+#include "tools.h"
 #endif
 
 
