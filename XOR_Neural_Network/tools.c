@@ -152,8 +152,7 @@ void Sigmo_mat(Matrix a)
 {
 	for(int i = 0;i < a.nb_column * a.nb_rows;++i)
 	{
-		double res_exp = exp(a.matrix_data[i]);
-		a.matrix_data[i] = (1/1+res_exp); 
+		a.matrix_data[i] = (1/(1+exp((-1)*a.matrix_data[i]))); 
 	}
 }
 
