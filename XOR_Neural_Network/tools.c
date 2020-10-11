@@ -82,3 +82,15 @@ Matrix Mult_mat_1(Matrix a, Matrix b)
 	
 	return res;
 }
+
+Matrix Sum_column(Matrix matrix)
+{
+	Matrix res = Init_matrix(matrix.nb_column,1);
+	
+	for(int i = 0; i < matrix.nb_rows*matrix.nb_column; ++i)
+	{
+		res.matrix_data[i%matrix.nb_column] += matrix.matrix_data[i];
+	}
+
+	return res;
+}
