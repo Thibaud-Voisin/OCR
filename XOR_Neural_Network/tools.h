@@ -24,6 +24,17 @@ void Pretty_print(Matrix matrix);
 Matrix Mult_mat_1(Matrix a, Matrix b);
 
 Matrix Sum_column(Matrix a);
+
+Matrix Transp_mat(Matrix a);
+
+Matrix Sum_bias(Matrix a, Matrix b);
+
+void Multip_factor(Matrix matrix, double a);
+
+Matrix Sum_weights(Matrix a, Matrix b);
+
+void Sigmo_mat(Matrix a);
+
+void Sigmo_mat_derivate(Matrix b);
+
 #endif
-
-

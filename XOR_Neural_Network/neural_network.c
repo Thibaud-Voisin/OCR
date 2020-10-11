@@ -4,11 +4,12 @@ int main()
 {
 	
 	srand(time(NULL));	
-	Matrix matrix = Init_matrix(5,4);
+	Matrix matrix = Init_matrix(4,4);
 	Fill_mat_rand(matrix);
 	Pretty_print(matrix);
-	Matrix res = Sum_column(matrix);
-	Pretty_print(res);
+	Sigmo_mat(matrix);
+	Pretty_print(matrix);
+
 	return 0;
 }
 

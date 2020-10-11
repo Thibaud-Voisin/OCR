@@ -1,6 +1,5 @@
 #include "tools.h"
 
-
 Matrix Init_matrix(int width,int height)
 {
 	Matrix matrix;
@@ -65,7 +64,7 @@ Matrix Mult_mat_1(Matrix a, Matrix b)
 	if (a.nb_column != b.nb_rows)
 	{
 		printf("Incompatible Matrices for multiplication");
-		exit(1);
+		exit(-1);
 	}
 	
 	Matrix res = Init_matrix(b.nb_column,a.nb_rows);
@@ -94,3 +93,79 @@ Matrix Sum_column(Matrix matrix)
 
 	return res;
 }
+
+Matrix Transp_mat(Matrix matrix)
+{
+	Matrix res = Init_matrix(matrix.nb_rows,matrix.nb_column);
+
+	for(int i = 0; i < res.nb_rows * res.nb_column; ++i)
+	{
+		res.matrix_data[i] = matrix.matrix_data[(i / res.nb_column) + ((i % res.nb_column) * res.nb_rows)];
+	}
+	
+	return res;
+}
+
+Matrix Sum_bias(Matrix a,Matrix b)
+{
+	
+	if((a.nb_column != b.nb_column) || (b.nb_rows != 1))
+	{
+		printf("Incompatible matrix in Sum_bias");
+		exit(-1);
+	}
+	
+
+	Matrix res = Init_matrix(a.nb_column,a.nb_rows);
+	
+	for(int i = 0; i < a.nb_column * a.nb_rows;++i)
+	{
+		res.matrix_data[i] = a.matrix_data[i] + b.matrix_data[i % b.nb_column];
+	}	
+	
+	return res;
+}
+
+void Multip_factor(Matrix matrix, double a)
+{
+	for(int i =0; i < matrix.nb_column * matrix.nb_rows; ++i)
+		matrix.matrix_data[i]*=a;
+}
+
+Matrix Sum_weights(Matrix a,Matrix b)
+{
+	Matrix res = Init_matrix(a.nb_column,a.nb_rows);
+
+	if((a.nb_column != b.nb_column) || (b.nb_rows != a.nb_rows))
+	{
+		printf("Incompatible matrix in Sum_weights");
+		exit(-1);
+	}
+	
+	for(int i = 0; i < a.nb_rows * a.nb_column; ++i)
+		res.matrix_data[i] = a.matrix_data[i] + b.matrix_data[i];
+
+	return res;
+}
+
+void Sigmo_mat(Matrix a)
+{
+	for(int i = 0;i < a.nb_column * a.nb_rows;++i)
+	{
+		double res_exp = exp(a.matrix_data[i]);
+		a.matrix_data[i] = (1/1+res_exp); 
+	}
+}
+
+void Sigmo_mat_derivate(Matrix a)
+{
+	for(int i = 0;i < a.nb_column * a.nb_rows;++i)
+		a.matrix_data[i] = (1 * (1 - a.matrix_data[i])); 
+}
+
+
+
+
+
+
+
