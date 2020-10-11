@@ -18,7 +18,6 @@ void Fill_mat_rand(Matrix matrix)
 {
 	int max_value = sizeof(double)*matrix.nb_column*matrix.nb_rows;
 		
-	srand(time(NULL));
 	for (int i = 0; i < max_value; ++i)
 	{
 		double rd = (double) rand() / RAND_MAX;
@@ -33,7 +32,7 @@ void Pretty_print(Matrix matrix)
 	char top[width_pretty];
 	
 	for(int i = 0;i<width_pretty;++i)
-		top[i] = '_';
+		top[i] = '-';
 
 	printf("%s\n",top);
 
@@ -59,4 +58,27 @@ void Pretty_print(Matrix matrix)
 		
 	}
 	printf("%s\n",top);
+}
+
+Matrix Mult_mat_1(Matrix a, Matrix b)
+{
+	if (a.nb_column != b.nb_rows)
+	{
+		printf("Incompatible Matrices for multiplication");
+		exit(1);
+	}
+	
+	Matrix res = Init_matrix(b.nb_column,a.nb_rows);
+
+	for(int i = 0;i < b.nb_column*a.nb_rows;++i)
+	{
+		double tmp = 0;
+		
+		for(int j = 0;j<a.nb_column;++j)
+			tmp += a.matrix_data[(i / res.nb_column + j)]*b.matrix_data[(i % res.nb_column + j*res.nb_column)];
+		
+		res.matrix_data[i]=tmp;
+	}
+	
+	return res;
 }
