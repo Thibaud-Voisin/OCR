@@ -29,7 +29,7 @@ Matrix Transp_mat(Matrix a);
 
 Matrix Sum_bias(Matrix a, Matrix b);
 
-void Multip_factor(Matrix matrix, double a);
+Matrix Multip_factor(Matrix matrix, double a);
 
 Matrix Sum_weights(Matrix a, Matrix b);
 
@@ -37,4 +37,7 @@ void Sigmo_mat(Matrix a);
 
 void Sigmo_mat_derivate(Matrix b);
 
+void Fill_mat_data(Matrix a, double b[],int size);
+
+Matrix Mult_simple(Matrix a,Matrix b);
 #endif
