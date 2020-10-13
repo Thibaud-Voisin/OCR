@@ -131,8 +131,8 @@ Matrix Multip_factor(Matrix matrix, double a)
 	Matrix res = Init_matrix(matrix.nb_column,matrix.nb_rows);
 	
 	for(int i =0; i < matrix.nb_column * matrix.nb_rows; ++i)
-		res.matrix_data[i]*=a;
-	
+		res.matrix_data[i]=matrix.matrix_data[i]*a;
+			
 	return res;
 }
 
