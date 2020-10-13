@@ -6,7 +6,9 @@ LDFLAGS = -g
 OBJ = main.o\
      pixel.o\
      grayscale.o\
-     display.o
+     display.o\
+     Binarize.o\
+     tools.o
 
 all : ${OBJ}
 	gcc ${OBJ} ${CFLAGS}

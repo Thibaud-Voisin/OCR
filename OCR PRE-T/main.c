@@ -4,6 +4,7 @@
 #include "pixel.h"
 #include "grayscale.h"
 #include "display.h"
+#include "Binarize.h"
 
 int main(int argc, char** argv)
 {
@@ -67,6 +68,7 @@ int main(int argc, char** argv)
 	SDL_RenderPresent(renderer);
 
 
+	Matrix matrix;
 
 	SDL_bool program_running = SDL_TRUE;
 	while(program_running)
@@ -79,7 +81,7 @@ int main(int argc, char** argv)
 				case SDL_KEYDOWN:
 					switch(event.key.keysym.sym)
 					{
-						case SDLK_b:
+						case SDLK_q:
 							break;
 						case SDLK_g:
 							image = grayscale(image);
@@ -88,6 +90,20 @@ int main(int argc, char** argv)
 						case SDLK_w:
 							image = blackwhite(image);
 							display_image(image, texture, renderer, rectangle);
+							continue;
+						case SDLK_b:
+							matrix = binarize_image(image);
+							printf("%d\n", matrix.nb_column);		
+							printf("%d\n", matrix.nb_rows);
+							for(int i = 0; i < matrix.nb_rows; i++)
+							{
+								for(int j = 0; j < matrix.nb_column; j++)
+								{
+									printf("%.0f",matrix.matrix_data[j + (i * matrix.nb_column)]);
+								}
+								printf("\n");
+							}
+							continue;
 						default:
 							continue;
 					}
