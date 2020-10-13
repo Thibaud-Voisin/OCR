@@ -162,7 +162,23 @@ void Sigmo_mat_derivate(Matrix a)
 		a.matrix_data[i] = (1 * (1 - a.matrix_data[i])); 
 }
 
+Matrix Mult_simple(Matrix a,Matrix b)
+{
+	if((a.nb_column != b.nb_column) || (b.nb_rows != a.nb_rows))
+	{
+		printf("Incompatible matrix in Mult_Simple");
+		exit(-1);
+	}
+	
+	
+	Matrix res = Init_matrix(a.nb_column,a.nb_rows);
 
+	for(int i = 0; i< a.nb_rows*a.nb_column;++i)
+		res.matrix_data[i] = a.matrix_data[i]*b.matrix_data[i];
+	
+	return res;
+
+}
 
 
 
