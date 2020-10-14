@@ -152,18 +152,24 @@ Matrix Sum_weights(Matrix a,Matrix b)
 	return res;
 }
 
-void Sigmo_mat(Matrix a)
+Matrix Sigmo_mat(Matrix a)
 {
+	Matrix res = Init_matrix(a.nb_column,a.nb_rows);	
+
 	for(int i = 0;i < a.nb_column * a.nb_rows;++i)
-	{
-		a.matrix_data[i] = (1/(1+exp((-1)*a.matrix_data[i]))); 
-	}
+		res.matrix_data[i] = (1/(1+exp((-1)*a.matrix_data[i]))); 
+	
+	return res;
 }
 
-void Sigmo_mat_derivate(Matrix a)
+Matrix Sigmo_mat_derivate(Matrix a)
 {
+	Matrix res = Init_matrix(a.nb_column,a.nb_rows);
+	
 	for(int i = 0;i < a.nb_column * a.nb_rows;++i)
-		a.matrix_data[i] = (1 * (1 - a.matrix_data[i])); 
+		res.matrix_data[i] = (1 * (1 - a.matrix_data[i])); 
+	
+	return res;
 }
 
 Matrix Mult_simple(Matrix a,Matrix b)
