@@ -1,6 +1,6 @@
 #include "display.h"
 
-void display_image(SDL_Surface *image, SDL_Texture *texture, SDL_Renderer *renderer, SDL_Window *window)
+void display_image(SDL_Surface *image, SDL_Texture *texture, SDL_Renderer *renderer, int height, int width)
 {
 	SDL_Rect rectangle;
 	texture = SDL_CreateTextureFromSurface(renderer, image);
@@ -9,11 +9,6 @@ void display_image(SDL_Surface *image, SDL_Texture *texture, SDL_Renderer *rende
 	{
 		exit(EXIT_FAILURE);
 	}
-
-	int width;
-	int height;
-	SDL_GetWindowSize(window, &width, &height);
-	
 
 	while(rectangle.h > (height*0.9))
 	{
