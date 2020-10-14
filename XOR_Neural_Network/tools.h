@@ -33,9 +33,9 @@ Matrix Multip_factor(Matrix matrix, double a);
 
 Matrix Sum_weights(Matrix a, Matrix b);
 
-void Sigmo_mat(Matrix a);
+Matrix Sigmo_mat(Matrix a);
 
-void Sigmo_mat_derivate(Matrix b);
+Matrix Sigmo_mat_derivate(Matrix b);
 
 void Fill_mat_data(Matrix a, double b[],int size);
 
