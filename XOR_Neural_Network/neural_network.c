@@ -27,36 +27,63 @@ int main()
 
 	Matrix hidden_bias = Init_matrix(hidden_layer_neurons,1);
 	Fill_mat_rand(hidden_bias);
+
 	Matrix output_weight = Init_matrix(output_layer_neurons,hidden_layer_neurons);
 	Fill_mat_rand(output_weight);
+
 	Matrix output_bias = Init_matrix(output_layer_neurons,1);
-	Fill_mat_rand(output_bias);	
+	Fill_mat_rand(output_bias);
+	
+	Matrix res_hidden_layer = Init_matrix(hidden_weight.nb_column,inputs.nb_rows);
+		
+	Matrix res_hidden_layer = Init_matrix(res_hidden_layer.nb_column,res_hidden_layer.nb_rows);
+
+	Matrix hidden_layer_output = Init_matrix(res_hidden_layer.nb_column,res_hidden_layer.nb_rows);
+	
+	Matrix res_output_layer = Init_matrix(output_weight.nb_column,hidden_layer_output.nb_rows);
+
+	Matrix final_res = Init_matrix(res_output_layer.nb_column,res_output_layer.nb_rows);
+
+	Matrix error_multip_factor = Init_matrix(final_res.nb_column,final_res.nb_rows);
+
+	Matrix error = Init_matrix(error_multip_factor.nb_column,error_multip_factor.nb_rows);
+
+	Matrix back_final_res_sigmo = Init_matrix(final_res.nb_column,final_res.nb_rows);
+		
+	Matrix back_final_res = Init_matrix(error.nb_column,error.nb_rows);
 
 
 	for(;nb_rep > 0;--nb_rep)
 	{
 		printf("Number of steps = %ld\n",(10000 - nb_rep));
 	
-		Matrix res_hidden_layer = Mult_mat_1(input,hidden_weight);
+		Mult_mat_1(input,hidden_weight,res_hidden_layer);
 		
-		res_hidden_layer = Sum_bias(res_hidden_layer,hidden_bias);
+		Sum_bias(res_hidden_layer,hidden_bias,res_hidden_layer);
 
-		Matrix hidden_layer_output = Sigmo_mat(res_hidden_layer);
+		Sigmo_mat(res_hidden_layer,hidden_layer_output);
 
 		
-		Matrix res_output_layer = Mult_mat_1(hidden_layer_output,output_weight);
+		Mult_mat_1(hidden_layer_output,output_weight,res_output_layer);
 		
 		res_output_layer = Sum_bias(res_output_layer,output_bias);
 		
-		Matrix final_res = Sigmo_mat(res_output_layer);
+		Sigmo_mat(res_output_layer,final_res);
 		
 
 		//BACKPROPAGATION
-		Matrix error = Sum_weights(Multip_factor(final_res,(-1)),expected_output);
-		
-		Matrix back_final_res = Mult_simple(error,Sigmo_mat(final_res));	
+		Multip_factor(final_res,(-1),error_multip_factor);
+		Sum_weights(error_multip_factor,expected_output,error);	
 
-		Matrix error_hidden_layer = Mult_mat_1(back_final_res,Transp_mat(output_weight));
+
+
+		Sigmo_mat(final_res,back_final_res_sigmo);
+		Mult_simple(error,back_final_res_sigmo,back_final_res);
+
+
+
+
+`		Matrix error_hidden_layer = Mult_mat_1(back_final_res,Transp_mat(output_weight));
 
 				
 		Matrix back_hidden_layer = Mult_simple(error_hidden_layer,Sigmo_mat_derivate(hidden_layer_output));

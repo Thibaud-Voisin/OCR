@@ -21,23 +21,23 @@ void Fill_mat_rand(Matrix matrix);
 
 void Pretty_print(Matrix matrix);
 
-Matrix Mult_mat_1(Matrix a, Matrix b);
+void Mult_mat_1(Matrix a, Matrix b, Matrix res);
 
-Matrix Sum_column(Matrix a);
+void Sum_column(Matrix a, Matrix res);
 
-Matrix Transp_mat(Matrix a);
+void Transp_mat(Matrix a, Matrix res);
 
-Matrix Sum_bias(Matrix a, Matrix b);
+void Sum_bias(Matrix a, Matrix b, Matrix res);
 
-Matrix Multip_factor(Matrix matrix, double a);
+void Multip_factor(Matrix matrix, double a, Matrix res);
 
-Matrix Sum_weights(Matrix a, Matrix b);
+void Sum_weights(Matrix a, Matrix b, Matrix res);
 
-Matrix Sigmo_mat(Matrix a);
+void Sigmo_mat(Matrix a, Matrix res);
 
-Matrix Sigmo_mat_derivate(Matrix b);
+void Sigmo_mat_derivate(Matrix b, Matrix res);
 
 void Fill_mat_data(Matrix a, double b[],int size);
 
-Matrix Mult_simple(Matrix a,Matrix b);
+void Mult_simple(Matrix a,Matrix b, Matrix res);
 #endif

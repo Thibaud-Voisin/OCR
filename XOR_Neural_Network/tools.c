@@ -59,7 +59,7 @@ void Pretty_print(Matrix matrix)
 	printf("%s\n",top);
 }
 
-Matrix Mult_mat_1(Matrix a, Matrix b)
+void Mult_mat_1(Matrix a, Matrix b,Matrix res)
 {
 	if (a.nb_column != b.nb_rows)
 	{
@@ -67,8 +67,6 @@ Matrix Mult_mat_1(Matrix a, Matrix b)
 		exit(-1);
 	}
 	
-	Matrix res = Init_matrix(b.nb_column,a.nb_rows);
-
 	for(int i = 0;i < b.nb_column*a.nb_rows;++i)
 	{
 		double tmp = 0;
@@ -78,67 +76,47 @@ Matrix Mult_mat_1(Matrix a, Matrix b)
 		
 		res.matrix_data[i]=tmp;
 	}
-	
-	return res;
 }
 
-Matrix Sum_column(Matrix matrix)
+void Sum_column(Matrix matrix, Matrix res)
 {
-	Matrix res = Init_matrix(matrix.nb_column,1);
-	
 	for(int i = 0; i < matrix.nb_rows*matrix.nb_column; ++i)
 	{
 		res.matrix_data[i%matrix.nb_column] += matrix.matrix_data[i];
 	}
-
-	return res;
 }
 
-Matrix Transp_mat(Matrix matrix)
+void Transp_mat(Matrix matrix,Matrix res)
 {
-	Matrix res = Init_matrix(matrix.nb_rows,matrix.nb_column);
 
 	for(int i = 0; i < res.nb_rows * res.nb_column; ++i)
 	{
 		res.matrix_data[i] = matrix.matrix_data[(i / res.nb_column) + ((i % res.nb_column) * res.nb_rows)];
 	}
-	
-	return res;
 }
 
-Matrix Sum_bias(Matrix a,Matrix b)
+void Sum_bias(Matrix a,Matrix b, Matrix res)
 {
-	
 	if((a.nb_column != b.nb_column) || (b.nb_rows != 1))
 	{
 		printf("Incompatible matrix in Sum_bias\n");
 		exit(-1);
 	}
 	
-
-	Matrix res = Init_matrix(a.nb_column,a.nb_rows);
-	
 	for(int i = 0; i < a.nb_column * a.nb_rows;++i)
 	{
 		res.matrix_data[i] = a.matrix_data[i] + b.matrix_data[i % b.nb_column];
 	}	
-	
-	return res;
 }
 
-Matrix Multip_factor(Matrix matrix, double a)
+void Multip_factor(Matrix matrix, double a,Matrix res)
 {
-	Matrix res = Init_matrix(matrix.nb_column,matrix.nb_rows);
-	
 	for(int i =0; i < matrix.nb_column * matrix.nb_rows; ++i)
 		res.matrix_data[i]=matrix.matrix_data[i]*a;
-			
-	return res;
 }
 
-Matrix Sum_weights(Matrix a,Matrix b)
+void Sum_weights(Matrix a,Matrix b,Matrix res)
 {
-	Matrix res = Init_matrix(a.nb_column,a.nb_rows);
 
 	if((a.nb_column != b.nb_column) || (b.nb_rows != a.nb_rows))
 	{
@@ -148,46 +126,31 @@ Matrix Sum_weights(Matrix a,Matrix b)
 	
 	for(int i = 0; i < a.nb_rows * a.nb_column; ++i)
 		res.matrix_data[i] = a.matrix_data[i] + b.matrix_data[i];
-
-	return res;
 }
 
-Matrix Sigmo_mat(Matrix a)
+void Sigmo_mat(Matrix a,Matrix res)
 {
-	Matrix res = Init_matrix(a.nb_column,a.nb_rows);	
-
 	for(int i = 0;i < a.nb_column * a.nb_rows;++i)
 		res.matrix_data[i] = (1/(1+exp((-1)*a.matrix_data[i]))); 
-	
-	return res;
 }
 
-Matrix Sigmo_mat_derivate(Matrix a)
+void Sigmo_mat_derivate(Matrix a, Matrix res)
 {
-	Matrix res = Init_matrix(a.nb_column,a.nb_rows);
 	
 	for(int i = 0;i < a.nb_column * a.nb_rows;++i)
 		res.matrix_data[i] = (1 * (1 - a.matrix_data[i])); 
-	
-	return res;
 }
 
-Matrix Mult_simple(Matrix a,Matrix b)
+void Mult_simple(Matrix a,Matrix b,Matrix res)
 {
 	if((a.nb_column != b.nb_column) || (b.nb_rows != a.nb_rows))
 	{
 		printf("Incompatible matrix in Mult_Simple\n");
 		exit(-1);
 	}
-	
-	
-	Matrix res = Init_matrix(a.nb_column,a.nb_rows);
 
 	for(int i = 0; i< a.nb_rows*a.nb_column;++i)
 		res.matrix_data[i] = a.matrix_data[i]*b.matrix_data[i];
-	
-	return res;
-
 }
 
 void Fill_mat_data(Matrix a, double b[],int size)
