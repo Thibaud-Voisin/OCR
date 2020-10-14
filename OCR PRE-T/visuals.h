@@ -3,6 +3,6 @@
 
 #include <SDL2/SDL.h>
 
-void display_buttons(SDL_Texture *button1tex, SDL_Renderer *renderer, int height);
+void display_buttons(SDL_Texture *buttonstex[], SDL_Renderer *renderer, int height, int width);
 
 #endif
