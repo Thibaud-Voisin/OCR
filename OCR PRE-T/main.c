@@ -5,6 +5,7 @@
 #include "grayscale.h"
 #include "display.h"
 #include "Binarize.h"
+#include "visuals.h"
 
 int main(int argc, char** argv)
 {
@@ -48,24 +49,18 @@ int main(int argc, char** argv)
 		return EXIT_FAILURE;
 	}
 
+	int width;
+	int height;
+	SDL_GetWindowSize(window, &width, &height);
 
-	SDL_Rect rectangle;
+	display_image(image, texture, renderer, window);
+
+	SDL_Texture *button1tex = NULL;
+
+	display_buttons(button1tex, renderer, height);
+	//SDL_Rect button2;
+	//SDL_Rect button3;
 	
-	texture = SDL_CreateTextureFromSurface(renderer, image);
-
-
-	if(SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h) != 0)
-	{
-		
-		printf("Failed QueryTexture\n");
-		return EXIT_FAILURE;
-	}
-
-	rectangle.x = (800 - rectangle.w)/2;
-	rectangle.y = (600 - rectangle.h)/2;
-
-	SDL_RenderCopy(renderer, texture, NULL, &rectangle);
-	SDL_RenderPresent(renderer);
 
 
 	Matrix matrix;
@@ -85,13 +80,14 @@ int main(int argc, char** argv)
 							break;
 						case SDLK_g:
 							image = grayscale(image);
-							display_image(image, texture, renderer, rectangle);
+							display_image(image, texture, renderer, window);
 							continue;
 						case SDLK_w:
-							image = blackwhite(image);
-							display_image(image, texture, renderer, rectangle);
-							continue;
 						case SDLK_b:
+							image = blackwhite(image);
+							display_image(image, texture, renderer, window);
+							if(event.key.keysym.sym == SDLK_w)
+								continue;
 							matrix = binarize_image(image);
 							printf("%d\n", matrix.nb_column);		
 							printf("%d\n", matrix.nb_rows);
@@ -113,12 +109,14 @@ int main(int argc, char** argv)
 				default:
 					break;
 			}
-		}
+		}	
 	}
 
+	SDL_DestroyTexture(button1tex);
 	SDL_DestroyTexture(texture);
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
+
 
 	SDL_Quit();
 

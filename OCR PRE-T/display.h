@@ -3,6 +3,6 @@
 
 #include <SDL2/SDL.h>
 
-void display_image(SDL_Surface *image, SDL_Texture *texture, SDL_Renderer *renderer, SDL_Rect rectangle);
+void display_image(SDL_Surface *image, SDL_Texture *texture, SDL_Renderer *renderer, SDL_Window *window);
 
 #endif

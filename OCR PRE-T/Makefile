@@ -8,7 +8,8 @@ OBJ = main.o\
      grayscale.o\
      display.o\
      Binarize.o\
-     tools.o
+     tools.o\
+     visuals.o
 
 all : ${OBJ}
 	gcc ${OBJ} ${CFLAGS}
