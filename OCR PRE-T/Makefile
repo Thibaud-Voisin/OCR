@@ -5,11 +5,11 @@ LDFLAGS = -g
 
 OBJ = main.o\
      pixel.o\
-     grayscale.o\
      display.o\
-     Binarize.o\
+     pre_processing.o\
      tools.o\
-     visuals.o
+     visuals.o\
+     segmentation.o
 
 all : ${OBJ}
 	gcc ${OBJ} ${CFLAGS}

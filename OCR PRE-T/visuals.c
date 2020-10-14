@@ -10,9 +10,9 @@ void display_buttons(SDL_Texture *buttonstex[], SDL_Renderer *renderer, int heig
 	SDL_Surface *button2img;
 	SDL_Surface *button3img;
 
-	button1img = SDL_LoadBMP("gray.bmp");	
-	button2img = SDL_LoadBMP("blackwhite.bmp");
-	button3img = SDL_LoadBMP("binarize.bmp");
+	button1img = SDL_LoadBMP("images/gray.bmp");	
+	button2img = SDL_LoadBMP("images/blackwhite.bmp");
+	button3img = SDL_LoadBMP("images/binarize.bmp");
 
 	buttonstex[0] = SDL_CreateTextureFromSurface(renderer, button1img);
 	buttonstex[1] = SDL_CreateTextureFromSurface(renderer, button2img);

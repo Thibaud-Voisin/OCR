@@ -2,10 +2,10 @@
 #include <stdlib.h>
 #include <SDL2/SDL.h>
 #include "pixel.h"
-#include "grayscale.h"
+#include "pre_processing.h"
 #include "display.h"
-#include "Binarize.h"
 #include "visuals.h"
+#include "segmentation.h"
 
 #define WIN_W 800
 #define WIN_H 600
@@ -75,6 +75,7 @@ int main(int argc, char** argv)
 					if(event.button.x < WIN_W/3 && event.button.x > 5 && event.button.y > WIN_H * 0.91)
 						{
 							image = grayscale(image);
+							//image = contrast(image);
 							display_image(image, texture, renderer, WIN_H, WIN_W);
 						}
 				
@@ -99,7 +100,45 @@ int main(int argc, char** argv)
 								}
 								printf("\n");
 							}
-							
+
+
+							int histo[matrix.nb_rows];
+							histoH(matrix, histo);
+						
+
+							int histo_length = sizeof(histo)/sizeof(histo[0]);
+							int InProcess = 0;
+							int nbLines = 0;
+
+							for(int i = 0; i < histo_length; i++)
+							{
+								if(histo[i] != 0 && InProcess == 0)
+								{	
+									InProcess = 1;
+									nbLines++;
+	
+								}
+		
+								if(histo[i] == 0 && InProcess == 1)
+									InProcess = 0;
+	
+							}
+	
+							printf("nbLines : %d\n", nbLines);
+
+							Matrix lines[nbLines];
+
+							printf("size of lines : %ld\n", sizeof(lines)/sizeof(lines[0]));
+
+							for(int i = 0; i < sizeof(histo)/sizeof(histo[0]); i++)
+								printf("Avant --- %d\n", histo[i]);
+
+							Seg_Lines(matrix, histo, lines);
+
+							for(int i = 0; i < sizeof(lines)/sizeof(lines[0]); i++)
+							{
+								Pretty_print(lines[i]);
+							}		
 						}
 				
 					continue;
