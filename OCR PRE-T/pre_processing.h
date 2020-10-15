@@ -7,7 +7,6 @@
 #include "pixel.h"
 #include "tools.h"
 
-
 Matrix binarize_image(SDL_Surface *image);
 
 SDL_Surface* grayscale(SDL_Surface *image);

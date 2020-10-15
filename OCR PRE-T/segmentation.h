@@ -3,8 +3,9 @@
 
 #include "tools.h"
 
-void histoH(Matrix matrix, int *histo);
 
-void Seg_Lines(Matrix matrix, int *histo, Matrix *lines);
+Array histoH(Matrix matrix);
+
+//void Seg_Lines(Matrix matrix, int *histo, Matrix *lines);
 
 #endif

@@ -60,3 +60,35 @@ void Pretty_print(Matrix matrix)
 	}
 	printf("%s\n",top);
 }
+
+Array Init_Array(int size)
+{
+	Array array;
+
+	array.size = size;
+
+	array.array_data = calloc(size, sizeof(int));
+
+	return array;
+}
+
+
+void Pretty_print_array(Array array)
+{
+	printf("----------------------\n");
+	for(int i = 0; i < array.size; i++)
+		printf("-- %d\n", array.array_data[i]);
+	printf("----------------------\n");
+}
+
+
+Matrix_Array Init_Matrix_Array(int size)
+{
+	Matrix_Array matrix_array;
+
+	matrix_array.size = size;
+
+	matrix_array.array_data = calloc(size, sizeof(int));
+
+	return matrix_array;
+}

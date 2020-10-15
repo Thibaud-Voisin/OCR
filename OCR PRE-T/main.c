@@ -102,12 +102,10 @@ int main(int argc, char** argv)
 							}
 
 
-							int histo[matrix.nb_rows];
-							histoH(matrix, histo);
-						
+							Array histo = histoH(matrix);
+							Pretty_print_array(histo);
 
-							int histo_length = sizeof(histo)/sizeof(histo[0]);
-							int InProcess = 0;
+							/*int InProcess = 0;
 							int nbLines = 0;
 
 							for(int i = 0; i < histo_length; i++)
@@ -133,12 +131,13 @@ int main(int argc, char** argv)
 							for(int i = 0; i < sizeof(histo)/sizeof(histo[0]); i++)
 								printf("Avant --- %d\n", histo[i]);
 
+							printf("-------------%ld\n", sizeof(histo)/sizeof(histo[0]));
 							Seg_Lines(matrix, histo, lines);
 
 							for(int i = 0; i < sizeof(lines)/sizeof(lines[0]); i++)
 							{
 								Pretty_print(lines[i]);
-							}		
+							}*/		
 						}
 				
 					continue;
