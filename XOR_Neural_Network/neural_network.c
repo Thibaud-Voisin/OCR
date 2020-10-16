@@ -15,7 +15,7 @@ int main()
 	Fill_mat_data(expected_output,data_expected_output,4);
 
 	
-	long nb_rep = 100000;
+	long nb_rep = 10000;
 	double precision = 0.1;
 
 	int input_layer_neurons = 2;
@@ -90,6 +90,7 @@ int main()
 	
 		Mult_mat_1(input,hidden_weight,res_hidden_layer);
 		
+		
 		Sum_bias(res_hidden_layer,hidden_bias,res_hidden_layer);
 
 		Sigmo_mat(res_hidden_layer,hidden_layer_output);
@@ -100,8 +101,6 @@ int main()
 		Sum_bias(res_output_layer,output_bias,res_output_layer);
 		
 		Sigmo_mat(res_output_layer,final_res);
-	
-		Pretty_print(final_res);	
 
 		//BACKPROPAGATION
 		Multip_factor(final_res,(-1),error_multip_factor);

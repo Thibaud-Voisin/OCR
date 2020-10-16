@@ -67,16 +67,21 @@ void Mult_mat_1(Matrix a, Matrix b,Matrix res)
 		exit(-1);
 	}
 	
-	for(int i = 0;i < b.nb_column*a.nb_rows;++i)
+	for (int i = 0; i < a.nb_rows; ++i) 
 	{
-		double tmp = 0;
-		
-		for(int j = 0;j<a.nb_column;++j)
-			tmp += a.matrix_data[(i / res.nb_column + j)]*b.matrix_data[(i % res.nb_column + j*res.nb_column)];
-		
-		res.matrix_data[i]=tmp;
-	}
+   
+    	for (int j = 0; j < b.nb_column; ++j) 
+		{
+            double sum = 0;
+        
+		    for (int k = 0; k < a.nb_column; ++k)
+                sum = sum + a.matrix_data[i * a.nb_column + k] * b.matrix_data[k * b.nb_column + j];
+         
+		   res.matrix_data[i * b.nb_column + j] = sum;
+        }
+    }
 }
+    
 
 void Sum_column(Matrix matrix, Matrix res)
 {
