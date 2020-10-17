@@ -25,28 +25,45 @@ Array histoH(Matrix matrix)
 Matrix_Array Seg_Lines(Matrix matrix, Array histo)
 {
 
-	Matrix_Array lines;
-
 	int counter = 0;
 
-	int InProcess = 0;
+	int InProcess = FALSE;
 
 	int StartIndex = 0;
 
+	int nbLines = 0;
 
-	for(int i = 0; i < sizeof(histo)/sizeof(histo[0]); i++)
+	for(int i = 0; i < histo.size; i++)
 	{
-		if(histo[i] != 0 && InProcess == FALSE)
+		if(histo.array_data[i] != 0 && InProcess == FALSE)
+		{	
+			InProcess = TRUE;
+
+			nbLines++;
+
+		}
+
+		if(histo.array_data[i] == 0 && InProcess == TRUE)
+			InProcess = FALSE;
+	}
+
+	Matrix_Array lines = Init_Matrix_Array(nbLines);
+
+	Matrix line;
+
+	for(int i = 0; i < histo.size; i++)
+	{
+		if(histo.array_data[i] != 0 && InProcess == FALSE)
 		{
 			InProcess = TRUE;
 			StartIndex = i;
 		}
 
-		if((histo[i] == 0 && InProcess == TRUE) || i == (sizeof(histo)/sizeof(histo[0])-1))
+		if((histo.array_data[i] == 0 && InProcess == TRUE) || i == (histo.size-1))
 		{
 			InProcess = FALSE;
 
-			Matrix line = Init_matrix(matrix.nb_rows, i-StartIndex);
+			line = Init_matrix(matrix.nb_rows, i-StartIndex);
 
 			for(int i = 0; i < line.nb_rows; i++)
 			{
@@ -55,8 +72,10 @@ Matrix_Array Seg_Lines(Matrix matrix, Array histo)
 					line.matrix_data[j + (i * line.nb_column)] = matrix.matrix_data[j + (i+StartIndex * matrix.nb_column)];
 				}
 			}
-			lines[counter] = line;
+			lines.array_data[counter] = line;
 			counter++;
 		}
 	}
+
+	return lines;
 }

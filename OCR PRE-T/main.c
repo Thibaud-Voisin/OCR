@@ -68,6 +68,14 @@ int main(int argc, char** argv)
 		{
 			switch(event.type)
 			{
+				case SDL_KEYDOWN:
+					switch(event.key.keysym.sym)
+					{
+						case SDLK_q:
+							program_running = SDL_FALSE;
+							break;
+					}
+					break;
 				case SDL_MOUSEBUTTONDOWN:
 				
 					printf("Clic en %dx/%dy\n", event.button.x, event.button.y);
@@ -104,42 +112,14 @@ int main(int argc, char** argv)
 
 							Array histo = histoH(matrix);
 							Pretty_print_array(histo);
+							
+							Matrix_Array lines = Seg_Lines(matrix, histo);
 
-							/*int InProcess = 0;
-							int nbLines = 0;
+							printf("number of lines : %d\n", lines.size);
 
-							for(int i = 0; i < histo_length; i++)
-							{
-								if(histo[i] != 0 && InProcess == 0)
-								{	
-									InProcess = 1;
-									nbLines++;
-	
-								}
-		
-								if(histo[i] == 0 && InProcess == 1)
-									InProcess = 0;
-	
-							}
-	
-							printf("nbLines : %d\n", nbLines);
+							Pretty_print(lines.array_data[0]);
 
-							Matrix lines[nbLines];
-
-							printf("size of lines : %ld\n", sizeof(lines)/sizeof(lines[0]));
-
-							for(int i = 0; i < sizeof(histo)/sizeof(histo[0]); i++)
-								printf("Avant --- %d\n", histo[i]);
-
-							printf("-------------%ld\n", sizeof(histo)/sizeof(histo[0]));
-							Seg_Lines(matrix, histo, lines);
-
-							for(int i = 0; i < sizeof(lines)/sizeof(lines[0]); i++)
-							{
-								Pretty_print(lines[i]);
-							}*/		
 						}
-				
 					continue;
 				case SDL_QUIT:
 					program_running = SDL_FALSE;

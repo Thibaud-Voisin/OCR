@@ -6,6 +6,6 @@
 
 Array histoH(Matrix matrix);
 
-//void Seg_Lines(Matrix matrix, int *histo, Matrix *lines);
+Matrix_Array Seg_Lines(Matrix matrix, Array histo);
 
 #endif
