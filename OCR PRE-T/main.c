@@ -74,6 +74,10 @@ int main(int argc, char** argv)
 						case SDLK_q:
 							program_running = SDL_FALSE;
 							break;
+						case SDLK_c:
+							image = contrast(image);
+							display_image(image, texture, renderer, WIN_H, WIN_W);
+							break;
 					}
 					break;
 				case SDL_MOUSEBUTTONDOWN:
@@ -83,7 +87,6 @@ int main(int argc, char** argv)
 					if(event.button.x < WIN_W/3 && event.button.x > 5 && event.button.y > WIN_H * 0.91)
 						{
 							image = grayscale(image);
-							//image = contrast(image);
 							display_image(image, texture, renderer, WIN_H, WIN_W);
 						}
 				
@@ -98,27 +101,14 @@ int main(int argc, char** argv)
 							image = blackwhite(image);
 							display_image(image, texture, renderer, WIN_H, WIN_W);
 							matrix = binarize_image(image);
-							printf("%d\n", matrix.nb_column);		
-							printf("%d\n", matrix.nb_rows);
-							for(int i = 0; i < matrix.nb_rows; i++)
-							{
-								for(int j = 0; j < matrix.nb_column; j++)
-								{
-									printf("%.0f",matrix.matrix_data[j + (i * matrix.nb_column)]);
-								}
-								printf("\n");
-							}
-
 
 							Array histo = histoH(matrix);
-							Pretty_print_array(histo);
 							
 							Matrix_Array lines = Seg_Lines(matrix, histo);
 
-							printf("number of lines : %d\n", lines.size);
+							printf("%d\n", lines.size);
 
 							Pretty_print(lines.array_data[0]);
-
 						}
 					continue;
 				case SDL_QUIT:

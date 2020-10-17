@@ -59,17 +59,18 @@ Matrix_Array Seg_Lines(Matrix matrix, Array histo)
 			StartIndex = i;
 		}
 
-		if((histo.array_data[i] == 0 && InProcess == TRUE) || i == (histo.size-1))
+		if((histo.array_data[i] == 0 || i == (histo.size-1)) && InProcess == TRUE)
 		{
 			InProcess = FALSE;
 
-			line = Init_matrix(matrix.nb_rows, i-StartIndex);
+			line = Init_matrix(matrix.nb_column, i-StartIndex);
 
-			for(int i = 0; i < line.nb_rows; i++)
+			for(int k = 0; k < line.nb_rows; k++)
 			{
 				for(int j = 0; j < line.nb_column; j++)
 				{
-					line.matrix_data[j + (i * line.nb_column)] = matrix.matrix_data[j + (i+StartIndex * matrix.nb_column)];
+					line.matrix_data[j + (k * line.nb_column)] = matrix.matrix_data[j+((k+1)*matrix.nb_column+StartIndex)];
+
 				}
 			}
 			lines.array_data[counter] = line;

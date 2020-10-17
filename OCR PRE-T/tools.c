@@ -69,7 +69,7 @@ void Pretty_print(Matrix matrix)
 	for(int i = 0; i < matrix.nb_rows; i++)
 	{
 		for(int j = 0; j < matrix.nb_column; j++)
-			printf("-- %.0f", matrix.matrix_data[i]);
+			printf("%.0f", matrix.matrix_data[j + (i * matrix.nb_column)]);
 		printf("\n");
 	}
 	printf("----------------------\n");

@@ -78,7 +78,7 @@ Matrix binarize_image(SDL_Surface *image)
 
 SDL_Surface* contrast(SDL_Surface *image)
 {
-	int contrast = 75;
+	float alpha  = 1.3;
 
 	for (int i = 0; i < image -> w; i++)
 	{
@@ -87,29 +87,30 @@ SDL_Surface* contrast(SDL_Surface *image)
 			Uint8 r,g,b;
 
 			SDL_GetRGB(get_pixel(image, i,j), image -> format, &r, &g, &b);
-		
-			float factor = (259*(contrast + 255))/(255*(259-contrast));
 
-			r = factor*(r-128)+128;
-			
-			if(r > 255)
-				r = 255;
-			if(r < 0)
-				r = 0;
-			g = factor*(g-128)+128;
-			
-			if(g > 255)
-				g = 255;
-			if(g < 0)
-				g = 0;
-			b = factor*(b-128)+128;
-			
-			if(b > 255)
-				b = 255;
-			if(b < 0)
-				b = 0;
+			int rs, gs, bs;
 
-			put_pixel(image, i,j,SDL_MapRGB(image -> format, r,g,b));
+			rs = 127 + (alpha*(r-127));
+
+			gs = 127 + (alpha*(g-127));
+
+			bs = 127 + (alpha*(b-127));
+
+			if(rs > 255)
+				rs = 255;
+			if(gs > 255)
+				gs = 255;
+			if(bs > 255)
+				bs = 255;
+
+			if(rs < 0)
+				rs = 0;
+			if(gs < 0)
+				gs = 0;
+			if(bs < 0)
+				bs = 0;
+
+			put_pixel(image, i,j,SDL_MapRGB(image -> format, rs,gs,bs));
 		}
 	}
 	return image;
