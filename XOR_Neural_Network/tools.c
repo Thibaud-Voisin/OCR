@@ -27,7 +27,7 @@ void Fill_mat_rand(Matrix matrix)
 
 void Pretty_print(Matrix matrix)
 {
-	int width_pretty = 1+(7*matrix.nb_column);
+	int width_pretty = 1+(11*matrix.nb_column);
 	char top[width_pretty];
 	
 	for(int i = 0;i<width_pretty;++i)
@@ -41,13 +41,13 @@ void Pretty_print(Matrix matrix)
 
 	for(int i = 0;i<matrix.nb_column * matrix.nb_rows;++i)
 	{	
-		sprintf(tmp,"%.4f",matrix.matrix_data[i]);
-		for (int k = 0;k<6;++k)
+		sprintf(tmp,"%.8f",matrix.matrix_data[i]);
+		for (int k = 0;k<10;++k)
 		{
 			middle[j+k] = tmp[k];
 		}
-		middle[j+6] = '|';
-		j+=7;
+		middle[j+10] = '|';
+		j+=11;
 
 		if (i%matrix.nb_column == matrix.nb_column-1)
 		{
@@ -143,7 +143,7 @@ void Sigmo_mat_derivate(Matrix a, Matrix res)
 {
 	
 	for(int i = 0;i < a.nb_column * a.nb_rows;++i)
-		res.matrix_data[i] = (1 * (1 - a.matrix_data[i])); 
+		res.matrix_data[i] = (a.matrix_data[i] * (1 - a.matrix_data[i])); 
 }
 
 void Mult_simple(Matrix a,Matrix b,Matrix res)
