@@ -78,6 +78,10 @@ int main(int argc, char** argv)
 							image = contrast(image);
 							display_image(image, texture, renderer, WIN_H, WIN_W);
 							break;
+						case SDLK_n:
+							image = noise_reduction(image);
+							display_image(image, texture, renderer, WIN_H, WIN_W);
+							break;
 					}
 					break;
 				case SDL_MOUSEBUTTONDOWN:

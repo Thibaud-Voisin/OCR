@@ -115,3 +115,53 @@ SDL_Surface* contrast(SDL_Surface *image)
 	}
 	return image;
 }
+
+SDL_Surface* noise_reduction(SDL_Surface *image)
+{
+	int pixels[5];
+
+	for(int i = 0; i < image -> w; i++)
+	{
+		for(int j = 0; j < image -> h; j++)
+		{
+			pixels[0] = get_pixel(image, i,j);
+			
+			if(i > 0)
+				pixels[1] = get_pixel(image, i-1, j);
+			else
+				pixels[1] = get_pixel(image, i, j);
+
+			if(j > 0)
+				pixels[2] = get_pixel(image, i, j-1);
+			else
+				pixels[2] = get_pixel(image, i, j);
+
+			if(i < image -> w)
+				pixels[3] = get_pixel(image, i+1, j);
+			else
+				pixels[3] = get_pixel(image, i, j);
+
+			if(j < image -> h)
+				pixels[4] = get_pixel(image, i, j+1);
+			else
+				pixels[4] = get_pixel(image, i, j);
+
+
+
+			for(int i = 0; i < 4; i++)
+			{
+				for(int j = 0; j < 4-i; j++)
+				{
+					if(pixels[j] < pixels[j+1])
+					{
+						int tmp = pixels[j];
+						pixels[j] = pixels[j+1];
+						pixels[j+1] = tmp;
+					}
+				}
+			}
+			put_pixel(image, i, j, pixels[2]);
+		}
+	}
+	return image;
+}
