@@ -4,11 +4,7 @@
 #include "pixel.h"
 #include "pre_processing.h"
 #include "display.h"
-#include "visuals.h"
 #include "segmentation.h"
-
-#define WIN_W 800
-#define WIN_H 600
 
 int main(int argc, char** argv)
 {
@@ -45,7 +41,9 @@ int main(int argc, char** argv)
 		return EXIT_FAILURE;
 	}
 
-	if (SDL_CreateWindowAndRenderer(WIN_W,WIN_H,0, &window, &renderer) != 0)
+	int WIN_W = image -> w;
+	int WIN_H = image -> h;
+	if (SDL_CreateWindowAndRenderer(WIN_W, WIN_H, 0, &window, &renderer) != 0)
 	{
 		
 		printf("Failed Creating Window and Renderer\n");
@@ -53,10 +51,6 @@ int main(int argc, char** argv)
 	}
 
 	display_image(image, texture, renderer, WIN_H, WIN_W);
-
-	SDL_Texture *buttonstex[] = {NULL, NULL, NULL};
-
-	display_buttons(buttonstex, renderer, WIN_H, WIN_W);
 
 	Matrix matrix;
 
@@ -72,36 +66,41 @@ int main(int argc, char** argv)
 					switch(event.key.keysym.sym)
 					{
 						case SDLK_q:
+
 							program_running = SDL_FALSE;
+							
 							break;
+
 						case SDLK_c:
+
 							image = contrast(image);
 							display_image(image, texture, renderer, WIN_H, WIN_W);
+							
 							break;
+
 						case SDLK_n:
+
 							image = noise_reduction(image);
 							display_image(image, texture, renderer, WIN_H, WIN_W);
+							
 							break;
-					}
-					break;
-				case SDL_MOUSEBUTTONDOWN:
-				
-					printf("Clic en %dx/%dy\n", event.button.x, event.button.y);
-				
-					if(event.button.x < WIN_W/3 && event.button.x > 5 && event.button.y > WIN_H * 0.91)
-						{
+
+						case SDLK_g:
+
 							image = grayscale(image);
 							display_image(image, texture, renderer, WIN_H, WIN_W);
-						}
-				
-					if(event.button.x < 2*WIN_W/3 && event.button.x > (WIN_W/3 + 5) && event.button.y > WIN_H * 0.91)
-						{
+							
+							break;
+
+						case SDLK_w:
+
 							image = blackwhite(image);
 							display_image(image, texture, renderer, WIN_H, WIN_W);
-						}
-				
-					if(event.button.x < WIN_W && event.button.x > (2*WIN_W/3 + 5) && event.button.y > WIN_H * 0.91)
-						{
+							
+							break;
+
+						case SDLK_b:
+
 							image = blackwhite(image);
 							display_image(image, texture, renderer, WIN_H, WIN_W);
 							matrix = binarize_image(image);
@@ -110,12 +109,15 @@ int main(int argc, char** argv)
 							
 							Matrix_Array lines = Seg_Lines(matrix, histo);
 
-							printf("%d\n", lines.size);
+							for(int i = 0; i < lines.size; i++)
+							{
+								Pretty_print(lines.array_data[i]);
+							}
 
-							Pretty_print(lines.array_data[0]);
-						}
-					continue;
-				case SDL_QUIT:
+							break;
+					}
+					break;
+			case SDL_QUIT:
 					program_running = SDL_FALSE;
 					break;
 				default:
@@ -123,10 +125,6 @@ int main(int argc, char** argv)
 			}
 		}	
 	}
-
-	SDL_DestroyTexture(buttonstex[0]);	
-	SDL_DestroyTexture(buttonstex[1]);
-	SDL_DestroyTexture(buttonstex[2]);
 
 	SDL_DestroyTexture(texture);
 	SDL_DestroyRenderer(renderer);

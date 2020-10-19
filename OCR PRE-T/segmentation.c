@@ -24,7 +24,6 @@ Array histoH(Matrix matrix)
 
 Matrix_Array Seg_Lines(Matrix matrix, Array histo)
 {
-
 	int counter = 0;
 
 	int InProcess = FALSE;
@@ -40,7 +39,6 @@ Matrix_Array Seg_Lines(Matrix matrix, Array histo)
 			InProcess = TRUE;
 
 			nbLines++;
-
 		}
 
 		if(histo.array_data[i] == 0 && InProcess == TRUE)
@@ -63,13 +61,14 @@ Matrix_Array Seg_Lines(Matrix matrix, Array histo)
 		{
 			InProcess = FALSE;
 
+			printf("diff = %d\n", i-StartIndex);
 			line = Init_matrix(matrix.nb_column, i-StartIndex);
 
 			for(int k = 0; k < line.nb_rows; k++)
 			{
 				for(int j = 0; j < line.nb_column; j++)
 				{
-					line.matrix_data[j + (k * line.nb_column)] = matrix.matrix_data[j+((k+1)*matrix.nb_column+StartIndex)];
+					line.matrix_data[j + (k * line.nb_column)] = matrix.matrix_data[j+((k+StartIndex)*matrix.nb_column)];
 
 				}
 			}

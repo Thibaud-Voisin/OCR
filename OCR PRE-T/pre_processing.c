@@ -7,15 +7,13 @@ SDL_Surface* grayscale(SDL_Surface *image)
 		for(int j = 0; j < image -> h; j++)
 		{
 			Uint8 r,g,b;
-			float tempr, tempg, tempb;
 			SDL_GetRGB(get_pixel(image, i,j), image -> format, &r, &g, &b);
-			tempr = r*0.3;
-			tempg = g*0.59;
-			tempb = b*0.11;
+			float average = r*0.3 + g*0.59 + b*0.11;
 			
-			r = tempr + tempg + tempb;
-			g = tempr + tempg + tempb;
-			b = tempr + tempg + tempb;
+			r = average;
+			g = average;
+			b = average;
+
 			put_pixel(image, i,j,SDL_MapRGB(image -> format, r,g,b));
 		}
 	}
