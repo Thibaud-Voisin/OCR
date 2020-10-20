@@ -4,7 +4,7 @@
 #define TRUE 1
 
 
-
+/*create an histogram of the number of zeros in each line of the given matrix*/
 Array histoH(Matrix matrix)
 {
 	Array histo = Init_Array(matrix.nb_rows);
@@ -22,6 +22,7 @@ Array histoH(Matrix matrix)
 	return histo;
 }
 
+/*create an histogram of the number of zeros in each column of the given matrix*/
 Array histoV(Matrix matrix)
 {
 	Array histo = Init_Array(matrix.nb_column);
@@ -39,6 +40,7 @@ Array histoV(Matrix matrix)
 	return histo;
 }
 
+/*returns the average size of one letter based on a given histogram*/
 float LetterSizeAverage(Array histov)
 {
 	int InProcess = FALSE;
@@ -61,9 +63,9 @@ float LetterSizeAverage(Array histov)
 	}
 
 	return average/nbletters;
-
 }
 
+/*Separates the matrix into lines*/
 Matrix_Array Seg_Lines(Matrix matrix, Array histo)
 {
 	int counter = 0;
@@ -74,6 +76,7 @@ Matrix_Array Seg_Lines(Matrix matrix, Array histo)
 
 	int nbLines = 0;
 
+	/*counts the number of lines it will need to separate, to have the size of the returned array*/
 	for(int i = 0; i < histo.size; i++)
 	{
 		if(histo.array_data[i] != 0 && InProcess == FALSE)
@@ -91,6 +94,7 @@ Matrix_Array Seg_Lines(Matrix matrix, Array histo)
 
 	Matrix line;
 
+	/*copies the selected line into a new matrix*/
 	for(int i = 0; i < histo.size; i++)
 	{
 		if(histo.array_data[i] != 0 && InProcess == FALSE)
@@ -121,6 +125,7 @@ Matrix_Array Seg_Lines(Matrix matrix, Array histo)
 	return lines;
 }
 
+/*same process as for lines, but vertically for words*/
 Matrix_Array Seg_Words(Matrix line, Array histov, float average)
 {
 	int counter = 0;
@@ -135,6 +140,7 @@ Matrix_Array Seg_Words(Matrix line, Array histov, float average)
 
 	average *= 0.6;
 
+	/*counts number of words, calculating the space between words to differentiate it from space between letters*/
 	for(int i = 0; i < histov.size; i++)
 	{
 		if(histov.array_data[i] != 0 && InProcess == FALSE)
@@ -201,7 +207,7 @@ Matrix_Array Seg_Words(Matrix line, Array histov, float average)
 
 
 
-
+/*same process as for words*/
 Matrix_Array Seg_Letters(Matrix word, Array histov)
 {
 	int counter = 0;
@@ -263,12 +269,16 @@ Matrix_Array Seg_Letters(Matrix word, Array histov)
 	return letters;
 }
 
+/*returning a random letter
+  soon to be replaced by neural network*/
 char RandomLetter()
 {
 	int c = rand() % 25;
 	return 'A'+c;
 }
 
+/*uses all the above functions to fully split the image into letter,
+  but keeping the format of the text*/
 void Segmentation(Matrix matrix)
 {
 	Array histov;
