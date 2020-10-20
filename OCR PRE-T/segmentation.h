@@ -6,6 +6,18 @@
 
 Array histoH(Matrix matrix);
 
-//void Seg_Lines(Matrix matrix, int *histo, Matrix *lines);
+Array histoV(Matrix matrix);
+
+float LetterSizeAverage(Array histov);
+
+Matrix_Array Seg_Lines(Matrix matrix, Array histo);
+
+Matrix_Array Seg_Words(Matrix line, Array histov, float average);
+
+Matrix_Array Seg_Letters(Matrix word, Array histov);
+
+void Segmentation(Matrix matrix);
+
+char RandomLetter();
 
 #endif

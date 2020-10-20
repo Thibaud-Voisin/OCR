@@ -7,15 +7,13 @@ SDL_Surface* grayscale(SDL_Surface *image)
 		for(int j = 0; j < image -> h; j++)
 		{
 			Uint8 r,g,b;
-			float tempr, tempg, tempb;
 			SDL_GetRGB(get_pixel(image, i,j), image -> format, &r, &g, &b);
-			tempr = r*0.3;
-			tempg = g*0.59;
-			tempb = b*0.11;
+			float average = r*0.3 + g*0.59 + b*0.11;
 			
-			r = tempr + tempg + tempb;
-			g = tempr + tempg + tempb;
-			b = tempr + tempg + tempb;
+			r = average;
+			g = average;
+			b = average;
+
 			put_pixel(image, i,j,SDL_MapRGB(image -> format, r,g,b));
 		}
 	}
@@ -78,7 +76,7 @@ Matrix binarize_image(SDL_Surface *image)
 
 SDL_Surface* contrast(SDL_Surface *image)
 {
-	int contrast = 75;
+	float alpha  = 1.3;
 
 	for (int i = 0; i < image -> w; i++)
 	{
@@ -87,29 +85,80 @@ SDL_Surface* contrast(SDL_Surface *image)
 			Uint8 r,g,b;
 
 			SDL_GetRGB(get_pixel(image, i,j), image -> format, &r, &g, &b);
-		
-			float factor = (259*(contrast + 255))/(255*(259-contrast));
 
-			r = factor*(r-128)+128;
-			
-			if(r > 255)
-				r = 255;
-			if(r < 0)
-				r = 0;
-			g = factor*(g-128)+128;
-			
-			if(g > 255)
-				g = 255;
-			if(g < 0)
-				g = 0;
-			b = factor*(b-128)+128;
-			
-			if(b > 255)
-				b = 255;
-			if(b < 0)
-				b = 0;
+			int rs, gs, bs;
 
-			put_pixel(image, i,j,SDL_MapRGB(image -> format, r,g,b));
+			rs = 127 + (alpha*(r-127));
+
+			gs = 127 + (alpha*(g-127));
+
+			bs = 127 + (alpha*(b-127));
+
+			if(rs > 255)
+				rs = 255;
+			if(gs > 255)
+				gs = 255;
+			if(bs > 255)
+				bs = 255;
+
+			if(rs < 0)
+				rs = 0;
+			if(gs < 0)
+				gs = 0;
+			if(bs < 0)
+				bs = 0;
+
+			put_pixel(image, i,j,SDL_MapRGB(image -> format, rs,gs,bs));
+		}
+	}
+	return image;
+}
+
+SDL_Surface* noise_reduction(SDL_Surface *image)
+{
+	int pixels[5];
+
+	for(int i = 0; i < image -> w; i++)
+	{
+		for(int j = 0; j < image -> h; j++)
+		{
+			pixels[0] = get_pixel(image, i,j);
+			
+			if(i > 0)
+				pixels[1] = get_pixel(image, i-1, j);
+			else
+				pixels[1] = get_pixel(image, i, j);
+
+			if(j > 0)
+				pixels[2] = get_pixel(image, i, j-1);
+			else
+				pixels[2] = get_pixel(image, i, j);
+
+			if(i < image -> w)
+				pixels[3] = get_pixel(image, i+1, j);
+			else
+				pixels[3] = get_pixel(image, i, j);
+
+			if(j < image -> h)
+				pixels[4] = get_pixel(image, i, j+1);
+			else
+				pixels[4] = get_pixel(image, i, j);
+
+
+
+			for(int i = 0; i < 4; i++)
+			{
+				for(int j = 0; j < 4-i; j++)
+				{
+					if(pixels[j] < pixels[j+1])
+					{
+						int tmp = pixels[j];
+						pixels[j] = pixels[j+1];
+						pixels[j+1] = tmp;
+					}
+				}
+			}
+			put_pixel(image, i, j, pixels[2]);
 		}
 	}
 	return image;

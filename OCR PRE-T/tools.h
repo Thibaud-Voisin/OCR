@@ -44,6 +44,14 @@ typedef struct Matrix_Array_t
 
 Matrix_Array Init_Matrix_Array(int size);
 
+typedef struct Array_Array_t
+{
+	Array *array_data;
+	
+	int size;
+}Array_Array;
+
+Array_Array Init_Array_Array(int size);
 
 #endif
 

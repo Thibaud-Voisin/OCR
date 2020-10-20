@@ -15,5 +15,6 @@ SDL_Surface* blackwhite(SDL_Surface *image);
 
 SDL_Surface* contrast(SDL_Surface *image);
 
+SDL_Surface* noise_reduction(SDL_Surface *image);
 
 #endif

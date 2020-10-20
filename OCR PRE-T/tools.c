@@ -27,7 +27,7 @@ void Fill_mat_rand(Matrix matrix)
 }
 
 
-void Pretty_print(Matrix matrix)
+/*void Pretty_print(Matrix matrix)
 {
 	int width_pretty = 1+(7*matrix.nb_column);
 	char top[width_pretty];
@@ -59,7 +59,24 @@ void Pretty_print(Matrix matrix)
 		
 	}
 	printf("%s\n",top);
+}*/
+
+
+void Pretty_print(Matrix matrix)
+{
+	printf("matrix size : %d x %d\n", matrix.nb_rows, matrix.nb_column);
+	printf("----------------------\n");
+	for(int i = 0; i < matrix.nb_rows; i++)
+	{
+		for(int j = 0; j < matrix.nb_column; j++)
+			printf("%.0f", matrix.matrix_data[j + (i * matrix.nb_column)]);
+		printf("\n");
+	}
+	printf("----------------------\n");
 }
+
+
+
 
 Array Init_Array(int size)
 {
@@ -75,6 +92,7 @@ Array Init_Array(int size)
 
 void Pretty_print_array(Array array)
 {
+	printf("size of array : %d\n", array.size);
 	printf("----------------------\n");
 	for(int i = 0; i < array.size; i++)
 		printf("-- %d\n", array.array_data[i]);
@@ -88,7 +106,19 @@ Matrix_Array Init_Matrix_Array(int size)
 
 	matrix_array.size = size;
 
-	matrix_array.array_data = calloc(size, sizeof(int));
+	matrix_array.array_data = calloc(size*sizeof(Matrix), sizeof(Matrix));
 
 	return matrix_array;
+}
+
+
+Array_Array Init_Array_Array(int size)
+{
+	Array_Array array_array;
+
+	array_array.size = size;
+
+	array_array.array_data = calloc(size*sizeof(Array), sizeof(Array));
+
+	return array_array;
 }

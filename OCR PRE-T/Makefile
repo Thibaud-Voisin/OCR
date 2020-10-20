@@ -8,7 +8,6 @@ OBJ = main.o\
      display.o\
      pre_processing.o\
      tools.o\
-     visuals.o\
      segmentation.o
 
 all : ${OBJ}
