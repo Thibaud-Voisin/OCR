@@ -92,6 +92,7 @@ Array Init_Array(int size)
 
 void Pretty_print_array(Array array)
 {
+	printf("size of array : %d\n", array.size);
 	printf("----------------------\n");
 	for(int i = 0; i < array.size; i++)
 		printf("-- %d\n", array.array_data[i]);
@@ -108,4 +109,16 @@ Matrix_Array Init_Matrix_Array(int size)
 	matrix_array.array_data = calloc(size*sizeof(Matrix), sizeof(Matrix));
 
 	return matrix_array;
+}
+
+
+Array_Array Init_Array_Array(int size)
+{
+	Array_Array array_array;
+
+	array_array.size = size;
+
+	array_array.array_data = calloc(size*sizeof(Array), sizeof(Array));
+
+	return array_array;
 }

@@ -22,6 +22,48 @@ Array histoH(Matrix matrix)
 	return histo;
 }
 
+Array histoV(Matrix matrix)
+{
+	Array histo = Init_Array(matrix.nb_column);
+
+	for(int i = 0; i < matrix.nb_column; i++)
+	{
+		for(int j = 0; j < matrix.nb_rows; j++)
+		{	
+			if(matrix.matrix_data[i + (j * matrix.nb_column)] == 0)
+			{
+				histo.array_data[i] += 1;
+			}	
+		}
+	}
+	return histo;
+}
+
+float LetterSizeAverage(Array histov)
+{
+	int InProcess = FALSE;
+
+	float average = 0;
+	int nbletters = 0;
+
+	for(int i = 0; i < histov.size; i++)
+	{
+		if(histov.array_data[i] != 0 && InProcess == FALSE)
+		{
+			InProcess = TRUE;
+			nbletters++;
+		}
+
+		if(histov.array_data[i] == 0 && InProcess == TRUE)
+			InProcess = FALSE;
+		if(InProcess == TRUE)
+			average++;
+	}
+
+	return average/nbletters;
+
+}
+
 Matrix_Array Seg_Lines(Matrix matrix, Array histo)
 {
 	int counter = 0;
@@ -78,4 +120,149 @@ Matrix_Array Seg_Lines(Matrix matrix, Array histo)
 	}
 
 	return lines;
+}
+
+Matrix_Array Seg_Words(Matrix line, Array histov, float average)
+{
+	int counter = 0;
+
+	int InProcess = FALSE;
+
+	int StartIndex = 0;
+
+	int nbWords = 0;
+
+	int nbofzeros = 0;
+
+	for(int i = 0; i < histov.size; i++)
+	{
+		if(histov.array_data[i] != 0 && InProcess == FALSE)
+		{	
+			InProcess = TRUE;
+		}
+
+		if(histov.array_data[i] != 0 && InProcess == TRUE)
+			nbofzeros = 0;
+
+		if(histov.array_data[i] == 0 && InProcess == TRUE)
+		{
+			nbofzeros++;
+			if(nbofzeros >= average || i == histov.size-1)
+			{
+				nbWords++;
+				InProcess = FALSE;
+			}
+		}
+	}
+
+	Matrix_Array words = Init_Matrix_Array(nbWords);
+
+	nbofzeros = 0;
+
+	Matrix word;
+
+	for(int i = 0; i < histov.size; i++)
+	{
+		if(histov.array_data[i] != 0 && InProcess == FALSE)
+		{
+			InProcess = TRUE;
+			StartIndex = i;
+		}
+
+		if(histov.array_data[i] != 0 && InProcess == TRUE)
+			nbofzeros = 0;
+
+		if((histov.array_data[i] == 0 || i == (histov.size-1)) && InProcess == TRUE)
+		{
+			nbofzeros++;
+			if(nbofzeros >= average || i == histov.size-1)
+			{
+
+				InProcess = FALSE;
+
+				word = Init_matrix(i-(StartIndex+nbofzeros-1), line.nb_rows);
+
+				for(int k = 0; k < word.nb_rows; k++)
+				{
+					for(int j = 0; j < word.nb_column; j++)
+					{
+						word.matrix_data[j + (k * word.nb_column)] = line.matrix_data[j+StartIndex + (k * line.nb_column)]; 
+					}
+				}
+				words.array_data[counter] = word;
+				counter++;
+			}
+		}
+	}
+
+	return words;
+}
+
+
+
+
+Matrix_Array Seg_Letters(Matrix word, Array histov)
+{
+	int counter = 0;
+
+	int InProcess = FALSE;
+
+	int StartIndex = 0;
+
+	int nbLetters = 0;
+
+	for(int i = 0; i < histov.size; i++)
+	{
+		if(histov.array_data[i] != 0 && InProcess == FALSE)
+		{	
+			InProcess = TRUE;
+		}
+
+		if((histov.array_data[i] == 0 || i == histov.size-1) && InProcess == TRUE)
+		{
+			nbLetters++;
+			InProcess = FALSE;
+		}
+	}
+
+	Matrix_Array letters = Init_Matrix_Array(nbLetters);
+
+	Matrix letter;
+
+	for(int i = 0; i < histov.size; i++)
+	{
+		if(histov.array_data[i] != 0 && InProcess == FALSE)
+		{
+			InProcess = TRUE;
+			StartIndex = i;
+		}
+
+		if((histov.array_data[i] == 0 || i == (histov.size-1)) && InProcess == TRUE)
+		{
+
+			if(i == (histov.size-1))
+				i++;
+
+			InProcess = FALSE;
+
+			letter = Init_matrix(i-StartIndex, word.nb_rows);
+
+			for(int k = 0; k < letter.nb_rows; k++)
+			{
+				for(int j = 0; j < letter.nb_column; j++)
+				{
+					letter.matrix_data[j + (k * letter.nb_column)] = word.matrix_data[j+StartIndex + (k * word.nb_column)]; 
+				}
+			}
+			letters.array_data[counter] = letter;
+			counter++;
+		}
+	}
+
+	return letters;
+}
+
+Array_Array Segmentation(Matrix matrix)
+{
+
 }

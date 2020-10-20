@@ -54,6 +54,8 @@ int main(int argc, char** argv)
 
 	Matrix matrix;
 
+	Array_Array Text;
+
 	SDL_bool program_running = SDL_TRUE;
 	while(program_running)
 	{
@@ -99,13 +101,16 @@ int main(int argc, char** argv)
 							
 							break;
 
-						case SDLK_b:
+						case SDLK_s:
 
 							image = blackwhite(image);
 							display_image(image, texture, renderer, WIN_H, WIN_W);
 							matrix = binarize_image(image);
 
-							Array histo = histoH(matrix);
+							Text = Segmentation(matrix);
+
+							printf("size of text : %d\n", Text.size);
+							/*Array histo = histoH(matrix);
 							
 							Matrix_Array lines = Seg_Lines(matrix, histo);
 
@@ -113,6 +118,29 @@ int main(int argc, char** argv)
 							{
 								Pretty_print(lines.array_data[i]);
 							}
+
+							Array histov = histoV(lines.array_data[0]);
+
+							float average = LetterSizeAverage(histov);
+
+							printf("average : %.5f\n", average);
+
+							Matrix_Array words = Seg_Words(lines.array_data[0], histov, average);
+
+							for(int i = 0; i < words.size; i++)
+							{
+								Pretty_print(words.array_data[i]);
+							}
+
+							histov = histoV(words.array_data[2]);
+
+							Matrix_Array letters = Seg_Letters(words.array_data[2], histov);
+
+							for(int i = 0; i < letters.size; i++)
+							{
+								Pretty_print(letters.array_data[i]);
+							}*/
+							
 
 							break;
 					}
