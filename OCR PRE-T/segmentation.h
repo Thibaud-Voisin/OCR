@@ -16,4 +16,8 @@ Matrix_Array Seg_Words(Matrix line, Array histov, float average);
 
 Matrix_Array Seg_Letters(Matrix word, Array histov);
 
+void Segmentation(Matrix matrix);
+
+char RandomLetter();
+
 #endif

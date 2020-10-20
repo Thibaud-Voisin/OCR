@@ -103,7 +103,6 @@ Matrix_Array Seg_Lines(Matrix matrix, Array histo)
 		{
 			InProcess = FALSE;
 
-			printf("diff = %d\n", i-StartIndex);
 			line = Init_matrix(matrix.nb_column, i-StartIndex);
 
 			for(int k = 0; k < line.nb_rows; k++)
@@ -133,6 +132,8 @@ Matrix_Array Seg_Words(Matrix line, Array histov, float average)
 	int nbWords = 0;
 
 	int nbofzeros = 0;
+
+	average *= 0.6;
 
 	for(int i = 0; i < histov.size; i++)
 	{
@@ -262,7 +263,39 @@ Matrix_Array Seg_Letters(Matrix word, Array histov)
 	return letters;
 }
 
-Array_Array Segmentation(Matrix matrix)
+char RandomLetter()
 {
+	int c = rand() % 25;
+	return 'A'+c;
+}
 
+void Segmentation(Matrix matrix)
+{
+	Array histov;
+	float average;
+	Matrix_Array words;
+	Matrix_Array letters;
+	srand(time(NULL));
+	printf("-------- Texte :\n");
+	Array histo = histoH(matrix);
+	Matrix_Array lines = Seg_Lines(matrix, histo);
+	for(int i = 0; i < lines.size; i++)
+	{
+		histov = histoV(lines.array_data[i]);
+		average = LetterSizeAverage(histov);
+		words = Seg_Words(lines.array_data[i], histov, average);
+		for(int j = 0; j < words.size; j++)
+		{
+			histov = histoV(words.array_data[j]);
+			letters = Seg_Letters(words.array_data[j], histov);
+			for(int k = 0; k < letters.size; k++)
+			{
+				char c = RandomLetter();
+				printf("%c", c);
+			}
+			printf("  ");
+		}
+		printf("\n");
+	}
+	printf("----------- Fin Texte\n");
 }
