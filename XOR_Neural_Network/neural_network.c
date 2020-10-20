@@ -15,35 +15,35 @@ int main()
 	Fill_mat_data(expected_output,data_expected_output,4);
 
 	
-	long nb_rep = 10;
-	double precision = 1;
+	long nb_rep = 10000;
+	double precision = 4;
 
 	int input_layer_neurons = 2;
 	int hidden_layer_neurons = 2;
 	int output_layer_neurons = 1; 
 
 	Matrix hidden_weight = Init_matrix(input_layer_neurons,hidden_layer_neurons);
-//	Fill_mat_rand(hidden_weight);
-	double data_hidden_weight[4] = {0.342,0.6178,0.4376,0.9499};
-	Fill_mat_data(hidden_weight,data_hidden_weight,4);
+	Fill_mat_rand(hidden_weight);
+//	double data_hidden_weight[4] = {0.42,0.6178,0.4376,0.9499};
+//	Fill_mat_data(hidden_weight,data_hidden_weight,4);
 	Pretty_print(hidden_weight);
 
 	Matrix hidden_bias = Init_matrix(hidden_layer_neurons,1);
-//	Fill_mat_rand(hidden_bias);
-	double data_hidden_bias[2] = {0.865,0.7432};
-	Fill_mat_data(hidden_bias,data_hidden_bias,2);
+	Fill_mat_rand(hidden_bias);
+//	double data_hidden_bias[2] = {0.865,0.7432};
+//	Fill_mat_data(hidden_bias,data_hidden_bias,2);
 	Pretty_print(hidden_bias);
 
 	Matrix output_weight = Init_matrix(output_layer_neurons,hidden_layer_neurons);
-//	Fill_mat_rand(output_weight);
-	double data_output_weight[2] = {0.563,0.8539};
-	Fill_mat_data(output_weight,data_output_weight,2);
+	Fill_mat_rand(output_weight);
+//	double data_output_weight[2] = {0.563,0.8539};
+//	Fill_mat_data(output_weight,data_output_weight,2);
 	Pretty_print(output_weight);
 
 	Matrix output_bias = Init_matrix(output_layer_neurons,1);
-//	Fill_mat_rand(output_bias);
-	double data_output_bias[1] = {0.4321};
-	Fill_mat_data(output_bias,data_output_bias,1);
+	Fill_mat_rand(output_bias);
+//	double data_output_bias[1] = {0.4321};
+//	Fill_mat_data(output_bias,data_output_bias,1);
 	Pretty_print(output_bias);
 
 	Matrix res_hidden_layer = Init_matrix(hidden_weight.nb_column,input.nb_rows);
@@ -100,13 +100,23 @@ int main()
 	{
 	//	printf("Number of steps = %ld\n",(10000 - nb_rep));
 		Mult_mat_1(input,hidden_weight,res_hidden_layer);
+//		printf("hidden_layer_activation\n\n");
+//		Pretty_print(res_hidden_layer);
+//		printf("bias_hidden\n\n");
+//		Pretty_print(hidden_bias);
 		Sum_bias(res_hidden_layer,hidden_bias,res_hidden_layer);
+//		printf("summed");
+//		Pretty_print(res_hidden_layer);
 		Sigmo_mat(res_hidden_layer,hidden_layer_output);
-	
+	//	printf("sigmoidfirst\n\n");
+	//	Pretty_print(hidden_layer_output);
+
 		Mult_mat_1(hidden_layer_output,output_weight,res_output_layer);
 		Sum_bias(res_output_layer,output_bias,res_output_layer);
+	//	printf("outputbias+weights\n\n");
+	//	Pretty_print(res_output_layer);
 		Sigmo_mat(res_output_layer,final_res);
-			
+	//	printf("sigmoid secpond\n\n");
 		Pretty_print(final_res);	
 		//BACKPROPAGATION
 		Multip_factor(final_res,(-1),error_multip_factor);
@@ -156,12 +166,18 @@ int main()
 		Multip_factor(hidden_weight_back_multmath,precision,hidden_weight_back_multfac);
 		Sum_weights(hidden_weight,hidden_weight_back_multfac,hidden_weight);
 			
-	
-		
+	//	printf("\n\nd_hidden_layer\n");
+	//	Pretty_print(back_hidden_layer);
+	//	printf("\n\nd_hidden_layer before\n");
+	//	Pretty_print(hidden_bias);	
 		Sum_column(back_hidden_layer,hidden_bias_back_sumcol);
+	//	printf("\n\nd_hidden_layer_sum\n");
+	//	Pretty_print(hidden_bias_back_sumcol);		
 
 		Multip_factor(hidden_bias_back_sumcol,precision,hidden_bias_back_multfact);
-		Sum_weights(hidden_bias,hidden_bias_back_multfact,hidden_bias);
+		Sum_bias(hidden_bias,hidden_bias_back_multfact,hidden_bias);
+	//	printf("\n\nhidden_bias after\n");
+	//	Pretty_print(hidden_bias);
 	}	
 	
 	return 0;

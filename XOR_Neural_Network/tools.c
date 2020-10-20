@@ -85,6 +85,8 @@ void Mult_mat_1(Matrix a, Matrix b,Matrix res)
 
 void Sum_column(Matrix matrix, Matrix res)
 {
+	for(int i = 0; i<res.nb_column*res.nb_rows;++i)
+		res.matrix_data[i]=0;
 	for(int i = 0; i < matrix.nb_rows*matrix.nb_column; ++i)
 	{
 		res.matrix_data[i%matrix.nb_column] += matrix.matrix_data[i];
