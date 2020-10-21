@@ -3,9 +3,9 @@
 Matrix Init_matrix(int width,int height)
 {
 	Matrix matrix;
-
-	matrix.matrix_data = calloc(width*height,sizeof(double));
-
+	matrix.matrix_data = malloc(width*height*sizeof(double)*8);
+	for(int i =0; i < width*height;++i)
+		matrix.matrix_data[i] = 0 ;
 	matrix.nb_column = width;
 
 	matrix.nb_rows = height;
@@ -15,6 +15,7 @@ Matrix Init_matrix(int width,int height)
 
 void Fill_mat_rand(Matrix matrix)
 {
+
 	int max_value = sizeof(double)*matrix.nb_column*matrix.nb_rows;
 		
 	for (int i = 0; i < max_value; ++i)
