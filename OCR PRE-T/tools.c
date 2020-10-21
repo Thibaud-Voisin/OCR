@@ -122,3 +122,27 @@ Array_Array Init_Array_Array(int size)
 
 	return array_array;
 }
+
+
+void wait_key_pressed()
+{
+	int i = 0;
+	SDL_Event event;
+	while(i == 0)
+	{
+		while(SDL_PollEvent(&event))
+		{
+			switch(event.type)
+			{
+				case SDL_KEYDOWN:
+					i = 1;
+					break;
+				default:
+					continue;
+			}
+			continue;
+		}
+	}
+}
+
+

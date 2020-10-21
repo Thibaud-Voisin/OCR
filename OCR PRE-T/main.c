@@ -102,8 +102,7 @@ int main(int argc, char** argv)
 
 							image = blackwhite(image);
 							matrix = binarize_image(image);
-							Segmentation(matrix, image);
-
+							Segmentation(matrix, image, texture, renderer, WIN_H, WIN_W);
 							break;
 					}
 					break;

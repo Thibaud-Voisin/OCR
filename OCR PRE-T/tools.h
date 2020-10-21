@@ -5,6 +5,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <time.h>
+#include "SDL2/SDL.h"
 
 typedef struct Matrix_t
 {
@@ -53,6 +54,7 @@ typedef struct Array_Array_t
 
 Array_Array Init_Array_Array(int size);
 
+void wait_key_pressed();
 #endif
 
 
