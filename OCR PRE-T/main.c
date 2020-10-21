@@ -106,7 +106,7 @@ int main(int argc, char** argv)
 							break;
 					}
 					break;
-			case SDL_QUIT:
+				case SDL_QUIT:
 					program_running = SDL_FALSE;
 					break;
 				default:

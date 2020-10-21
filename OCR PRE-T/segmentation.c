@@ -127,6 +127,8 @@ Matrix_Array Seg_Lines(Matrix matrix, Array histo, SDL_Surface *image, Array Lin
 			//following lines for graphic render
 			for(int x = 0; x < image -> w; x++)
 			{
+				if(StartIndex-1 < 0)
+					StartIndex++;
 				put_pixel(image, x, StartIndex-1, RED);
 				put_pixel(image, x, i, RED);
 			}
@@ -214,8 +216,18 @@ Matrix_Array Seg_Words(Matrix line, Array histov, float average, SDL_Surface *im
 				//following lines for graphic render
 				for(int y = 0; y < line.nb_rows; y++)
 				{
-					put_pixel(image, StartIndex-1, index+y, GREEN);
-					put_pixel(image, i-3, index+y, GREEN);
+					int a = StartIndex-1;
+					int b = index+y;
+					int c = i - 3;
+					if(a < 0)
+						a = 0;
+					if(b >= (image -> h))
+						b = (image -> h) - 1;
+					if(c < 0)
+						c = 0;
+
+					put_pixel(image, a, b, GREEN);
+					put_pixel(image, c, b, GREEN);
 				}
 			}
 		}
@@ -286,8 +298,18 @@ Matrix_Array Seg_Letters(Matrix word, Array histov, SDL_Surface *image, int inde
 			//following lines for graphic render
 			for(int y = 0; y < word.nb_rows; y++)
 			{
-				put_pixel(image, StartIndex+index2-1, index+y, BLUE);
-				put_pixel(image, i+index2, index+y, BLUE);
+				int a = StartIndex+index2-1;
+				int b = index+y;
+				int c = i + index2;
+				if(a < 0)
+					a = 0;
+				if(b >= (image -> h))
+					b = (image -> h) - 1;
+				if(c < 0)
+					c = 0;
+
+				put_pixel(image, a, b, BLUE);
+				put_pixel(image, c, b, BLUE);
 			}
 		}
 	}
