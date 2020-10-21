@@ -7,6 +7,7 @@
 #include <time.h>
 
 #include "tools.h"
+void Neural_network(unsigned long a,double b);
 #endif
 
 
