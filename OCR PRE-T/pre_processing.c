@@ -1,5 +1,6 @@
 #include "pre_processing.h"
 
+/*turns the given image into levels of gray, then returns it*/
 SDL_Surface* grayscale(SDL_Surface *image)
 {
 	for (int i = 0; i < image -> w; i++)
@@ -21,6 +22,7 @@ SDL_Surface* grayscale(SDL_Surface *image)
 
 }
 
+/*turns the given image into black and white only*/
 SDL_Surface* blackwhite(SDL_Surface *image)
 {
 	for (int i = 0; i < image -> w; i++)
@@ -31,7 +33,7 @@ SDL_Surface* blackwhite(SDL_Surface *image)
 
 			SDL_GetRGB(get_pixel(image, i,j), image -> format, &r, &g, &b);
 			
-			if((r+g+b)/3 > 127)
+			if((r+g+b)/3 > 127) /*if the color is closer to white, it turns white, else black*/
 			{
 				r = 255;
 				g = 255;
@@ -51,7 +53,7 @@ SDL_Surface* blackwhite(SDL_Surface *image)
 }
 
 
-
+/*Create a Matrix from a black and white image : black pixels are zeros, whites are ones*/
 Matrix binarize_image(SDL_Surface *image)
 {
 	int width = image -> w;
@@ -73,10 +75,10 @@ Matrix binarize_image(SDL_Surface *image)
 	return matrix;
 }
 
-
+/*Increase the contrast of the given image : bright pixels becomes brighter, and darks darker*/
 SDL_Surface* contrast(SDL_Surface *image)
 {
-	float alpha  = 1.3;
+	float alpha  = 1.3; /*coefficient of contrast*/
 
 	for (int i = 0; i < image -> w; i++)
 	{
@@ -87,13 +89,17 @@ SDL_Surface* contrast(SDL_Surface *image)
 			SDL_GetRGB(get_pixel(image, i,j), image -> format, &r, &g, &b);
 
 			int rs, gs, bs;
+		
+			/*remove 127 to all rbg components, so that if they are dark, they become negative.
+			  that way, multiplying by alpha will increase the positive, and reduce the negative*/
 
-			rs = 127 + (alpha*(r-127));
+			rs = 127 + (alpha*(r-127)); 
 
 			gs = 127 + (alpha*(g-127));
 
 			bs = 127 + (alpha*(b-127));
 
+			/*keeping rgb components within bounderies*/
 			if(rs > 255)
 				rs = 255;
 			if(gs > 255)
@@ -114,6 +120,7 @@ SDL_Surface* contrast(SDL_Surface *image)
 	return image;
 }
 
+/*removing small noise -> isolated pixels that are of no importance*/
 SDL_Surface* noise_reduction(SDL_Surface *image)
 {
 	int pixels[5];
@@ -122,6 +129,7 @@ SDL_Surface* noise_reduction(SDL_Surface *image)
 	{
 		for(int j = 0; j < image -> h; j++)
 		{
+			/*putting into an array all the direct neighboors of the pixel*/
 			pixels[0] = get_pixel(image, i,j);
 			
 			if(i > 0)
@@ -145,7 +153,7 @@ SDL_Surface* noise_reduction(SDL_Surface *image)
 				pixels[4] = get_pixel(image, i, j);
 
 
-
+			/*sorting the array*/
 			for(int i = 0; i < 4; i++)
 			{
 				for(int j = 0; j < 4-i; j++)
@@ -158,6 +166,9 @@ SDL_Surface* noise_reduction(SDL_Surface *image)
 					}
 				}
 			}
+
+			/*replace the current pixel by the median pixel of his neighboors*/
+
 			put_pixel(image, i, j, pixels[2]);
 		}
 	}

@@ -1,5 +1,6 @@
 #include "display.h"
 
+/*function displays the given image if there is no problem converting it into a texture, which should never happen*/
 void display_image(SDL_Surface *image, SDL_Texture *texture, SDL_Renderer *renderer, int height, int width)
 {
 	SDL_Rect rectangle;
