@@ -3,6 +3,10 @@
 #define FALSE 0
 #define TRUE 1
 
+#define RED 16580620
+#define GREEN 1636389
+#define BLUE 459007
+
 
 /*create an histogram of the number of zeros in each line of the given matrix*/
 Array histoH(Matrix matrix)
@@ -66,7 +70,7 @@ float LetterSizeAverage(Array histov)
 }
 
 /*Separates the matrix into lines*/
-Matrix_Array Seg_Lines(Matrix matrix, Array histo)
+Matrix_Array Seg_Lines(Matrix matrix, Array histo, SDL_Surface *image, Array LinesIndex)
 {
 	int counter = 0;
 
@@ -118,7 +122,14 @@ Matrix_Array Seg_Lines(Matrix matrix, Array histo)
 				}
 			}
 			lines.array_data[counter] = line;
+			LinesIndex.array_data[counter] = StartIndex;
 			counter++;
+			//following lines for graphic render
+			for(int x = 0; x < image -> w; x++)
+			{
+				put_pixel(image, x, StartIndex-1, RED);
+				put_pixel(image, x, i, RED);
+			}
 		}
 	}
 
@@ -126,7 +137,7 @@ Matrix_Array Seg_Lines(Matrix matrix, Array histo)
 }
 
 /*same process as for lines, but vertically for words*/
-Matrix_Array Seg_Words(Matrix line, Array histov, float average)
+Matrix_Array Seg_Words(Matrix line, Array histov, float average, SDL_Surface *image, int index, Array WordsIndex)
 {
 	int counter = 0;
 
@@ -197,7 +208,15 @@ Matrix_Array Seg_Words(Matrix line, Array histov, float average)
 					}
 				}
 				words.array_data[counter] = word;
+				WordsIndex.array_data[counter] = StartIndex;
 				counter++;
+
+				//following lines for graphic render
+				for(int y = 0; y < line.nb_rows; y++)
+				{
+					put_pixel(image, StartIndex-1, index+y, GREEN);
+					put_pixel(image, i-2, index+y, GREEN);
+				}
 			}
 		}
 	}
@@ -208,7 +227,7 @@ Matrix_Array Seg_Words(Matrix line, Array histov, float average)
 
 
 /*same process as for words*/
-Matrix_Array Seg_Letters(Matrix word, Array histov)
+Matrix_Array Seg_Letters(Matrix word, Array histov, SDL_Surface *image, int index, int index2)
 {
 	int counter = 0;
 
@@ -263,6 +282,13 @@ Matrix_Array Seg_Letters(Matrix word, Array histov)
 			}
 			letters.array_data[counter] = letter;
 			counter++;
+
+			//following lines for graphic render
+			for(int y = 0; y < word.nb_rows; y++)
+			{
+				put_pixel(image, StartIndex+index2, index+y, BLUE);
+				put_pixel(image, i+index2, index+y, BLUE);
+			}
 		}
 	}
 
@@ -279,7 +305,7 @@ char RandomLetter()
 
 /*uses all the above functions to fully split the image into letter,
   but keeping the format of the text*/
-void Segmentation(Matrix matrix)
+void Segmentation(Matrix matrix, SDL_Surface *image)
 {
 	Array histov;
 	float average;
@@ -288,16 +314,18 @@ void Segmentation(Matrix matrix)
 	srand(time(NULL));
 	printf("-------- Texte :\n");
 	Array histo = histoH(matrix);
-	Matrix_Array lines = Seg_Lines(matrix, histo);
+	Array LinesIndex = Init_Array(histo.size);
+	Matrix_Array lines = Seg_Lines(matrix, histo, image, LinesIndex);
 	for(int i = 0; i < lines.size; i++)
 	{
 		histov = histoV(lines.array_data[i]);
 		average = LetterSizeAverage(histov);
-		words = Seg_Words(lines.array_data[i], histov, average);
+		Array WordsIndex = Init_Array(histov.size);
+		words = Seg_Words(lines.array_data[i], histov, average, image, LinesIndex.array_data[i], WordsIndex);
 		for(int j = 0; j < words.size; j++)
 		{
 			histov = histoV(words.array_data[j]);
-			letters = Seg_Letters(words.array_data[j], histov);
+			letters = Seg_Letters(words.array_data[j], histov, image, LinesIndex.array_data[i], WordsIndex.array_data[j]);
 			for(int k = 0; k < letters.size; k++)
 			{
 				char c = RandomLetter();
@@ -307,5 +335,9 @@ void Segmentation(Matrix matrix)
 		}
 		printf("\n");
 	}
+	free(words.array_data);
+	free(letters.array_data);
+	free(histo.array_data);
+	free(lines.array_data);
 	printf("----------- Fin Texte\n");
 }

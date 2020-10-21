@@ -2,6 +2,8 @@
 #define SEGMENTATION_H
 
 #include "tools.h"
+#include "SDL2/SDL.h"
+#include "pixel.h"
 
 
 Array histoH(Matrix matrix);
@@ -10,13 +12,13 @@ Array histoV(Matrix matrix);
 
 float LetterSizeAverage(Array histov);
 
-Matrix_Array Seg_Lines(Matrix matrix, Array histo);
+Matrix_Array Seg_Lines(Matrix matrix, Array histo, SDL_Surface *image, Array LinesIndex);
 
-Matrix_Array Seg_Words(Matrix line, Array histov, float average);
+Matrix_Array Seg_Words(Matrix line, Array histov, float average, SDL_Surface *image, int index, Array WordsIndex);
 
-Matrix_Array Seg_Letters(Matrix word, Array histov);
+Matrix_Array Seg_Letters(Matrix word, Array histov, SDL_Surface *image, int index, int index2);
 
-void Segmentation(Matrix matrix);
+void Segmentation(Matrix matrix, SDL_Surface *image);
 
 char RandomLetter();
 
