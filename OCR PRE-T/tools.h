@@ -55,6 +55,5 @@ typedef struct Array_Array_t
 Array_Array Init_Array_Array(int size);
 
 void wait_key_pressed();
+
 #endif
-
-
