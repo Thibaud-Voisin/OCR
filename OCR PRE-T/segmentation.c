@@ -338,6 +338,7 @@ void Segmentation(Matrix matrix, SDL_Surface *image, SDL_Texture *texture, SDL_R
 	Array histo = histoH(matrix);
 	Array LinesIndex = Init_Array(histo.size);
 	Matrix_Array lines = Seg_Lines(matrix, histo, image, LinesIndex);
+	image = contrast(image);
 	display_image(image, texture, renderer, height, width);
 	wait_key_pressed();
 	for(int i = 0; i < lines.size; i++)
@@ -347,6 +348,7 @@ void Segmentation(Matrix matrix, SDL_Surface *image, SDL_Texture *texture, SDL_R
 		Array WordsIndex = Init_Array(histov.size);
 		words = Seg_Words(lines.array_data[i], histov, average, image, LinesIndex.array_data[i], WordsIndex);
 	}
+	image = contrast(image);
 	display_image(image, texture, renderer, height, width);
 	wait_key_pressed();
 	for(int i = 0; i < lines.size; i++)
@@ -368,6 +370,7 @@ void Segmentation(Matrix matrix, SDL_Surface *image, SDL_Texture *texture, SDL_R
 		}
 		printf("\n");
 	}
+	image = contrast(image);
 	free(words.array_data);
 	free(letters.array_data);
 	free(histo.array_data);

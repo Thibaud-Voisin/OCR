@@ -5,6 +5,7 @@
 #include "SDL2/SDL.h"
 #include "pixel.h"
 #include "display.h"
+#include "pre_processing.h"
 
 Array histoH(Matrix matrix);
 
