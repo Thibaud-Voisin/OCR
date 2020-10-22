@@ -2,6 +2,9 @@
 
 int main()
 {
+	srand(time(NULL));	
+
+
 //	printf("Enter the number of training\n");
 	unsigned long nb_rep = 100000;
 //	scanf("%lu",&nb_rep);

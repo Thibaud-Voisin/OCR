@@ -2,8 +2,6 @@
 
 void Neural_network(unsigned long rep,double pres)
 {
-	srand(time(NULL));	
-
 	Matrix input = Init_matrix(2,4);
 	double data_input[8] = {0,0,0,1,1,0,1,1};
 	Fill_mat_data(input,data_input,8);
@@ -23,10 +21,8 @@ void Neural_network(unsigned long rep,double pres)
 
 	Matrix hidden_weight = Init_matrix(hidden_layer_neurons,input_layer_neurons);
 	Fill_mat_rand(hidden_weight);
-	printf("d");
 	Matrix output_weight = Init_matrix(output_layer_neurons,hidden_layer_neurons);
 	Fill_mat_rand(output_weight);
-	printf("df");
 
 	Matrix hidden_bias = Init_matrix(hidden_layer_neurons,1);
 	Fill_mat_rand(hidden_bias);
