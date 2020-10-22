@@ -218,7 +218,7 @@ Matrix_Array Seg_Words(Matrix line, Array histov, float average, SDL_Surface *im
 				{
 					int a = StartIndex-1;
 					int b = index+y;
-					int c = i - 3;
+					int c = i - nbofzeros+1;
 					if(a < 0)
 						a = 0;
 					if(b >= (image -> h))
