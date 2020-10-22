@@ -29,14 +29,19 @@ void Fill_mat_rand(Matrix matrix)
 void Pretty_print(Matrix matrix)
 {
 	int width_pretty = 1+(11*matrix.nb_column);
-	char top[width_pretty];
 	
-	for(int i = 0;i<width_pretty;++i)
-		top[i] = '-';
+	char *top=(char *) calloc(width_pretty+1,sizeof(char));
+	
+	memset(top, '-', width_pretty);	
+	
+	char *topmem = top;
 
-	printf("%s\n",top);
+	while(*topmem!='\0')
+        printf("%c",*topmem++);
+	printf("\n");
 
-	char middle[width_pretty];
+	char *middle=(char *) calloc(width_pretty+1,sizeof(char));
+	
 	int j = 0;
 	char tmp[15];
 
@@ -45,7 +50,7 @@ void Pretty_print(Matrix matrix)
 		sprintf(tmp,"%.8f",matrix.matrix_data[i]);
 		for (int k = 0;k<10;++k)
 		{
-			middle[j+k] = tmp[k];
+			memset((middle+j+k),tmp[k],1);	
 		}
 		middle[j+10] = '|';
 		j+=11;
@@ -57,7 +62,10 @@ void Pretty_print(Matrix matrix)
 		}
 		
 	}
-	printf("%s\n",top);
+	while(*top!='\0')
+        printf("%c",*top++);
+	printf("\n");
+
 }
 
 void Mult_mat_1(Matrix a, Matrix b,Matrix res)

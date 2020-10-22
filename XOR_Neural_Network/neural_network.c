@@ -2,8 +2,6 @@
 
 void Neural_network(unsigned long rep,double pres)
 {
-	srand(time(NULL));	
-
 	Matrix input = Init_matrix(2,4);
 	double data_input[8] = {0,0,0,1,1,0,1,1};
 	Fill_mat_data(input,data_input,8);
