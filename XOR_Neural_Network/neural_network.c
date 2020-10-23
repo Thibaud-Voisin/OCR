@@ -6,7 +6,7 @@ Neural_network Init_neural_network(Matrix input, int input_layer_neurons, int hi
 
 	N_n.hidden_weight = Init_matrix(hidden_layer_neurons,input_layer_neurons);
 	Fill_mat_rand(N_n.hidden_weight);
-	Pretty_print(N_n.hidden_weight);
+//	Pretty_print(N_n.hidden_weight);
 	N_n.output_weight = Init_matrix(output_layer_neurons,hidden_layer_neurons);
 	Fill_mat_rand(N_n.output_weight);
 
