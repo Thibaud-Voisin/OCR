@@ -317,8 +317,10 @@ void Segmentation(Matrix matrix, SDL_Surface *image, SDL_Texture *texture, SDL_R
 {
 	Array histov;
 	float average;
+
 	Matrix_Array words = Init_Matrix_Array(0);
 	Matrix_Array letters = Init_Matrix_Array(0);
+
 	free(words.array_data);
 	free(letters.array_data);
 
@@ -329,7 +331,9 @@ void Segmentation(Matrix matrix, SDL_Surface *image, SDL_Texture *texture, SDL_R
 	Array histo = histoH(matrix);
 	Array LinesIndex = Init_Array(histo.size);
 	Array WordsIndex = Init_Array(0);
+	
 	free(WordsIndex.array_data);
+	
 	Matrix_Array lines = Seg_Lines(matrix, histo, image, LinesIndex);
 
 	//next lines for graphic render
