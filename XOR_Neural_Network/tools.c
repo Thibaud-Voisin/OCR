@@ -34,10 +34,11 @@ void Pretty_print(Matrix matrix)
 	
 	memset(top, '-', width_pretty);	
 	
-	char *topmem = top;
+	int top_i = 0;
+	int top_j = 0;
 
-	while(*topmem!='\0')
-        printf("%c",*topmem++);
+	while(*(top + top_i)!='\0')
+        printf("%c",*(top + top_i++));
 	printf("\n");
 
 	char *middle=(char *) calloc(width_pretty+1,sizeof(char));
@@ -62,10 +63,12 @@ void Pretty_print(Matrix matrix)
 		}
 		
 	}
-	while(*top!='\0')
-        printf("%c",*top++);
+	while(*(top + top_j)!='\0')
+        printf("%c",*(top + top_j++));
 	printf("\n");
-
+	
+	free(middle);
+	free(top);
 }
 
 void Mult_mat_1(Matrix a, Matrix b,Matrix res)
