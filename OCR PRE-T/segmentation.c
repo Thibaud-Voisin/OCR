@@ -113,13 +113,10 @@ SDL_Surface* DrawLine(SDL_Surface *image, int i, int StartIndex)
 
 
 
-SDL_Surface* DrawWordSep(SDL_Surface *image, int i, int StartIndex, int index, int rows, int nbofzeros)
+SDL_Surface* DrawSep(SDL_Surface *image, int a, int b, int c, int COLOR, int rows)
 {
 	for(int y = 0; y < rows; y++)
 	{
-		int a = StartIndex-1;
-		int b = index+y;
-		int c = i - nbofzeros+1;
 		if(a < 0)
 			a = 0;
 		if(b >= (image -> h))
@@ -127,40 +124,12 @@ SDL_Surface* DrawWordSep(SDL_Surface *image, int i, int StartIndex, int index, i
 		if(c < 0)
 			c = 0;
 
-		put_pixel(image, a, b, GREEN);
-		put_pixel(image, c, b, GREEN);
+		put_pixel(image, a, b+y, COLOR);
+		put_pixel(image, c, b+y, COLOR);
 	}
 	return image;
 
 }
-
-
-SDL_Surface* DrawLetterSep(SDL_Surface *image, int i, int StartIndex, int index, int index2, int rows)
-{
-	for(int y = 0; y < rows; y++)
-	{
-		int a = StartIndex+index2-1;
-		int b = index+y;
-		int c = i + index2;
-		if(a < 0)
-			a = 0;
-		if(b >= (image -> h))
-			b = (image -> h) - 1;
-		if(c < 0)
-			c = 0;
-
-		put_pixel(image, a, b, BLUE);
-		put_pixel(image, c, b, BLUE);
-	}
-
-	return image;
-}
-
-
-
-
-
-
 
 
 /*Separates the matrix into lines*/
@@ -193,16 +162,13 @@ Matrix_Array Seg_Lines(Matrix matrix, Array histo, SDL_Surface *image, Array Lin
 
 			line = Init_matrix(matrix.nb_column, i-StartIndex);
 
-			for(int k = 0; k < line.nb_rows; k++)
-			{
-				for(int j = 0; j < line.nb_column; j++)
-				{
-					line.matrix_data[j + (k * line.nb_column)] = matrix.matrix_data[j+((k+StartIndex)*matrix.nb_column)];
+			//copies the selected part of matrix into line
+			CopyMatrix(matrix, line, 0, StartIndex);
 
-				}
-			}
 			lines.array_data[counter] = line;
+
 			LinesIndex.array_data[counter] = StartIndex;
+			
 			counter++;
 
 			//for visual render
@@ -226,37 +192,13 @@ Matrix_Array Seg_Words(Matrix line, Array histov, float average, SDL_Surface *im
 
 	int StartIndex = 0;
 
-	int nbWords = 0;
-
 	int nbofzeros = 0;
 
 	average *= 0.6;
 
-	/*counts number of words, calculating the space between words to differentiate it from space between letters*/
-	for(int i = 0; i < histov.size; i++)
-	{
-		if(histov.array_data[i] != 0 && InProcess == FALSE)
-		{	
-			InProcess = TRUE;
-		}
-
-		if(histov.array_data[i] != 0 && InProcess == TRUE)
-			nbofzeros = 0;
-
-		if(histov.array_data[i] == 0 && InProcess == TRUE)
-		{
-			nbofzeros++;
-			if(nbofzeros >= average || i == histov.size-1)
-			{
-				nbWords++;
-				InProcess = FALSE;
-			}
-		}
-	}
+	int nbWords = CountWords(histov, average);
 
 	Matrix_Array words = Init_Matrix_Array(nbWords);
-
-	nbofzeros = 0;
 
 	Matrix word;
 
@@ -279,21 +221,17 @@ Matrix_Array Seg_Words(Matrix line, Array histov, float average, SDL_Surface *im
 
 				InProcess = FALSE;
 
-				word = Init_matrix(i-(StartIndex+nbofzeros-1), line.nb_rows);
+				word = Init_matrix(i-(StartIndex+nbofzeros-2), line.nb_rows);
 
-				for(int k = 0; k < word.nb_rows; k++)
-				{
-					for(int j = 0; j < word.nb_column; j++)
-					{
-						word.matrix_data[j + (k * word.nb_column)] = line.matrix_data[j+StartIndex + (k * line.nb_column)]; 
-					}
-				}
+				//copies the selected part of line into word
+				CopyMatrix(line, word, StartIndex, 0);
+
 				words.array_data[counter] = word;
 				WordsIndex.array_data[counter] = StartIndex;
 				counter++;
 
 				//next line for visual render
-				image = DrawWordSep(image, i, StartIndex, index, line.nb_rows, nbofzeros);
+				image = DrawSep(image, StartIndex-1, index, i-nbofzeros+1, GREEN, line.nb_rows);
 			}
 		}
 	}
@@ -315,22 +253,8 @@ Matrix_Array Seg_Letters(Matrix word, Array histov, SDL_Surface *image, int inde
 
 	int StartIndex = 0;
 
-	int nbLetters = 0;
-
-	for(int i = 0; i < histov.size; i++)
-	{
-		if(histov.array_data[i] != 0 && InProcess == FALSE)
-		{	
-			InProcess = TRUE;
-		}
-
-		if((histov.array_data[i] == 0 || i == histov.size-1) && InProcess == TRUE)
-		{
-			nbLetters++;
-			InProcess = FALSE;
-		}
-	}
-
+	int nbLetters = CountLetters(histov);
+	
 	Matrix_Array letters = Init_Matrix_Array(nbLetters);
 
 	Matrix letter;
@@ -353,18 +277,15 @@ Matrix_Array Seg_Letters(Matrix word, Array histov, SDL_Surface *image, int inde
 
 			letter = Init_matrix(i-StartIndex, word.nb_rows);
 
-			for(int k = 0; k < letter.nb_rows; k++)
-			{
-				for(int j = 0; j < letter.nb_column; j++)
-				{
-					letter.matrix_data[j + (k * letter.nb_column)] = word.matrix_data[j+StartIndex + (k * word.nb_column)]; 
-				}
-			}
+			//copies the selected part of word into letter
+			CopyMatrix(word, letter, StartIndex, 0);
+
 			letters.array_data[counter] = letter;
+			
 			counter++;
 
 			//for visual render
-			image = DrawLetterSep(image, i, StartIndex, index, index2, word.nb_rows);
+			image = DrawSep(image, StartIndex+index2-1, index, i+index2-1, BLUE, word.nb_rows);
 			
 		}
 	}
@@ -398,6 +319,8 @@ void Segmentation(Matrix matrix, SDL_Surface *image, SDL_Texture *texture, SDL_R
 	float average;
 	Matrix_Array words = Init_Matrix_Array(0);
 	Matrix_Array letters = Init_Matrix_Array(0);
+	free(words.array_data);
+	free(letters.array_data);
 
 	srand(time(NULL)); //used to init the random in RandomLetter
 
@@ -405,6 +328,8 @@ void Segmentation(Matrix matrix, SDL_Surface *image, SDL_Texture *texture, SDL_R
 
 	Array histo = histoH(matrix);
 	Array LinesIndex = Init_Array(histo.size);
+	Array WordsIndex = Init_Array(0);
+	free(WordsIndex.array_data);
 	Matrix_Array lines = Seg_Lines(matrix, histo, image, LinesIndex);
 
 	//next lines for graphic render
@@ -417,8 +342,11 @@ void Segmentation(Matrix matrix, SDL_Surface *image, SDL_Texture *texture, SDL_R
 	{
 		histov = histoV(lines.array_data[i]);
 		average = LetterSizeAverage(histov);
-		Array WordsIndex = Init_Array(histov.size);
+		WordsIndex = Init_Array(histov.size);
 		words = Seg_Words(lines.array_data[i], histov, average, image, LinesIndex.array_data[i], WordsIndex);
+		freeArrays(words);
+		free(histov.array_data);
+		free(WordsIndex.array_data);
 	}
 	image = contrast(image);
 	display_image(image, texture, renderer);
@@ -430,8 +358,9 @@ void Segmentation(Matrix matrix, SDL_Surface *image, SDL_Texture *texture, SDL_R
 	{
 		histov = histoV(lines.array_data[i]);
 		average = LetterSizeAverage(histov);
-		Array WordsIndex = Init_Array(histov.size);
+		WordsIndex = Init_Array(histov.size);
 		words = Seg_Words(lines.array_data[i], histov, average, image, LinesIndex.array_data[i], WordsIndex);
+		free(histov.array_data);	
 		for(int j = 0; j < words.size; j++)
 		{
 			histov = histoV(words.array_data[j]);
@@ -442,16 +371,25 @@ void Segmentation(Matrix matrix, SDL_Surface *image, SDL_Texture *texture, SDL_R
 				printf("%c", c);
 			}
 			printf("  ");
+			freeArrays(letters);
+			free(histov.array_data);	
+
 		}
-		printf("\n");
+		printf("\n");	
+		freeArrays(words);
+		free(WordsIndex.array_data);
+
+
 	}
 	printf("----------- Fin Texte\n");
 
 	//next line here to update the displayed image
 	image = contrast(image);
-	
-	free(words.array_data);
-	free(letters.array_data);
+
+
 	free(histo.array_data);
-	free(lines.array_data);
+	free(LinesIndex.array_data);
+	freeArrays(lines);
 }
+
+

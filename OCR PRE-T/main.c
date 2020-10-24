@@ -111,6 +111,8 @@ int main(int argc, char** argv)
 		}
 	}
 
+	free(matrix.matrix_data);
+
 	SDL_DestroyTexture(texture);
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);

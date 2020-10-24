@@ -56,4 +56,11 @@ Array_Array Init_Array_Array(int size);
 
 void wait_key_pressed();
 
+void freeArrays(Matrix_Array array);
+
+void CopyMatrix(Matrix matrix, Matrix copy, int a, int b);
+
+int CountWords(Array histov, float average);
+
+int CountLetters(Array histov);
 #endif

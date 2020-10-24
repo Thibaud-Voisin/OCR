@@ -146,3 +146,71 @@ void wait_key_pressed()
 }
 
 
+void freeArrays(Matrix_Array array)
+{
+	for(int i = 0; i < array.size; i++)
+		free(array.array_data[i].matrix_data);
+	free(array.array_data);
+}
+
+//used in segmentation
+void CopyMatrix(Matrix matrix, Matrix copy, int a, int b)
+{
+	for(int i = 0; i < copy.nb_rows; i++)
+	{
+		for(int j = 0; j < copy.nb_column; j++)
+			copy.matrix_data[j + (i * copy.nb_column)] = matrix.matrix_data[ j + a + ((i + b) * matrix.nb_column)];
+			
+	}
+}
+
+/*counts number of words, calculating the space between words to differentiate it from space between letters*/
+int CountWords(Array histov, float average)
+{
+	int InProcess = 0;
+	int nbWords = 0;
+	int nbofzeros = 0;
+
+	for(int i = 0; i < histov.size; i++)
+	{
+		if(histov.array_data[i] != 0 && InProcess == 0)
+		{	
+			InProcess = 1;
+		}
+
+		if(histov.array_data[i] != 0 && InProcess == 1)
+			nbofzeros = 0;
+
+		if(histov.array_data[i] == 0 && InProcess == 1)
+		{
+			nbofzeros++;
+			if(nbofzeros >= average || i == histov.size-1)
+			{
+				nbWords++;
+				InProcess = 0;
+			}
+		}
+	}
+	return nbWords;
+}
+
+int CountLetters(Array histov)
+{
+	int InProcess = 0;
+	int nbLetters = 0;
+
+	for(int i = 0; i < histov.size; i++)
+	{
+		if(histov.array_data[i] != 0 && InProcess == 0)
+		{	
+			InProcess = 1;
+		}
+
+		if((histov.array_data[i] == 0 || i == histov.size-1) && InProcess == 1)
+		{
+			nbLetters++;
+			InProcess = 0;
+		}
+	}
+	return nbLetters;
+}
