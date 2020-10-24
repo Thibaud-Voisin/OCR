@@ -392,12 +392,12 @@ char RandomLetter()
 
 /*uses all the above functions to fully split the image into letter,
   but keeping the format of the text*/
-void Segmentation(Matrix matrix, SDL_Surface *image, SDL_Texture *texture, SDL_Renderer *renderer, int height, int width)
+void Segmentation(Matrix matrix, SDL_Surface *image, SDL_Texture *texture, SDL_Renderer *renderer)
 {
 	Array histov;
 	float average;
-	Matrix_Array words;
-	Matrix_Array letters;
+	Matrix_Array words = Init_Matrix_Array(0);
+	Matrix_Array letters = Init_Matrix_Array(0);
 
 	srand(time(NULL)); //used to init the random in RandomLetter
 
@@ -409,7 +409,7 @@ void Segmentation(Matrix matrix, SDL_Surface *image, SDL_Texture *texture, SDL_R
 
 	//next lines for graphic render
 	image = contrast(image);
-	display_image(image, texture, renderer, height, width);
+	display_image(image, texture, renderer);
 	wait_key_pressed();
 
 	//this loop is for graphic render only : it does the same as bellow but without the letters
@@ -421,7 +421,7 @@ void Segmentation(Matrix matrix, SDL_Surface *image, SDL_Texture *texture, SDL_R
 		words = Seg_Words(lines.array_data[i], histov, average, image, LinesIndex.array_data[i], WordsIndex);
 	}
 	image = contrast(image);
-	display_image(image, texture, renderer, height, width);
+	display_image(image, texture, renderer);
 	wait_key_pressed();
 
 

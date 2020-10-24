@@ -52,10 +52,6 @@ int main(int argc, char** argv)
 	}
 	Matrix matrix;
 
-	//SDL_Surface (*fptr[119]) (SDL_Surface); 
-
-	//fptr[99] = &contrast;
-
 	SDL_bool program_running = SDL_TRUE;
 	while(program_running)
 	{
@@ -65,7 +61,6 @@ int main(int argc, char** argv)
 			switch(event.type)
 			{
 				case SDL_KEYDOWN:
-				//	image = fptr[event.key.keysym.sym](image);
 					switch(event.key.keysym.sym)
 					{
 						case SDLK_q:
@@ -102,7 +97,7 @@ int main(int argc, char** argv)
 
 							image = blackwhite(image);
 							matrix = binarize_image(image);
-							Segmentation(matrix, image, texture, renderer, WIN_H, WIN_W);
+							Segmentation(matrix, image, texture, renderer);
 							break;
 					}
 					break;
@@ -112,7 +107,7 @@ int main(int argc, char** argv)
 				default:
 					break;
 			}
-			display_image(image, texture, renderer, WIN_H, WIN_W);
+			display_image(image, texture, renderer);
 		}
 	}
 

@@ -2,7 +2,7 @@
 
 /*function displays the given image if there is no problem converting it into a texture, which should never happen*/
 
-void display_image(SDL_Surface *image, SDL_Texture *texture, SDL_Renderer *renderer, int height, int width)
+void display_image(SDL_Surface *image, SDL_Texture *texture, SDL_Renderer *renderer)
 {
 	SDL_Rect rectangle;
 	texture = SDL_CreateTextureFromSurface(renderer, image);
