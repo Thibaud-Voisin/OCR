@@ -1,7 +1,7 @@
 #include "pre_processing.h"
 
 /*turns the given image into levels of gray, then returns it*/
-SDL_Surface* grayscale(SDL_Surface *image)
+void grayscale(SDL_Surface *image)
 {
 	for (int i = 0; i < image -> w; i++)
 	{
@@ -18,12 +18,10 @@ SDL_Surface* grayscale(SDL_Surface *image)
 			put_pixel(image, i,j,SDL_MapRGB(image -> format, r,g,b));
 		}
 	}
-	return image;
-
 }
 
 /*turns the given image into black and white only*/
-SDL_Surface* blackwhite(SDL_Surface *image)
+void blackwhite(SDL_Surface *image)
 {
 	for (int i = 0; i < image -> w; i++)
 	{
@@ -48,8 +46,6 @@ SDL_Surface* blackwhite(SDL_Surface *image)
 			put_pixel(image, i,j,SDL_MapRGB(image -> format, r,g,b));
 		}
 	}
-	return image;
-
 }
 
 
@@ -76,7 +72,7 @@ Matrix binarize_image(SDL_Surface *image)
 }
 
 /*Increase the contrast of the given image : bright pixels becomes brighter, and darks darker*/
-SDL_Surface* contrast(SDL_Surface *image)
+void contrast(SDL_Surface *image)
 {
 	float alpha  = 1.3; /*coefficient of contrast*/
 
@@ -117,11 +113,10 @@ SDL_Surface* contrast(SDL_Surface *image)
 			put_pixel(image, i,j,SDL_MapRGB(image -> format, rs,gs,bs));
 		}
 	}
-	return image;
 }
 
 /*removing small noise -> isolated pixels that are of no importance*/
-SDL_Surface* noise_reduction(SDL_Surface *image)
+void noise_reduction(SDL_Surface *image)
 {
 	int pixels[5];
 
@@ -172,5 +167,4 @@ SDL_Surface* noise_reduction(SDL_Surface *image)
 			put_pixel(image, i, j, pixels[2]);
 		}
 	}
-	return image;
 }

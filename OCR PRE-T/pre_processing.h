@@ -9,12 +9,12 @@
 
 Matrix binarize_image(SDL_Surface *image);
 
-SDL_Surface* grayscale(SDL_Surface *image);
+void grayscale(SDL_Surface *image);
 
-SDL_Surface* blackwhite(SDL_Surface *image);
+void blackwhite(SDL_Surface *image);
 
-SDL_Surface* contrast(SDL_Surface *image);
+void contrast(SDL_Surface *image);
 
-SDL_Surface* noise_reduction(SDL_Surface *image);
+void noise_reduction(SDL_Surface *image);
 
 #endif

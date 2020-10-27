@@ -337,7 +337,7 @@ void Segmentation(Matrix matrix, SDL_Surface *image, SDL_Texture *texture, SDL_R
 	Matrix_Array lines = Seg_Lines(matrix, histo, image, LinesIndex);
 
 	//next lines for graphic render
-	image = contrast(image);
+	contrast(image);
 	display_image(image, texture, renderer);
 	wait_key_pressed();
 
@@ -352,7 +352,7 @@ void Segmentation(Matrix matrix, SDL_Surface *image, SDL_Texture *texture, SDL_R
 		free(histov.array_data);
 		free(WordsIndex.array_data);
 	}
-	image = contrast(image);
+	contrast(image);
 	display_image(image, texture, renderer);
 	wait_key_pressed();
 
@@ -388,7 +388,7 @@ void Segmentation(Matrix matrix, SDL_Surface *image, SDL_Texture *texture, SDL_R
 	printf("----------- Fin Texte\n");
 
 	//next line here to update the displayed image
-	image = contrast(image);
+	contrast(image);
 
 
 	free(histo.array_data);

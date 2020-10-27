@@ -64,31 +64,31 @@ int main(int argc, char** argv)
 
 						case SDLK_c:
 
-							image = contrast(image);
+							contrast(image);
 							
 							break;
 
 						case SDLK_n:
 
-							image = noise_reduction(image);
+							noise_reduction(image);
 							
 							break;
 
 						case SDLK_g:
 
-							image = grayscale(image);
+							grayscale(image);
 							
 							break;
 
 						case SDLK_w:
 
-							image = blackwhite(image);
+							blackwhite(image);
 							
 							break;
 
 						case SDLK_s:
 
-							image = blackwhite(image);
+							blackwhite(image);
 							matrix = binarize_image(image);
 							Segmentation(matrix, image, texture, renderer);
 							break;
