@@ -34,13 +34,6 @@ int main(int argc, char** argv)
 		return EXIT_FAILURE;
 	}
 
-	if(SDL_Init(SDL_INIT_EVERYTHING) != 0)
-	{
-		
-		printf("Failed Init SDL\n");
-		return EXIT_FAILURE;
-	}
-
 	int WIN_W = image -> w;
 	int WIN_H = image -> h;
 
@@ -116,7 +109,7 @@ int main(int argc, char** argv)
 	SDL_DestroyTexture(texture);
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
-
+	SDL_FreeSurface(image);
 
 	SDL_Quit();
 
