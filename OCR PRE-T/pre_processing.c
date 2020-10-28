@@ -49,12 +49,13 @@ void blackwhite(SDL_Surface *image)
 }
 
 
-/*Create a Matrix from a black and white image : black pixels are zeros, whites are ones*/
-Matrix binarize_image(SDL_Surface *image)
+int GetMainColor(SDL_Surface *image)
 {
 	int width = image -> w;
 	int height = image -> h;
-	Matrix matrix = Init_matrix(width, height);
+
+	int nbwhite = 0;
+	int nbblack = 0;
 
 	for(int i = 0; i < width; i++)
 	{
@@ -63,6 +64,34 @@ Matrix binarize_image(SDL_Surface *image)
 			Uint8 r,g,b;
 			SDL_GetRGB(get_pixel(image, i,j), image -> format, &r, &g, &b);
 			if(r != 0)
+				nbblack++;
+			else
+				nbwhite++;
+		}
+	}
+	if(nbwhite > nbblack)
+		return 0;
+	return 1;
+}
+
+/*Create a Matrix from a black and white image : black pixels are zeros, whites are ones*/
+Matrix binarize_image(SDL_Surface *image)
+{
+	int width = image -> w;
+	int height = image -> h;
+	Matrix matrix = Init_matrix(width, height);
+	
+	int mainColor = GetMainColor(image);
+
+
+	for(int i = 0; i < width; i++)
+	{
+		for(int j = 0; j < height; j++)
+		{
+			Uint8 r,g,b;
+			SDL_GetRGB(get_pixel(image, i,j), image -> format, &r, &g, &b);
+			
+			if((r != 0 && mainColor == 1) || (r == 0 && mainColor == 0))
 				matrix.matrix_data[i + (matrix.nb_column*j)] = 1;
 			else
 				matrix.matrix_data[i + (matrix.nb_column*j)] = 0;
