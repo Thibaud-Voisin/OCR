@@ -147,11 +147,13 @@ void contrast(SDL_Surface *image)
 /*removing small noise -> isolated pixels that are of no importance*/
 void noise_reduction(SDL_Surface *image)
 {
+	int width = image -> w;
+	int height = image -> h;
 	int pixels[5];
 
-	for(int i = 0; i < image -> w; i++)
+	for(int i = 0; i < width; i++)
 	{
-		for(int j = 0; j < image -> h; j++)
+		for(int j = 0; j < height; j++)
 		{
 			/*putting into an array all the direct neighboors of the pixel*/
 			pixels[0] = get_pixel(image, i,j);
@@ -166,12 +168,12 @@ void noise_reduction(SDL_Surface *image)
 			else
 				pixels[2] = get_pixel(image, i, j);
 
-			if(i < image -> w)
+			if(i < width-1)
 				pixels[3] = get_pixel(image, i+1, j);
 			else
 				pixels[3] = get_pixel(image, i, j);
 
-			if(j < image -> h)
+			if(j < height-1)
 				pixels[4] = get_pixel(image, i, j+1);
 			else
 				pixels[4] = get_pixel(image, i, j);
