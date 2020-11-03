@@ -37,9 +37,8 @@ int main(int argc, char** argv)
 	int WIN_W = image -> w;
 	int WIN_H = image -> h;
 
-	if (SDL_CreateWindowAndRenderer(WIN_W, WIN_H, 0, &window, &renderer) != 0)
-	{
-		
+	if(SDL_CreateWindowAndRenderer(WIN_W, WIN_H, 0, &window, &renderer) != 0)
+	{	
 		printf("Failed Creating Window and Renderer\n");
 		return EXIT_FAILURE;
 	}
