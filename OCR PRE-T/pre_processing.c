@@ -210,7 +210,9 @@ void image_rotation(SDL_Surface *image, double angle)
     double sinV = sin(angle);
     double cosV = cos(angle);
 
-	SDL_Surface *rotated = CopySurface(image);
+	SDL_Surface *rotated = SDL_CreateRGBSurface(0, image -> w, image -> h, 32, 0, 0, 0, 0);
+
+    SDL_BlitSurface(image, NULL, rotated, NULL);
 
 	for(int i = 0; i < width; i++)
 	{
@@ -234,4 +236,5 @@ void image_rotation(SDL_Surface *image, double angle)
 	}
 
     SDL_BlitSurface(rotated, NULL, image, NULL);
+    SDL_FreeSurface(rotated);
 }

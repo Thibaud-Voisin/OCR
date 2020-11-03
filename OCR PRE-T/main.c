@@ -22,11 +22,13 @@ int main(int argc, char** argv)
 	}
 
 	SDL_Surface *image;
+    SDL_Surface *saveimage;
 	SDL_Texture *texture = NULL;
 	SDL_Renderer *renderer = NULL;
 	SDL_Window *window = NULL;
 
 	image = SDL_LoadBMP(argv[1]);
+    saveimage = SDL_LoadBMP(argv[1]);
 
 	if(image == NULL)
 	{
@@ -43,6 +45,8 @@ int main(int argc, char** argv)
 		return EXIT_FAILURE;
 	}
 	Matrix matrix;
+    int angle;
+    int check;
 
 	SDL_bool program_running = SDL_TRUE;
 	while(program_running)
@@ -94,8 +98,15 @@ int main(int argc, char** argv)
                             break;
 
 						case SDLK_r:
-							
-							image_rotation(image, 45);
+
+                            SDL_BlitSurface(saveimage, NULL, image, NULL);
+
+                            printf("Enter an angle of rotation :\n");
+                            check = scanf("%d", &angle);
+                            if(check)
+                                image_rotation(image, (double)angle);
+                            else
+                                printf("Invalid angle\n");
 							
 							break;
 					}
@@ -116,6 +127,7 @@ int main(int argc, char** argv)
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_FreeSurface(image);
+    SDL_FreeSurface(saveimage);
 
 	SDL_Quit();
 

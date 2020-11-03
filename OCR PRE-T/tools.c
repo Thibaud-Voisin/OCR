@@ -214,12 +214,3 @@ int CountLetters(Array histov)
 	}
 	return nbLetters;
 }
-
-SDL_Surface* CopySurface(SDL_Surface *image)
-{
-    SDL_Surface *copy = SDL_CreateRGBSurface(0, image -> w, image -> h, 32, image -> format -> Rmask, image -> format -> Gmask, image -> format -> Bmask, image -> format -> Amask);
-
-    SDL_BlitSurface(image, NULL, copy, NULL);
-
-    return copy;
-}

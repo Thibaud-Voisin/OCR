@@ -65,6 +65,4 @@ int CountWords(Array histov, float average);
 
 int CountLetters(Array histov);
 
-SDL_Surface* CopySurface(SDL_Surface *image);
-
 #endif
