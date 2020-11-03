@@ -1,6 +1,6 @@
 CC = gcc
 
-CFLAGS = `pkg-config --cflags --libs sdl2` -Wall -Werror -Wextra -g -pedantic-errors -O2
+CFLAGS = `pkg-config --cflags --libs sdl2` -Wall -Werror -Wextra -g -pedantic-errors -O2 -lm
 LDFLAGS = -g
 
 OBJ = main.o\

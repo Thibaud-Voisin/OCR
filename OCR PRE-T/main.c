@@ -91,6 +91,13 @@ int main(int argc, char** argv)
 							blackwhite(image);
 							matrix = binarize_image(image);
 							Segmentation(matrix, image, texture, renderer);
+							
+                            break;
+
+						case SDLK_r:
+							
+							image_rotation(image, 45);
+							
 							break;
 					}
 					break;

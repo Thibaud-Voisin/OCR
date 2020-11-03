@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "SDL2/SDL.h"
+#include "pixel.h"
 
 typedef struct Matrix_t
 {
@@ -63,4 +64,7 @@ void CopyMatrix(Matrix matrix, Matrix copy, int a, int b);
 int CountWords(Array histov, float average);
 
 int CountLetters(Array histov);
+
+SDL_Surface* CopySurface(SDL_Surface *image);
+
 #endif

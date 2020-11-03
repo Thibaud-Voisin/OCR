@@ -199,3 +199,39 @@ void noise_reduction(SDL_Surface *image)
 		}
 	}
 }
+
+void image_rotation(SDL_Surface *image, double angle)
+{
+	int width = image -> w;
+	int height = image -> h;
+
+    angle = angle * M_PI / 180;
+
+    double sinV = sin(angle);
+    double cosV = cos(angle);
+
+	SDL_Surface *rotated = CopySurface(image);
+
+	for(int i = 0; i < width; i++)
+	{
+		for(int j = 0; j < height; j++)
+		{
+            int x0 = width / 2;
+            int y0 = height / 2;
+
+            int x = cosV * (i - x0) + sinV * (j - y0) + x0;
+            int y = -sinV * (i - x0) + cosV * (j - y0) + y0;
+
+            Uint32 pixel;
+
+            if(x >= 0 && x < width && y >= 0 && y < height)
+                pixel = get_pixel(image, x, y);
+            else
+                pixel = 0;
+
+            put_pixel(rotated, i, j, pixel);
+		}
+	}
+
+    SDL_BlitSurface(rotated, NULL, image, NULL);
+}
