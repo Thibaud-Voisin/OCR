@@ -155,7 +155,7 @@ void noise_reduction(SDL_Surface *image)
 	{
 		for(int j = 0; j < height; j++)
 		{
-			/*putting into an array all the direct neighboors of the pixel*/
+			//putting into an array all the direct neighboors of the pixel
 			pixels[0] = get_pixel(image, i,j);
 			
 			if(i > 0)
@@ -179,7 +179,7 @@ void noise_reduction(SDL_Surface *image)
 				pixels[4] = get_pixel(image, i, j);
 
 
-			/*sorting the array*/
+			//sorting the array
 			for(int i = 0; i < 4; i++)
 			{
 				for(int j = 0; j < 4-i; j++)
@@ -193,9 +193,10 @@ void noise_reduction(SDL_Surface *image)
 				}
 			}
 
-			/*replace the current pixel by the median pixel of his neighboors*/
+			//replace the current pixel by the median pixel of his neighboors
 
 			put_pixel(image, i, j, pixels[2]);
+            
 		}
 	}
 }
@@ -214,6 +215,13 @@ void image_rotation(SDL_Surface *image, double angle)
 
     SDL_BlitSurface(image, NULL, rotated, NULL);
 
+    Uint32 color = 0;
+    
+    if(GetMainColor(image) != 0)
+    {
+        color = 16777215;
+    }
+
 	for(int i = 0; i < width; i++)
 	{
 		for(int j = 0; j < height; j++)
@@ -229,7 +237,7 @@ void image_rotation(SDL_Surface *image, double angle)
             if(x >= 0 && x < width && y >= 0 && y < height)
                 pixel = get_pixel(image, x, y);
             else
-                pixel = 0;
+                pixel = color;
 
             put_pixel(rotated, i, j, pixel);
 		}

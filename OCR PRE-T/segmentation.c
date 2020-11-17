@@ -181,8 +181,6 @@ Matrix_Array Seg_Lines(Matrix matrix, Array histo, SDL_Surface *image, Array Lin
 
 
 
-
-
 /*same process as for lines, but vertically for words*/
 Matrix_Array Seg_Words(Matrix line, Array histov, float average, SDL_Surface *image, int index, Array WordsIndex)
 {
@@ -239,11 +237,6 @@ Matrix_Array Seg_Words(Matrix line, Array histov, float average, SDL_Surface *im
 	return words;
 }
 
-
-
-
-
-
 /*same process as for words*/
 Matrix_Array Seg_Letters(Matrix word, Array histov, SDL_Surface *image, int index, int index2)
 {
@@ -280,6 +273,8 @@ Matrix_Array Seg_Letters(Matrix word, Array histov, SDL_Surface *image, int inde
 			//copies the selected part of word into letter
 			CopyMatrix(word, letter, StartIndex, 0);
 
+            letter = CutEdges(letter);
+
 			letters.array_data[counter] = letter;
 			
 			counter++;
@@ -294,10 +289,6 @@ Matrix_Array Seg_Letters(Matrix word, Array histov, SDL_Surface *image, int inde
 }
 
 
-
-
-
-
 /*returning a random letter
   soon to be replaced by neural network*/
 char RandomLetter()
@@ -307,8 +298,20 @@ char RandomLetter()
 }
 
 
-
-
+Matrix CutEdges(Matrix letter)
+{
+    Array histo = histoH(letter);
+    Pretty_print_array(histo);
+    int StartIndex = 0;
+    while(histo.array_data[StartIndex] == 0)
+        StartIndex++;
+    int EndIndex = letter.nb_rows-1;
+    while(histo.array_data[EndIndex] == 0)
+        EndIndex--;
+    Matrix cropped = Init_matrix(letter.nb_column,letter.nb_rows-StartIndex-(letter.nb_rows-EndIndex)+1);
+    CopyMatrix(letter, cropped, 0, StartIndex);
+    return cropped;
+}
 
 
 /*uses all the above functions to fully split the image into letter,

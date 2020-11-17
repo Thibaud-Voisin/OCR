@@ -19,6 +19,8 @@ Matrix_Array Seg_Words(Matrix line, Array histov, float average, SDL_Surface *im
 
 Matrix_Array Seg_Letters(Matrix word, Array histov, SDL_Surface *image, int index, int index2);
 
+Matrix CutEdges(Matrix letter);
+
 void Segmentation(Matrix matrix, SDL_Surface *image, SDL_Texture *texture, SDL_Renderer *renderer);
 
 char RandomLetter();

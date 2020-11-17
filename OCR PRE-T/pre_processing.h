@@ -19,4 +19,5 @@ void contrast(SDL_Surface *image);
 void noise_reduction(SDL_Surface *image);
 
 void image_rotation(SDL_Surface *image, double angle);
+
 #endif
