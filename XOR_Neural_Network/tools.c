@@ -1,5 +1,289 @@
 #include "tools.h"
 
+
+void load_data(char *str, Matrix hidden_weight, Matrix output_weight, Matrix hidden_bias, Matrix output_bias)
+{
+	int position = 18;
+	double number;
+	for(int i = 0; i < hidden_weight.nb_column*hidden_weight.nb_rows; ++i)
+	{
+		
+		number = 0;
+		
+		for(int j = 0; j < 18; ++j)
+		{
+			number /= 10;
+			number += str[position-j]-'0';
+		}
+
+		if(str[position-18] == '-')
+			number *= (-1);
+			
+		position+=19;
+		hidden_weight.matrix_data[i] = number;
+	}
+
+	for(int i = 0; i < hidden_bias.nb_column*hidden_bias.nb_rows; ++i)
+	{
+		
+		number = 0;
+		
+		for(int j = 0; j < 18; ++j)
+		{
+			number /= 10;
+			number += str[position-j]-'0';
+		}
+
+		if(str[position-18] == '-')
+			number *= (-1);
+			
+		position+=19;
+		hidden_bias.matrix_data[i] = number;
+	}
+
+
+	for(int i = 0; i < output_weight.nb_column*output_weight.nb_rows; ++i)
+	{
+		
+		number = 0;
+		
+		for(int j = 0; j < 18; ++j)
+		{
+			number /= 10;
+			number += str[position-j]-'0';
+		}
+
+		if(str[position-18] == '-')
+			number *= (-1);
+			
+		position+=19;
+		output_weight.matrix_data[i] = number;
+	}
+	
+	for(int i = 0; i < output_bias.nb_column*hidden_bias.nb_rows; ++i)
+	{
+		
+		number = 0;
+		
+		for(int j = 0; j < 18; ++j)
+		{
+			number /= 10;
+			number += str[position-j]-'0';
+		}
+
+		if(str[position-18] == '-')
+			number *= (-1);
+			
+		position+=19;
+		output_bias.matrix_data[i] = number;
+	}
+
+}
+
+
+
+
+
+
+
+void save_data(Matrix hidden_weights, Matrix hidden_bias, Matrix output_weights, Matrix output_bias)
+{
+
+
+
+	char *str_final = calloc(((hidden_weights.nb_column*hidden_weights.nb_rows)*21)+(hidden_weights.nb_column) + (hidden_bias.nb_column*21) + ((output_weights.nb_column*output_weights.nb_rows)*21)+(output_weights.nb_column) + (output_bias.nb_column*21), sizeof(char));
+	
+	int pos_str_final = 0;
+
+	for(int i = 0; i < hidden_weights.nb_rows; ++i)
+	{
+		for(int j = 0; j < hidden_weights.nb_column; ++j)
+		{
+			char str[10000];
+			snprintf(str,30,"%.20f",hidden_weights.matrix_data[i*hidden_weights.nb_column+j]);
+	
+			int deca = 0;
+	
+			for(int k = 0; k < 20; ++k)
+			{
+				if(!k && str[k] != '-')
+				{
+					str_final[pos_str_final] = '+';
+					++pos_str_final;
+					deca = 1;
+				}
+				else
+				{
+					if(deca)		
+						str_final[pos_str_final] = str[k-1];
+					else
+						str_final[pos_str_final] = str[k];
+					++pos_str_final;
+				}
+			}	
+		}
+	}
+	
+	for(int j = 0; j < hidden_bias.nb_column; ++j)
+	{
+		char str[10000];
+		snprintf(str,30,"%.20f",hidden_bias.matrix_data[j]);
+	
+		int deca = 0;
+	
+		for(int k = 0; k < 20; ++k)
+		{
+			if(!k && str[k] != '-')
+			{
+				str_final[pos_str_final] = '+';
+				++pos_str_final;
+				deca = 1;
+			}
+			else
+			{
+				if(deca)		
+					str_final[pos_str_final] = str[k-1];
+				else
+					str_final[pos_str_final] = str[k];
+				++pos_str_final;
+			}
+		}	
+	}
+
+	for(int i = 0; i < output_weights.nb_rows; ++i)
+	{
+		for(int j = 0; j < output_weights.nb_column; ++j)
+		{
+			char str[10000];
+			snprintf(str,30,"%.20f",output_weights.matrix_data[i*output_weights.nb_column+j]);
+	
+			int deca = 0;
+	
+			for(int k = 0; k < 20; ++k)
+			{
+				if(!k && str[k] != '-')
+				{
+					str_final[pos_str_final] = '+';
+					++pos_str_final;
+					deca = 1;
+				}
+				else
+				{
+					if(deca)		
+						str_final[pos_str_final] = str[k-1];
+					else
+						str_final[pos_str_final] = str[k];
+					++pos_str_final;
+				}
+			}	
+		}
+	}
+	
+	for(int j = 0; j < output_bias.nb_column; ++j)
+	{
+		char str[10000];
+		snprintf(str,30,"%.20f",output_bias.matrix_data[j]);
+	
+		int deca = 0;
+	
+		for(int k = 0; k < 20; ++k)
+		{
+			if(!k && str[k] != '-')
+			{
+				str_final[pos_str_final] = '+';
+				++pos_str_final;
+				deca = 1;
+			}
+			else
+			{
+				if(deca)		
+					str_final[pos_str_final] = str[k-1];
+				else
+					str_final[pos_str_final] = str[k];
+				++pos_str_final;
+			}
+		}	
+	}
+
+	int j_l,n = strlen(str_final);
+
+	for(int i = j_l = 0; i < n; ++i)
+		if(str_final[i] != '.')
+			str_final[j_l++] = str_final[i];
+	str_final[j_l] = 0;
+	
+	FILE *file;
+
+	int digits_input = 0;
+	int digits_hidden = 0;	
+	
+	int i = hidden_weights.nb_rows;
+	int j = hidden_bias.nb_column;
+	
+		
+	for(; i >=10 ; i/=10)
+	{
+		++digits_input;
+	}
+
+
+	for(; j >=10 ; j/=10)
+	{
+		++digits_hidden;
+	}
+
+
+	char *name = calloc(digits_input + digits_hidden+6,sizeof(char));
+
+	char str[10000];
+	
+	snprintf(str,15,"%d",hidden_weights.nb_rows);
+	
+	int pos = 0;
+
+	for(int k = 0; k <= digits_input; ++k)
+	{
+		name[k] = str[k];
+		++pos;
+	}
+
+	name[pos] = '_';
+	++pos;
+
+	char str2[10000];
+		
+	snprintf(str2,15,"%d",hidden_bias.nb_column);
+	
+
+	for(int k = 0; k <= digits_hidden; ++k)
+	{
+		name[pos] = str2[k];
+		++pos;
+	}
+
+	name[pos] = '_';
+	++pos;
+	name[pos] = 's';
+	++pos;
+	name[pos] = 'a';
+	++pos;
+	name[pos] = 'v';
+	++pos;
+	name[pos] = 'e';
+	++pos;
+
+	
+	file = fopen(name,"w");
+
+	if(file == NULL)
+		printf("ERROR\n");
+	fprintf(file,"%s", str_final );
+
+	fclose(file);
+
+}
+
+
 Matrix Init_matrix(int width,int height)
 {
 	Matrix matrix;

@@ -1,20 +1,105 @@
 #include "neural_network.h"
 
-Neural_network Init_neural_network(Matrix input, int input_layer_neurons, int hidden_layer_neurons, int output_layer_neurons)
+Neural_network Init_neural_network(Matrix input, int input_layer_neurons, int hidden_layer_neurons, int output_layer_neurons, int load_data_b)
 {
 	Neural_network N_n;
 
 	N_n.hidden_weight = Init_matrix(hidden_layer_neurons,input_layer_neurons);
-	Fill_mat_rand(N_n.hidden_weight);
-//	Pretty_print(N_n.hidden_weight);
+
 	N_n.output_weight = Init_matrix(output_layer_neurons,hidden_layer_neurons);
-	Fill_mat_rand(N_n.output_weight);
 
 	N_n.hidden_bias = Init_matrix(hidden_layer_neurons,1);
-	Fill_mat_rand(N_n.hidden_bias);
 	
 	N_n.output_bias = Init_matrix(output_layer_neurons,1);
-	Fill_mat_rand(N_n.output_bias);
+	
+	if(!load_data_b)
+	{
+		Fill_mat_rand(N_n.hidden_weight);
+		Fill_mat_rand(N_n.output_weight);
+		Fill_mat_rand(N_n.hidden_bias);
+		Fill_mat_rand(N_n.output_bias);
+	}
+	else
+	{
+		int digits_input = 0;
+		int digits_hidden = 0;	
+	
+		int i = input_layer_neurons;
+		int j = hidden_layer_neurons;
+	
+		
+		for(; i >=10 ; i/=10)
+		{
+			++digits_input;
+		}
+
+
+		for(; j >=10 ; j/=10)
+		{
+			++digits_hidden;
+		}
+
+
+		char *name = calloc(digits_input + digits_hidden+6,sizeof(char));
+
+		char str[10000];
+	
+		snprintf(str,15,"%d",input_layer_neurons);
+	
+		int pos = 0;
+
+		for(int k = 0; k <= digits_input; ++k)
+		{
+			name[k] = str[k];
+			++pos;
+		}
+
+		name[pos] = '_';
+		++pos;
+
+		char str2[10000];
+		
+		snprintf(str2,15,"%d",hidden_layer_neurons);
+	
+
+		for(int k = 0; k <= digits_hidden; ++k)
+		{
+			name[pos] = str2[k];
+			++pos;
+		}
+
+		name[pos] = '_';
+		++pos;
+		name[pos] = 's';
+		++pos;
+		name[pos] = 'a';
+		++pos;
+		name[pos] = 'v';
+		++pos;
+		name[pos] = 'e';
+		++pos;	
+	
+		long number_of_char = ((input_layer_neurons*(input_layer_neurons*hidden_layer_neurons))*21)+(input_layer_neurons) + (hidden_layer_neurons*21) + ((hidden_layer_neurons*output_layer_neurons)*21)+(hidden_layer_neurons) + (output_layer_neurons*21) + 4 ;
+
+		char *str_f = calloc(number_of_char ,sizeof(char));
+		
+		FILE *file;
+		
+		file = fopen(name,"r");
+
+		if(file == NULL)
+		{	
+			printf("error on read save");
+			exit(0);
+		}
+
+		while(fgets(str_f,number_of_char, file) != NULL)
+		
+		load_data(str_f, N_n.hidden_weight,N_n.output_weight,N_n.hidden_bias,N_n.output_bias);
+		
+		fclose(file);
+	}
+
 
 	N_n.res_hidden_layer = Init_matrix(N_n.hidden_weight.nb_column,input.nb_rows);
 		
@@ -107,6 +192,9 @@ void Train_N_n(Neural_network N_n,Matrix input, Matrix expected_output, unsigned
 		Sum_bias(N_n.hidden_bias,N_n.hidden_bias_back_multfact,N_n.hidden_bias);
 	
 	}
+
+		save_data(N_n.hidden_weight ,N_n.hidden_bias ,N_n.output_weight ,N_n.output_bias);
+	
 		Pretty_print(N_n.final_res);
 }
 
