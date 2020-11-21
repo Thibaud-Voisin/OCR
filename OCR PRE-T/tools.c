@@ -214,3 +214,18 @@ int CountLetters(Array histov)
 	}
 	return nbLetters;
 }
+
+int CompareMatrix(Matrix a, Matrix b)
+{
+    if(a.nb_rows != b.nb_rows || a.nb_column != b.nb_column)
+        return 0;
+    for(int i = 0; i < a.nb_rows; i++)
+    {
+        for(int j = 0; j < a.nb_column; j++)
+        {
+            if(a.matrix_data[i*a.nb_column + j] != b.matrix_data[i*a.nb_column +j])
+                return 0;
+        }
+    }
+    return 1;
+}

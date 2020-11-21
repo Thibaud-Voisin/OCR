@@ -65,4 +65,6 @@ int CountWords(Array histov, float average);
 
 int CountLetters(Array histov);
 
+int CompareMatrix(Matrix a, Matrix b);
+
 #endif
