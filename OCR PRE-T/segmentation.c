@@ -481,6 +481,24 @@ Matrix_Array PropagationFix(Matrix_Array letters)
   but keeping the format of the text*/
 void Segmentation(Matrix matrix, SDL_Surface *image, SDL_Texture *texture, SDL_Renderer *renderer)
 {
+    int sizeoftext = 0;
+    int check = 0;
+    printf("Enter the number of letter in the text\n");
+    check = scanf("%d", &sizeoftext);
+    if(check == 0)
+        errx(1,"Invalid Size\n");
+
+    char str[sizeoftext];
+    printf("Enter all the letters of the text, no spaces\n");
+    check = scanf("%s", str);
+
+    if(check == 0)
+        errx(1,"Invalid Text\n");
+
+    for(int i = 0; i < sizeoftext; i++)
+        printf("%c",str[i]);
+    printf("\n");
+
 	Array histov;
 	float average;
 
@@ -539,7 +557,8 @@ void Segmentation(Matrix matrix, SDL_Surface *image, SDL_Texture *texture, SDL_R
             letters = PropagationFix(letters);
            
             //for(int x = 0; x < letters.size; x++)
-              //  Pretty_print(letters.array_data[x]);
+            //Pretty_print(letters.array_data[x]);
+
 
 			for(int k = 0; k < letters.size; k++)
 			{

@@ -5,6 +5,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <time.h>
+#include <err.h>
 #include "SDL2/SDL.h"
 #include "pixel.h"
 
