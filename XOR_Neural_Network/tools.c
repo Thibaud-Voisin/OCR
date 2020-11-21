@@ -1,14 +1,103 @@
 #include "tools.h"
 
-void Write_hidden_weights(Matrix hidden_weights, Matrix hidden_bias, Matrix output_weights, Matrix output_bias)
+
+void load_data(char *str, Matrix hidden_weight, Matrix output_weight, Matrix hidden_bias, Matrix output_bias)
 {
-	char *str_final = calloc(((hidden_weights.nb_column*hidden_weights.nb_rows)*21)+(hidden_weights.nb_column) + (hidden_bias.nb_column*21) + ((output_weights.nb_column*output_weights.nb_rows)*21)+(output_weights.nb_column) + (output_bias.nb_column*21) + 4, sizeof(char));
+	int position = 18;
+	double number;
+	for(int i = 0; i < hidden_weight.nb_column*hidden_weight.nb_rows; ++i)
+	{
+		
+		number = 0;
+		
+		for(int j = 0; j < 18; ++j)
+		{
+			number /= 10;
+			number += str[position-j]-'0';
+		}
+
+		if(str[position-18] == '-')
+			number *= (-1);
+			
+		position+=19;
+		hidden_weight.matrix_data[i] = number;
+	}
+
+	for(int i = 0; i < hidden_bias.nb_column*hidden_bias.nb_rows; ++i)
+	{
+		
+		number = 0;
+		
+		for(int j = 0; j < 18; ++j)
+		{
+			number /= 10;
+			number += str[position-j]-'0';
+		}
+
+		if(str[position-18] == '-')
+			number *= (-1);
+			
+		position+=19;
+		hidden_bias.matrix_data[i] = number;
+	}
+
+
+	for(int i = 0; i < output_weight.nb_column*output_weight.nb_rows; ++i)
+	{
+		
+		number = 0;
+		
+		for(int j = 0; j < 18; ++j)
+		{
+			number /= 10;
+			number += str[position-j]-'0';
+		}
+
+		if(str[position-18] == '-')
+			number *= (-1);
+			
+		position+=19;
+		output_weight.matrix_data[i] = number;
+	}
+	
+	for(int i = 0; i < output_bias.nb_column*hidden_bias.nb_rows; ++i)
+	{
+		
+		number = 0;
+		
+		for(int j = 0; j < 18; ++j)
+		{
+			number /= 10;
+			number += str[position-j]-'0';
+		}
+
+		if(str[position-18] == '-')
+			number *= (-1);
+			
+		position+=19;
+		output_bias.matrix_data[i] = number;
+	}
+
+}
+
+
+
+
+
+
+
+void save_data(Matrix hidden_weights, Matrix hidden_bias, Matrix output_weights, Matrix output_bias)
+{
+
+
+
+	char *str_final = calloc(((hidden_weights.nb_column*hidden_weights.nb_rows)*21)+(hidden_weights.nb_column) + (hidden_bias.nb_column*21) + ((output_weights.nb_column*output_weights.nb_rows)*21)+(output_weights.nb_column) + (output_bias.nb_column*21), sizeof(char));
 	
 	int pos_str_final = 0;
 
-	for(int i = 0; i < hidden_weights.nb_column; ++i)
+	for(int i = 0; i < hidden_weights.nb_rows; ++i)
 	{
-		for(int j = 0; j < hidden_weights.nb_rows; ++j)
+		for(int j = 0; j < hidden_weights.nb_column; ++j)
 		{
 			char str[10000];
 			snprintf(str,30,"%.20f",hidden_weights.matrix_data[i*hidden_weights.nb_column+j]);
@@ -32,15 +121,8 @@ void Write_hidden_weights(Matrix hidden_weights, Matrix hidden_bias, Matrix outp
 					++pos_str_final;
 				}
 			}	
-			str_final[pos_str_final] = ';';
-			++pos_str_final;
 		}
-		str_final[pos_str_final] = '\n';
-		++pos_str_final;
 	}
-	
-	str_final[pos_str_final] = '!';
-	++pos_str_final;
 	
 	for(int j = 0; j < hidden_bias.nb_column; ++j)
 	{
@@ -66,16 +148,11 @@ void Write_hidden_weights(Matrix hidden_weights, Matrix hidden_bias, Matrix outp
 				++pos_str_final;
 			}
 		}	
-		str_final[pos_str_final] = ';';
-		++pos_str_final;
 	}
-	
-	str_final[pos_str_final] = '!';
-	++pos_str_final;
 
-	for(int i = 0; i < output_weights.nb_column; ++i)
+	for(int i = 0; i < output_weights.nb_rows; ++i)
 	{
-		for(int j = 0; j < output_weights.nb_rows; ++j)
+		for(int j = 0; j < output_weights.nb_column; ++j)
 		{
 			char str[10000];
 			snprintf(str,30,"%.20f",output_weights.matrix_data[i*output_weights.nb_column+j]);
@@ -99,15 +176,8 @@ void Write_hidden_weights(Matrix hidden_weights, Matrix hidden_bias, Matrix outp
 					++pos_str_final;
 				}
 			}	
-			str_final[pos_str_final] = ';';
-			++pos_str_final;
 		}
-		str_final[pos_str_final] = '\n';
-		++pos_str_final;
 	}
-	
-	str_final[pos_str_final] = '!';
-	++pos_str_final;
 	
 	for(int j = 0; j < output_bias.nb_column; ++j)
 	{
@@ -133,12 +203,14 @@ void Write_hidden_weights(Matrix hidden_weights, Matrix hidden_bias, Matrix outp
 				++pos_str_final;
 			}
 		}	
-		str_final[pos_str_final] = ';';
-		++pos_str_final;
 	}
-		
-	str_final[pos_str_final] = '!';
-	++pos_str_final;
+
+	int j_l,n = strlen(str_final);
+
+	for(int i = j_l = 0; i < n; ++i)
+		if(str_final[i] != '.')
+			str_final[j_l++] = str_final[i];
+	str_final[j_l] = 0;
 	
 	FILE *file;
 

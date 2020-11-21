@@ -16,7 +16,9 @@ typedef struct Matrix_t
 	int nb_rows;		
 }Matrix;
 
-void Write_hidden_weights(Matrix a, Matrix b, Matrix c, Matrix d);
+void load_data(char *str, Matrix hidden_weight, Matrix output_weight, Matrix hidden_bias, Matrix output_bias);
+
+void save_data(Matrix a, Matrix b, Matrix c, Matrix d);
 
 Matrix Init_matrix(int width,int height);
 
