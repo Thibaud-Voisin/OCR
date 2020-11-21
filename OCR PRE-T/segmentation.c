@@ -493,11 +493,9 @@ void Segmentation(Matrix matrix, SDL_Surface *image, SDL_Texture *texture, SDL_R
     check = scanf("%s", str);
 
     if(check == 0)
+    {
         errx(1,"Invalid Text\n");
-
-    for(int i = 0; i < sizeoftext; i++)
-        printf("%c",str[i]);
-    printf("\n");
+    }
 
 	Array histov;
 	float average;
