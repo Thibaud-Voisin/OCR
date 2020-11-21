@@ -23,7 +23,7 @@ int main()
 	Fill_mat_data(expected_output,data_expected_output,4);
 
 	int input_layer_neurons = 2;
-	int hidden_layer_neurons = 25;
+	int hidden_layer_neurons = 20;
 	int output_layer_neurons = 1; 
 
 

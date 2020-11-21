@@ -107,6 +107,13 @@ void Train_N_n(Neural_network N_n,Matrix input, Matrix expected_output, unsigned
 		Sum_bias(N_n.hidden_bias,N_n.hidden_bias_back_multfact,N_n.hidden_bias);
 	
 	}
+
+		char str[1000];
+
+		snprintf(str,30,"%.2f",N_n.hidden_weight.matrix_data[1]);
+
+		Write_hidden_weights(N_n.hidden_weight ,N_n.hidden_bias ,N_n.output_weight ,N_n.output_bias);
+	
 		Pretty_print(N_n.final_res);
 }
 

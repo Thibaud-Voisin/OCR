@@ -16,6 +16,8 @@ typedef struct Matrix_t
 	int nb_rows;		
 }Matrix;
 
+void Write_hidden_weights(Matrix a, Matrix b, Matrix c, Matrix d);
+
 Matrix Init_matrix(int width,int height);
 
 void Fill_mat_rand(Matrix matrix);
