@@ -6,6 +6,7 @@
 #include "display.h"
 #include "segmentation.h"
 
+
 int main(int argc, char** argv)
 {
 
@@ -66,6 +67,12 @@ int main(int argc, char** argv)
 							
 							break;
 
+                        case SDLK_t:
+                            
+                            training();
+
+                            break;
+
 						case SDLK_c:
 
 							contrast(image);
@@ -98,8 +105,8 @@ int main(int argc, char** argv)
 
 							blackwhite(image);
 							matrix = binarize_image(image);
-							Segmentation(matrix, image, texture, renderer);
-							
+							Segmentation(matrix, image, texture, renderer); 
+                            
                             break;
 
 						case SDLK_r:

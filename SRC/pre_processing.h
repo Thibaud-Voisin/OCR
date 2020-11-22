@@ -2,11 +2,11 @@
 #define PRE_PROCESSING_H	
 
 #include <stdio.h>
+#include <math.h>
 #include <stdlib.h>
-#include <SDL2/SDL.h>
+#include "SDL2/SDL.h"
 #include "pixel.h"
 #include "tools.h"
-#include <math.h>
 
 Matrix binarize_image(SDL_Surface *image);
 

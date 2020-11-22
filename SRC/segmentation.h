@@ -4,8 +4,9 @@
 #include "tools.h"
 #include "SDL2/SDL.h"
 #include "pixel.h"
-#include "display.h"
 #include "pre_processing.h"
+#include "display.h"
+
 
 Array histoH(Matrix matrix);
 
@@ -24,6 +25,8 @@ Matrix CutEdges(Matrix letter);
 Matrix Resize(Matrix letter);
 
 void Segmentation(Matrix matrix, SDL_Surface *image, SDL_Texture *texture, SDL_Renderer *renderer);
+
+Matrix_Array Segmentation2(Matrix matrix, SDL_Surface *image);
 
 char RandomLetter();
 

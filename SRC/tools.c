@@ -1,5 +1,6 @@
 #include "tools.h"
-
+#include "pre_processing.h"
+#include "segmentation.h"
 
 Matrix Init_matrix(int width,int height)
 {
@@ -654,5 +655,73 @@ void Fill_mat_data(Matrix a, double b[],int size)
 		a.matrix_data[i]=b[i];
 }
 
+void training()
+{
+    unsigned int i = 1;
+    while(1)
+    {
+        FILE *file;
+        char num[4];
+        sprintf(num,"%d",i);
+        char name[20]; 
+        char image[20];
+        strcpy(name, "./training/texts/");
+        strcpy(image, "./training/images/");
+        strcat(name, num);
+        strcat(image,num);
+        strcat(image,".bmp");
 
+        SDL_Surface *surface = SDL_LoadBMP(image);
+        if(surface == NULL)
+            break;
+        
+        grayscale(surface);
+        blackwhite(surface);
+        Matrix matrix = binarize_image(surface);
+        Matrix_Array letters = Segmentation2(matrix, surface);
 
+        //display
+        printf("size = %d\n", letters.size);
+        for(int i = 0; i < letters.size; i++)
+            Pretty_print(letters.array_data[i]);
+
+        file = fopen(name,"r");
+
+        if(file == NULL)
+            break;
+
+        char c = fgetc(file);
+        int counter = 0;
+        char tmp[100000];
+
+        for(; c != EOF; c = fgetc(file))
+        {
+            if(c != ' ' && c != '\n')
+            {
+                tmp[counter] = c;
+                counter++;
+            }
+        }
+        fclose(file);
+        
+        char str[counter];
+
+        printf("counter = %d\n", counter);
+
+        for(int i = 0; i < counter; i++)
+        {
+            str[i] = tmp[i];
+        }
+        //display
+        for(int i = 0; i < counter; i++)
+            printf("%c", str[i]);
+        printf("\n");
+
+        if(counter != letters.size)
+        {
+            printf("ERROR : number of letters detected on image and given are different :\ndetected : %d\ngiven : %d\n", letters.size, counter);
+            break;
+        }
+        i++;
+    }
+}

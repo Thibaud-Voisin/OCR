@@ -1,5 +1,5 @@
-#ifndef tools
-#define tools
+#ifndef TOOLS_H
+#define TOOLS_H
 
 #include <stdio.h>
 #include <math.h>
@@ -8,6 +8,7 @@
 #include <err.h>
 #include "SDL2/SDL.h"
 #include "pixel.h"
+#include <string.h>
 
 typedef struct Matrix_t
 {
@@ -93,5 +94,6 @@ void Fill_mat_data(Matrix a, double b[],int size);
 
 void Mult_simple(Matrix a,Matrix b, Matrix res);
 
+void training();
 
 #endif

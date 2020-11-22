@@ -457,8 +457,8 @@ Matrix_Array PropagationFix(Matrix_Array letters)
             newLetters.array_data[i+j] = CutEdges(newLetters.array_data[i+j]);
             newLetters.array_data[i+j] = DoubleCheck(newLetters.array_data[i+j]);
             newLetters.array_data[i+j] = Resize(newLetters.array_data[i+j]);
-            //newLetters.array_data[i+j] = CutEdges2(newLetters.array_data[i+j]);
-            //newLetters.array_data[i+j] = Resize(newLetters.array_data[i+j]);
+            newLetters.array_data[i+j] = CutEdges2(newLetters.array_data[i+j]);
+            newLetters.array_data[i+j] = Resize(newLetters.array_data[i+j]);
 
             j++;
             newLetters.array_data[i+j] = tmp.array_data[1];
@@ -466,8 +466,8 @@ Matrix_Array PropagationFix(Matrix_Array letters)
             newLetters.array_data[i+j] = CutEdges(newLetters.array_data[i+j]);
             newLetters.array_data[i+j] = DoubleCheck(newLetters.array_data[i+j]);
             newLetters.array_data[i+j] = Resize(newLetters.array_data[i+j]);
-            //newLetters.array_data[i+j] = CutEdges2(newLetters.array_data[i+j]);
-            //newLetters.array_data[i+j] = Resize(newLetters.array_data[i+j]);
+            newLetters.array_data[i+j] = CutEdges2(newLetters.array_data[i+j]);
+            newLetters.array_data[i+j] = Resize(newLetters.array_data[i+j]);
         }
     }
     letters = Init_Matrix_Array(i+j);
@@ -548,7 +548,6 @@ void Segmentation(Matrix matrix, SDL_Surface *image, SDL_Texture *texture, SDL_R
 				printf("%c", c);
             }
 			printf("  ");
-			freeArrays(letters);
 			free(histov.array_data);	
 
 		}
@@ -570,3 +569,77 @@ void Segmentation(Matrix matrix, SDL_Surface *image, SDL_Texture *texture, SDL_R
 }
 
 
+/*uses all the above functions to fully split the image into letter,
+  but keeping the format of the text*/
+Matrix_Array Segmentation2(Matrix matrix, SDL_Surface *image)
+{
+    Array histov;
+	float average;
+
+
+    Matrix_Array allLetters = Init_Matrix_Array(100000);
+    int counter = 0;
+
+	Matrix_Array words = Init_Matrix_Array(0);
+	Matrix_Array letters = Init_Matrix_Array(0);
+
+	free(words.array_data);
+	free(letters.array_data);
+
+	srand(time(NULL)); //used to init the random in RandomLetter
+
+	printf("-------- Texte :\n");
+
+	Array histo = histoH(matrix);
+	Array LinesIndex = Init_Array(histo.size);
+	Array WordsIndex = Init_Array(0);
+	
+	free(WordsIndex.array_data);
+	
+	Matrix_Array lines = Seg_Lines(matrix, histo, image, LinesIndex);
+
+	//core segmentation
+	for(int i = 0; i < lines.size; i++)
+	{
+		histov = histoV(lines.array_data[i]);
+		average = LetterSizeAverage(histov);
+		WordsIndex = Init_Array(histov.size);
+		words = Seg_Words(lines.array_data[i], histov, average, image, LinesIndex.array_data[i], WordsIndex);
+		free(histov.array_data);	
+		for(int j = 0; j < words.size; j++)
+		{
+			histov = histoV(words.array_data[j]);
+			letters = Seg_Letters(words.array_data[j], histov, image, LinesIndex.array_data[i], WordsIndex.array_data[j]);
+           
+            letters = PropagationFix(letters);
+           
+			for(int k = 0; k < letters.size; k++)
+			{
+                allLetters.array_data[counter] = letters.array_data[k];
+                counter++;
+				char c = RandomLetter();
+				printf("%c", c);
+            }
+			printf("  ");
+			free(histov.array_data);	
+
+		}
+		printf("\n");	
+		freeArrays(words);
+		free(WordsIndex.array_data);
+
+
+	}
+	printf("----------- Fin Texte\n");
+
+	free(histo.array_data);
+	free(LinesIndex.array_data);
+	freeArrays(lines);
+
+    Matrix_Array final = Init_Matrix_Array(counter);
+
+    for(int i = 0; i < counter; i++)
+        final.array_data[i] = allLetters.array_data[i];
+
+    return final;
+}
