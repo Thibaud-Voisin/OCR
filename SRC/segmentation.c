@@ -305,6 +305,8 @@ Matrix_Array Seg_Letters(Matrix word, Array histov, SDL_Surface *image, int inde
 
             letter = CutEdges(letter);
 
+            letter = Resize(letter);
+
             letter = DoubleCheck(letter);
 
             letter = Resize(letter);
@@ -381,6 +383,7 @@ void Recursive(Matrix letter, Matrix new, Matrix path, int x, int y)
     Pretty_print(new);
     Pretty_print(path);
     */
+    printf("x = %d, y = %d\n", x, y);
     new.matrix_data[x*new.nb_column+y] = 0;
     path.matrix_data[x*path.nb_column+y] = 1;
  
@@ -417,14 +420,14 @@ Matrix IsolateLetter(Matrix letter, int x, int y)
 Matrix_Array DoubleLetters(Matrix letter)
 {
     Matrix_Array tmp = Init_Matrix_Array(2);
-    int x = 0;
-    int y = 0;
-    while(x < letter.nb_rows && letter.matrix_data[x*letter.nb_column] == 1)
-        x++;
-    while(y < letter.nb_rows && letter.matrix_data[y*letter.nb_column+letter.nb_column-1] == 1)
-        y++;
-    tmp.array_data[0] = IsolateLetter(letter,x,0);
-    tmp.array_data[1] = IsolateLetter(letter,y,letter.nb_column-1);
+    int a = 0;
+    int b = 0;
+    while(a < letter.nb_rows && letter.matrix_data[a*letter.nb_column] == 1)
+        a++;
+    while(b < letter.nb_rows && letter.matrix_data[b*letter.nb_column+letter.nb_column-1] == 1)
+        b++;
+    tmp.array_data[0] = IsolateLetter(letter,a,0);
+    tmp.array_data[1] = IsolateLetter(letter,b,letter.nb_column-1);
     return tmp;
 }
 
@@ -475,6 +478,50 @@ Matrix_Array PropagationFix(Matrix_Array letters)
         letters.array_data[x] = newLetters.array_data[x];
     return letters;
 }
+
+
+/*Matrix_Array CheckLetters(Matrix_Array letters)
+{
+    int avR = 0;
+    int avC = 0;
+
+    for(int i = 0; i < letters.size; i++)
+    {
+        avR += letters.array_data[i].nb_rows;
+        avC += letters.array_data[i].nb_column;
+    }
+
+    avR /= letters.size;
+    avC /= letters.size;
+
+    int counter = 0;
+
+    Array wrong = Init_Array(letters.size);
+
+    for(int i = 0; i < letters.size; i++)
+    {
+        Matrix letter = letters.array_data[i];
+        if(letter.nb_rows > 5*avR || letter.nb_column > 5*avC)
+        {
+            wrong.array_data[counter] = i;
+            counter++;
+        }
+        else
+            letters.array_data[i] = Resize(letters.array_data[i]);
+    }
+    Matrix_Array new = Init_Matrix_Array(letters.size-counter);  
+    int j = 0;
+    for(int i = 0; i < letters.size; i++)
+    {
+        if(wrong.array_data[j] == i)
+        {
+            j++;
+            continue;
+        }
+        new.array_data[i-j] = letters.array_data[i];
+    }
+    return new;
+}*/
 
 
 /*uses all the above functions to fully split the image into letter,
@@ -534,12 +581,15 @@ void Segmentation(Matrix matrix, SDL_Surface *image, SDL_Texture *texture, SDL_R
 		for(int j = 0; j < words.size; j++)
 		{
 			histov = histoV(words.array_data[j]);
+
 			letters = Seg_Letters(words.array_data[j], histov, image, LinesIndex.array_data[i], WordsIndex.array_data[j]);
-           
+
+            //letters = CheckLetters(letters);
+
             letters = PropagationFix(letters);
            
             //for(int x = 0; x < letters.size; x++)
-            //Pretty_print(letters.array_data[x]);
+                //Pretty_print(letters.array_data[x]);
 
 
 			for(int k = 0; k < letters.size; k++)

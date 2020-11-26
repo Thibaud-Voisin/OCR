@@ -681,9 +681,9 @@ void training()
         Matrix_Array letters = Segmentation2(matrix, surface);
 
         //display
-        printf("size = %d\n", letters.size);
-        for(int i = 0; i < letters.size; i++)
-            Pretty_print(letters.array_data[i]);
+        //printf("size = %d\n", letters.size);
+        //for(int i = 0; i < letters.size; i++)
+           // Pretty_print(letters.array_data[i]);
 
         file = fopen(name,"r");
 

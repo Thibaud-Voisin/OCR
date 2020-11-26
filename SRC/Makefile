@@ -1,7 +1,10 @@
 CC = gcc
 
-CFLAGS = `pkg-config --cflags --libs sdl2` -Wall -Werror -Wextra -g -pedantic-errors -O2 -lm
 LDFLAGS = -g
+
+GTKLIB=`pkg-config --cflags --libs gtk+-3.0`
+
+CFLAGS = `pkg-config --cflags --libs sdl2` ${GTKLIB} -pipe -pthread -Wall -Werror -Wextra -g -pedantic-errors -O2 -lm -rdynamic
 
 OBJ = main.o\
      pixel.o\
@@ -14,8 +17,13 @@ NN = main_NN.o\
 	 tools.o\
 	 neural_network.o
 
+GT = src/main.o
+
 pre : ${OBJ}
 	gcc ${OBJ} ${CFLAGS} -o pre.out
+
+gtk : ${GT}
+	gcc ${GT} ${CFLAGS} -o gtk.out
 
 neural : ${NN}
 	gcc ${NN} ${CFLAGS} -o neural.out
@@ -23,3 +31,4 @@ neural : ${NN}
 clean :
 	rm -rf *.o
 	rm -rf *.out
+	rm -rf src/*.o
