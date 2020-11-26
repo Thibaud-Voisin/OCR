@@ -383,7 +383,6 @@ void Recursive(Matrix letter, Matrix new, Matrix path, int x, int y)
     Pretty_print(new);
     Pretty_print(path);
     */
-    printf("x = %d, y = %d\n", x, y);
     new.matrix_data[x*new.nb_column+y] = 0;
     path.matrix_data[x*path.nb_column+y] = 1;
  
