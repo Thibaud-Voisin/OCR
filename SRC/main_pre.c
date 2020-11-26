@@ -53,20 +53,6 @@ int main(int argc, char** argv)
 				case SDL_KEYDOWN:
 					switch(event.key.keysym.sym)
 					{
-                        case SDLK_t:
-                            
-                            training();
-
-                            break;
-
-						case SDLK_s:
-
-							blackwhite(image);
-							matrix = binarize_image(image);
-							Segmentation(matrix, image, texture, renderer); 
-                            
-                            break;
-
 						case SDLK_r:
 
 

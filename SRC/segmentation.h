@@ -24,7 +24,7 @@ Matrix CutEdges(Matrix letter);
 
 Matrix Resize(Matrix letter);
 
-void Segmentation(Matrix matrix, SDL_Surface *image, SDL_Texture *texture, SDL_Renderer *renderer);
+gchar* Segmentation(Matrix matrix, SDL_Surface *image, gchar *txt);
 
 Matrix_Array Segmentation2(Matrix matrix, SDL_Surface *image);
 

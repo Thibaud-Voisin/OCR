@@ -1,6 +1,7 @@
 #ifndef TOOLS_H
 #define TOOLS_H
 
+#include <gtk/gtk.h>
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>

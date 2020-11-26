@@ -120,10 +120,11 @@ void on_btn_scan_clicked(GtkMenuItem *btn_scan, app_widgets *app_wdgts)
     btn_scan = btn_scan;
     blackwhite(app_wdgts -> image);
     Matrix matrix = binarize_image(app_wdgts -> image);
-    Matrix_Array final = Segmentation2(matrix, app_wdgts -> image);
-    gchar tmp[2] = "";
-    g_snprintf(tmp, 2, "%i", final.size);
-    gtk_label_set_text(GTK_LABEL(app_wdgts->w_lbl_scan),tmp);
+    gchar txt[50]; 
+    gchar *tst = Segmentation(matrix, app_wdgts -> image, txt);
+    gtk_label_set_label(GTK_LABEL(app_wdgts->w_lbl_scan),tst);
+
+    reload_image(app_wdgts);
 }
 
 void on_btn_training_clicked(GtkMenuItem *btn_training, app_widgets *app_wdgts)

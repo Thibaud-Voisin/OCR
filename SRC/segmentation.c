@@ -1,7 +1,7 @@
 #include "segmentation.h"
 
-#define FALSE 0
-#define TRUE 1
+#define FALSE2 0
+#define TRUE2 1
 
 #define RED 16580620
 #define GREEN 1636389
@@ -47,22 +47,22 @@ Array histoV(Matrix matrix)
 /*returns the average size of one letter based on a given histogram*/
 float LetterSizeAverage(Array histov)
 {
-	int InProcess = FALSE;
+	int InProcess = FALSE2;
 
 	float average = 0;
 	int nbletters = 0;
 
 	for(int i = 0; i < histov.size; i++)
 	{
-		if(histov.array_data[i] != 0 && InProcess == FALSE)
+		if(histov.array_data[i] != 0 && InProcess == FALSE2)
 		{
-			InProcess = TRUE;
+			InProcess = TRUE2;
 			nbletters++;
 		}
 
-		if(histov.array_data[i] == 0 && InProcess == TRUE)
-			InProcess = FALSE;
-		if(InProcess == TRUE)
+		if(histov.array_data[i] == 0 && InProcess == TRUE2)
+			InProcess = FALSE2;
+		if(InProcess == TRUE2)
 			average++;
 	}
 
@@ -71,22 +71,22 @@ float LetterSizeAverage(Array histov)
 
 int Count(Array histo)
 {
-	int InProcess = FALSE;
+	int InProcess = FALSE2;
 
 	int nbLines = 0;
 
 	/*counts the number of lines it will need to separate, to have the size of the returned array*/
 	for(int i = 0; i < histo.size; i++)
 	{
-		if(histo.array_data[i] != 0 && InProcess == FALSE)
+		if(histo.array_data[i] != 0 && InProcess == FALSE2)
 		{	
-			InProcess = TRUE;
+			InProcess = TRUE2;
 
 			nbLines++;
 		}
 
-		if(histo.array_data[i] == 0 && InProcess == TRUE)
-			InProcess = FALSE;
+		if(histo.array_data[i] == 0 && InProcess == TRUE2)
+			InProcess = FALSE2;
 	}
 	return nbLines;
 
@@ -137,7 +137,7 @@ Matrix_Array Seg_Lines(Matrix matrix, Array histo, SDL_Surface *image, Array Lin
 {
 	int counter = 0;
 
-	int InProcess = FALSE;
+	int InProcess = FALSE2;
 
 	int StartIndex = 0;
 
@@ -150,15 +150,15 @@ Matrix_Array Seg_Lines(Matrix matrix, Array histo, SDL_Surface *image, Array Lin
 	/*copies the selected line into a new matrix*/
 	for(int i = 0; i < histo.size; i++)
 	{
-		if(histo.array_data[i] != 0 && InProcess == FALSE)
+		if(histo.array_data[i] != 0 && InProcess == FALSE2)
 		{
-			InProcess = TRUE;
+			InProcess = TRUE2;
 			StartIndex = i;
 		}
 
-		if((histo.array_data[i] == 0 || i == (histo.size-1)) && InProcess == TRUE)
+		if((histo.array_data[i] == 0 || i == (histo.size-1)) && InProcess == TRUE2)
 		{
-			InProcess = FALSE;
+			InProcess = FALSE2;
 
 			line = Init_matrix(matrix.nb_column, i-StartIndex);
 
@@ -186,7 +186,7 @@ Matrix_Array Seg_Words(Matrix line, Array histov, float average, SDL_Surface *im
 {
 	int counter = 0;
 
-	int InProcess = FALSE;
+	int InProcess = FALSE2;
 
 	int StartIndex = 0;
 
@@ -202,22 +202,22 @@ Matrix_Array Seg_Words(Matrix line, Array histov, float average, SDL_Surface *im
 
 	for(int i = 0; i < histov.size; i++)
 	{
-		if(histov.array_data[i] != 0 && InProcess == FALSE)
+		if(histov.array_data[i] != 0 && InProcess == FALSE2)
 		{
-			InProcess = TRUE;
+			InProcess = TRUE2;
 			StartIndex = i;
 		}
 
-		if(histov.array_data[i] != 0 && InProcess == TRUE)
+		if(histov.array_data[i] != 0 && InProcess == TRUE2)
 			nbofzeros = 0;
 
-		if((histov.array_data[i] == 0 || i == (histov.size-1)) && InProcess == TRUE)
+		if((histov.array_data[i] == 0 || i == (histov.size-1)) && InProcess == TRUE2)
 		{
 			nbofzeros++;
 			if(nbofzeros >= average || i == histov.size-1)
 			{
 
-				InProcess = FALSE;
+				InProcess = FALSE2;
 
 				word = Init_matrix(i-(StartIndex+nbofzeros-2), line.nb_rows);
 
@@ -272,7 +272,7 @@ Matrix_Array Seg_Letters(Matrix word, Array histov, SDL_Surface *image, int inde
 {
 	int counter = 0;
 
-	int InProcess = FALSE;
+	int InProcess = FALSE2;
 
 	int StartIndex = 0;
 
@@ -284,19 +284,19 @@ Matrix_Array Seg_Letters(Matrix word, Array histov, SDL_Surface *image, int inde
 
 	for(int i = 0; i < histov.size; i++)
 	{
-		if(histov.array_data[i] != 0 && InProcess == FALSE)
+		if(histov.array_data[i] != 0 && InProcess == FALSE2)
 		{
-			InProcess = TRUE;
+			InProcess = TRUE2;
 			StartIndex = i;
 		}
 
-		if((histov.array_data[i] == 0 || i == (histov.size-1)) && InProcess == TRUE)
+		if((histov.array_data[i] == 0 || i == (histov.size-1)) && InProcess == TRUE2)
 		{
 
 			if(i == (histov.size-1))
 				i++;
 
-			InProcess = FALSE;
+			InProcess = FALSE2;
 
 			letter = Init_matrix(i-StartIndex, word.nb_rows);
 
@@ -525,7 +525,7 @@ Matrix_Array PropagationFix(Matrix_Array letters)
 
 /*uses all the above functions to fully split the image into letter,
   but keeping the format of the text*/
-void Segmentation(Matrix matrix, SDL_Surface *image, SDL_Texture *texture, SDL_Renderer *renderer)
+gchar* Segmentation(Matrix matrix, SDL_Surface *image, gchar *txt)
 {
     Array histov;
 	float average;
@@ -536,10 +536,6 @@ void Segmentation(Matrix matrix, SDL_Surface *image, SDL_Texture *texture, SDL_R
 	free(words.array_data);
 	free(letters.array_data);
 
-	srand(time(NULL)); //used to init the random in RandomLetter
-
-	printf("-------- Texte :\n");
-
 	Array histo = histoH(matrix);
 	Array LinesIndex = Init_Array(histo.size);
 	Array WordsIndex = Init_Array(0);
@@ -547,27 +543,6 @@ void Segmentation(Matrix matrix, SDL_Surface *image, SDL_Texture *texture, SDL_R
 	free(WordsIndex.array_data);
 	
 	Matrix_Array lines = Seg_Lines(matrix, histo, image, LinesIndex);
-
-	//next lines for graphic render
-	contrast(image);
-	display_image(image, texture, renderer);
-	wait_key_pressed();
-
-	//this loop is for graphic render only : it does the same as bellow but without the letters
-	for(int i = 0; i < lines.size; i++)
-	{
-		histov = histoV(lines.array_data[i]);
-		average = LetterSizeAverage(histov);
-		WordsIndex = Init_Array(histov.size);
-		words = Seg_Words(lines.array_data[i], histov, average, image, LinesIndex.array_data[i], WordsIndex);
-		freeArrays(words);
-		free(histov.array_data);
-		free(WordsIndex.array_data);
-	}
-	contrast(image);
-	display_image(image, texture, renderer);
-	wait_key_pressed();
-
 
 	//core segmentation
 	for(int i = 0; i < lines.size; i++)
@@ -583,38 +558,26 @@ void Segmentation(Matrix matrix, SDL_Surface *image, SDL_Texture *texture, SDL_R
 
 			letters = Seg_Letters(words.array_data[j], histov, image, LinesIndex.array_data[i], WordsIndex.array_data[j]);
 
-            //letters = CheckLetters(letters);
-
             letters = PropagationFix(letters);
            
-            //for(int x = 0; x < letters.size; x++)
-                //Pretty_print(letters.array_data[x]);
-
-
 			for(int k = 0; k < letters.size; k++)
 			{
-				char c = RandomLetter();
-				printf("%c", c);
+			    char c = RandomLetter();
+                txt = g_strdup_printf("%s%c",txt,c);
             }
-			printf("  ");
-			free(histov.array_data);	
+			free(histov.array_data);
+            txt = g_strdup_printf("%s%s",txt," ");
 
 		}
-		printf("\n");	
+        txt = g_strdup_printf("%s%s",txt,"\n");
 		freeArrays(words);
 		free(WordsIndex.array_data);
 
-
 	}
-	printf("----------- Fin Texte\n");
-
-	//next line here to update the displayed image
-	contrast(image);
-
-
 	free(histo.array_data);
 	free(LinesIndex.array_data);
 	freeArrays(lines);
+    return txt;
 }
 
 
