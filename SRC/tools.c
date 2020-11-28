@@ -725,3 +725,9 @@ void training(app_widgets *app_wdgts)
         i++;
     }
 }
+
+void reload_image(app_widgets *app_wdgts)
+{
+    SDL_SaveBMP(app_wdgts -> image, "tmp.bmp");
+    gtk_image_set_from_file(GTK_IMAGE(app_wdgts->w_img_main), "tmp.bmp"); 
+}

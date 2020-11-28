@@ -8,15 +8,6 @@
 #include "segmentation.h"
 #include "tools.h"
 
-
-
-
-void reload_image(app_widgets *app_wdgts)
-{
-    SDL_SaveBMP(app_wdgts -> image, "tmp.bmp");
-    gtk_image_set_from_file(GTK_IMAGE(app_wdgts->w_img_main), "tmp.bmp"); 
-}
-
 // File --> Open
 void on_menuitm_open_activate(GtkMenuItem *menuitem, app_widgets *app_wdgts)
 {
@@ -32,6 +23,7 @@ void on_menuitm_open_activate(GtkMenuItem *menuitem, app_widgets *app_wdgts)
         file_name = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(app_wdgts->w_dlg_file_choose));
         if (file_name != NULL) {
             app_wdgts -> image = SDL_LoadBMP(file_name);
+
             gtk_image_set_from_file(GTK_IMAGE(app_wdgts->w_img_main), file_name);
             
             gtk_widget_set_visible(app_wdgts->w_menuitm_open,FALSE);
@@ -57,7 +49,6 @@ void on_btn_rmvpict_clicked(GtkMenuItem *btn_rmvpict, app_widgets *app_wdgts)
 {
     btn_rmvpict = btn_rmvpict;
     
-    gtk_label_set_text(GTK_LABEL(app_wdgts->w_lbl_scan),"Waiting for scan...");
    
 
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(app_wdgts->w_spin),0);
@@ -84,6 +75,8 @@ void on_btn_rmvpict_clicked(GtkMenuItem *btn_rmvpict, app_widgets *app_wdgts)
     gtk_image_clear(GTK_IMAGE(app_wdgts->w_img_main));
     remove("tmp.bmp");
     remove("tmp2.bmp");
+
+    gtk_label_set_text(GTK_LABEL(app_wdgts->w_lbl_scan),"Waiting for scan...");
 }
 
 void on_spin_value_changed(GtkMenuItem *btn_left, app_widgets *app_wdgts)
@@ -108,6 +101,7 @@ void on_btn_scan_clicked(GtkMenuItem *btn_scan, app_widgets *app_wdgts)
     gtk_widget_set_sensitive(app_wdgts->w_btn_drwords,TRUE);
     gtk_widget_set_sensitive(app_wdgts->w_btn_drletters,TRUE);
     btn_scan = btn_scan;
+
     blackwhite(app_wdgts -> image);
     Matrix matrix = binarize_image(app_wdgts -> image);
     gchar txt[50] = ""; 
@@ -196,6 +190,11 @@ void on_btn_drletters_toggled(GtkToggleButton *btn_drletters, app_widgets *app_w
 {
     btn_drletters = btn_drletters;
     on_dr_change(app_wdgts);
+    /*SDL_Surface *image = app_wdgts -> image;
+    for(int i  = 0; i < image -> w; i++)
+        for(int j = 0; j < image -> h; j++)
+            put_pixel(image, i, j, 16580620);
+    reload_image(app_wdgts);*/
 }
 
 

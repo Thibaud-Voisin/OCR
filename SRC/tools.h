@@ -128,4 +128,6 @@ void Mult_simple(Matrix a,Matrix b, Matrix res);
 
 void training(app_widgets *app_wdgts);
 
+void reload_image(app_widgets *app_wdgts);
+
 #endif

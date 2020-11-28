@@ -98,7 +98,7 @@ int Count(Array histo)
 
 SDL_Surface* DrawLine(SDL_Surface *image, int i, int StartIndex)
 {
-	for(int x = 0; x < image -> w; x++)
+    for(int x = 0; x < image -> w; x++)
 	{
 		int a = StartIndex-1;
 		if(a < 0)
@@ -134,8 +134,8 @@ SDL_Surface* DrawSep(SDL_Surface *image, int a, int b, int c, int COLOR, int row
 
 /*Separates the matrix into lines*/
 Matrix_Array Seg_Lines(Matrix matrix, Array histo, SDL_Surface *image, Array LinesIndex, GtkToggleButton *display)
-{
-	int counter = 0;
+{	
+    int counter = 0;
 
 	int InProcess = FALSE2;
 
@@ -264,6 +264,9 @@ Matrix DoubleCheck(Matrix letter)
     Matrix copy = Init_matrix(letter.nb_column-a-b, letter.nb_rows-c-d);
     
     CopyMatrix(letter,copy,a,c);
+
+    free(histo.array_data);
+    free(histo2.array_data);
  
     return copy;
 }
@@ -347,6 +350,7 @@ Matrix CutEdges(Matrix letter)
         EndIndex--;
     Matrix cropped = Init_matrix(letter.nb_column,letter.nb_rows-StartIndex-(letter.nb_rows-EndIndex)+1);
     CopyMatrix(letter, cropped, 0, StartIndex);
+    free(histo.array_data);
     return cropped;
 }
 
@@ -361,6 +365,7 @@ Matrix CutEdges2(Matrix letter)
         EndIndex--;
     Matrix cropped = Init_matrix(letter.nb_column-StartIndex-(letter.nb_column-EndIndex)+1, letter.nb_rows);
     CopyMatrix(letter, cropped, StartIndex, 0);
+    free(histo.array_data);
     return cropped;
 }
 
@@ -416,6 +421,7 @@ Matrix IsolateLetter(Matrix letter, int x, int y)
             new.matrix_data[i*new.nb_column+j] = 1;
     Matrix boolM = Init_matrix(letter.nb_rows, letter.nb_column);
     Recursive(letter, new, boolM, x, y);
+    free(boolM.matrix_data);
     return new;
 }
 
@@ -455,8 +461,6 @@ Matrix_Array PropagationFix(Matrix_Array letters)
             newLetters.array_data[i+j] = letters.array_data[i];
         else
         {
-            //Pretty_print(tmp.array_data[0]);
-            //Pretty_print(tmp.array_data[1]);
             newLetters.array_data[i+j] = tmp.array_data[0];
             
             newLetters.array_data[i+j] = CutEdges(newLetters.array_data[i+j]);
@@ -474,6 +478,7 @@ Matrix_Array PropagationFix(Matrix_Array letters)
             newLetters.array_data[i+j] = CutEdges2(newLetters.array_data[i+j]);
             newLetters.array_data[i+j] = Resize(newLetters.array_data[i+j]);
         }
+        free(histo.array_data);
     }
     letters = Init_Matrix_Array(i+j);
     for(int x = 0; x < letters.size; x++)
@@ -481,49 +486,18 @@ Matrix_Array PropagationFix(Matrix_Array letters)
     return letters;
 }
 
-
-/*Matrix_Array CheckLetters(Matrix_Array letters)
+void refresh(SDL_Surface *image)
 {
-    int avR = 0;
-    int avC = 0;
-
-    for(int i = 0; i < letters.size; i++)
+    for(int i = 0; i < image -> w; i++)
     {
-        avR += letters.array_data[i].nb_rows;
-        avC += letters.array_data[i].nb_column;
-    }
-
-    avR /= letters.size;
-    avC /= letters.size;
-
-    int counter = 0;
-
-    Array wrong = Init_Array(letters.size);
-
-    for(int i = 0; i < letters.size; i++)
-    {
-        Matrix letter = letters.array_data[i];
-        if(letter.nb_rows > 5*avR || letter.nb_column > 5*avC)
+        for(int j = 0; j < image -> h; j++)
         {
-            wrong.array_data[counter] = i;
-            counter++;
+            Uint8 r,g,b;
+            SDL_GetRGB(get_pixel(image, i, j), image -> format, &r, &g, &b);
+            put_pixel(image, i, j, SDL_MapRGB(image -> format, r, g, b));
         }
-        else
-            letters.array_data[i] = Resize(letters.array_data[i]);
     }
-    Matrix_Array new = Init_Matrix_Array(letters.size-counter);  
-    int j = 0;
-    for(int i = 0; i < letters.size; i++)
-    {
-        if(wrong.array_data[j] == i)
-        {
-            j++;
-            continue;
-        }
-        new.array_data[i-j] = letters.array_data[i];
-    }
-    return new;
-}*/
+}
 
 
 /*uses all the above functions to fully split the image into letter,
@@ -537,14 +511,9 @@ gchar* Segmentation(Matrix matrix, SDL_Surface *image, gchar *txt, app_widgets *
 	Matrix_Array words = Init_Matrix_Array(0);
 	Matrix_Array letters = Init_Matrix_Array(0);
 
-	free(words.array_data);
-	free(letters.array_data);
-
 	Array histo = histoH(matrix);
 	Array LinesIndex = Init_Array(histo.size);
 	Array WordsIndex = Init_Array(0);
-	
-	free(WordsIndex.array_data);
 	
 	Matrix_Array lines = Seg_Lines(matrix, histo, image, LinesIndex, GTK_TOGGLE_BUTTON(app_wdgts -> w_btn_drlines));
 
@@ -555,14 +524,13 @@ gchar* Segmentation(Matrix matrix, SDL_Surface *image, gchar *txt, app_widgets *
 		average = LetterSizeAverage(histov);
 		WordsIndex = Init_Array(histov.size);
 		words = Seg_Words(lines.array_data[i], histov, average, image, LinesIndex.array_data[i], WordsIndex, GTK_TOGGLE_BUTTON(app_wdgts -> w_btn_drwords));
-		free(histov.array_data);	
 		for(int j = 0; j < words.size; j++)
 		{
 			histov = histoV(words.array_data[j]);
 
 			letters = Seg_Letters(words.array_data[j], histov, image, LinesIndex.array_data[i], WordsIndex.array_data[j], GTK_TOGGLE_BUTTON(app_wdgts -> w_btn_drletters));
 
-            letters = PropagationFix(letters);
+            //letters = PropagationFix(letters);
            
 			for(int k = 0; k < letters.size; k++)
 			{
@@ -571,6 +539,8 @@ gchar* Segmentation(Matrix matrix, SDL_Surface *image, gchar *txt, app_widgets *
             }
 			free(histov.array_data);
             txt = g_strdup_printf("%s%s",txt," ");
+
+            freeArrays(letters);
 
 		}
         txt = g_strdup_printf("%s%s",txt,"\n");
@@ -581,6 +551,7 @@ gchar* Segmentation(Matrix matrix, SDL_Surface *image, gchar *txt, app_widgets *
 	free(histo.array_data);
 	free(LinesIndex.array_data);
 	freeArrays(lines);
+    refresh(image);
     return txt;
 }
 
