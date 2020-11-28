@@ -12,6 +12,9 @@ typedef struct {
     SDL_Surface *image;
     int rotate;
 
+    GtkWidget *w_btn_drlines;
+    GtkWidget *w_btn_drwords;
+    GtkWidget *w_btn_drletters;
     GtkWidget *w_dlg_file_choose;       // Pointer to file chooser dialog box
     GtkWidget *w_img_main;              // Pointer to image widget
     
@@ -95,8 +98,9 @@ void on_btn_rmvpict_clicked(GtkMenuItem *btn_rmvpict, app_widgets *app_wdgts)
     gtk_widget_set_sensitive(app_wdgts->w_btn_blckwhte,FALSE);
     gtk_widget_set_sensitive(app_wdgts->w_btn_noise,FALSE);
     gtk_widget_set_sensitive(app_wdgts->w_btn_contrast,FALSE);
-    
-
+    gtk_widget_set_sensitive(app_wdgts->w_btn_drlines,FALSE);
+    gtk_widget_set_sensitive(app_wdgts->w_btn_drwords,FALSE);
+    gtk_widget_set_sensitive(app_wdgts->w_btn_drletters,FALSE);
 }
 
 void on_spin_value_changed(GtkMenuItem *btn_left, app_widgets *app_wdgts)
@@ -117,6 +121,9 @@ void on_spin_value_changed(GtkMenuItem *btn_left, app_widgets *app_wdgts)
 
 void on_btn_scan_clicked(GtkMenuItem *btn_scan, app_widgets *app_wdgts)
 {
+    gtk_widget_set_sensitive(app_wdgts->w_btn_drlines,TRUE);
+    gtk_widget_set_sensitive(app_wdgts->w_btn_drwords,TRUE);
+    gtk_widget_set_sensitive(app_wdgts->w_btn_drletters,TRUE);
     btn_scan = btn_scan;
     blackwhite(app_wdgts -> image);
     Matrix matrix = binarize_image(app_wdgts -> image);
@@ -174,6 +181,25 @@ void on_btn_contrast_clicked(GtkMenuItem *btn_contrast, app_widgets *app_wdgts)
 }
 
 
+void on_btn_drlines_toggled(GtkToggleButton *btn_drlines, app_widgets *app_wdgts)
+{
+    btn_drlines = btn_drlines;
+    printf("test = %d\n", app_wdgts -> rotate);
+}
+
+void on_btn_drwords_toggled(GtkToggleButton *btn_drwords, app_widgets *app_wdgts)
+{
+    btn_drwords = btn_drwords;
+    printf("test = %d\n", app_wdgts -> rotate);
+}
+
+void on_btn_drletters_toggled(GtkToggleButton *btn_drletters, app_widgets *app_wdgts)
+{
+    btn_drletters = btn_drletters;
+    printf("test = %d\n", app_wdgts -> rotate);
+}
+
+
 // called when window is closed
 void on_window_main_destroy()
 {
@@ -217,6 +243,9 @@ int main(int argc, char *argv[])
     widgets->w_btn_blckwhte = GTK_WIDGET(gtk_builder_get_object(builder, "btn_blckwhte"));
     widgets->w_btn_noise = GTK_WIDGET(gtk_builder_get_object(builder, "btn_noise"));
     widgets->w_btn_contrast = GTK_WIDGET(gtk_builder_get_object(builder, "btn_contrast"));
+    widgets->w_btn_drlines = GTK_WIDGET(gtk_builder_get_object(builder,"btn_drlines"));
+    widgets->w_btn_drwords = GTK_WIDGET(gtk_builder_get_object(builder,"btn_drwords"));
+    widgets->w_btn_drletters = GTK_WIDGET(gtk_builder_get_object(builder,"btn_drletters"));
     
     
     gtk_builder_connect_signals(builder, widgets);
