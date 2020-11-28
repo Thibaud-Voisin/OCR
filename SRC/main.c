@@ -6,39 +6,15 @@
 #include "pre_processing.h"
 #include "display.h"
 #include "segmentation.h"
+#include "tools.h"
 
 
-typedef struct {
-    SDL_Surface *image;
-    int rotate;
-
-    GtkWidget *w_btn_drlines;
-    GtkWidget *w_btn_drwords;
-    GtkWidget *w_btn_drletters;
-    GtkWidget *w_dlg_file_choose;       // Pointer to file chooser dialog box
-    GtkWidget *w_img_main;              // Pointer to image widget
-    
-    GtkWidget *w_lbl_scan;
-    GtkWidget *w_lbl_degree;
-    
-    GtkWidget *w_spin;
-    
-    GtkWidget *w_btn_rmvpict;
-    GtkWidget *w_menuitm_open;
-    GtkWidget *w_btn_scan;
-    GtkWidget *w_btn_training;
-    GtkWidget *box;
-    GtkWidget *w_btn_grscale;
-    GtkWidget *w_btn_blckwhte;
-    GtkWidget *w_btn_noise;
-    GtkWidget *w_btn_contrast;
-} app_widgets;
 
 
 void reload_image(app_widgets *app_wdgts)
 {
     SDL_SaveBMP(app_wdgts -> image, "tmp.bmp");
-    gtk_image_set_from_file(GTK_IMAGE(app_wdgts->w_img_main), "tmp.bmp");        
+    gtk_image_set_from_file(GTK_IMAGE(app_wdgts->w_img_main), "tmp.bmp"); 
 }
 
 // File --> Open
@@ -80,7 +56,6 @@ void on_menuitm_open_activate(GtkMenuItem *menuitem, app_widgets *app_wdgts)
 void on_btn_rmvpict_clicked(GtkMenuItem *btn_rmvpict, app_widgets *app_wdgts)
 {
     btn_rmvpict = btn_rmvpict;
-    gtk_image_set_from_file(GTK_IMAGE(app_wdgts->w_img_main), "");
     
     gtk_label_set_text(GTK_LABEL(app_wdgts->w_lbl_scan),"Waiting for scan...");
    
@@ -101,6 +76,14 @@ void on_btn_rmvpict_clicked(GtkMenuItem *btn_rmvpict, app_widgets *app_wdgts)
     gtk_widget_set_sensitive(app_wdgts->w_btn_drlines,FALSE);
     gtk_widget_set_sensitive(app_wdgts->w_btn_drwords,FALSE);
     gtk_widget_set_sensitive(app_wdgts->w_btn_drletters,FALSE);
+
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(app_wdgts->w_btn_drlines),FALSE);
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(app_wdgts->w_btn_drwords),FALSE);
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(app_wdgts->w_btn_drletters),FALSE);
+
+    gtk_image_clear(GTK_IMAGE(app_wdgts->w_img_main));
+    remove("tmp.bmp");
+    remove("tmp2.bmp");
 }
 
 void on_spin_value_changed(GtkMenuItem *btn_left, app_widgets *app_wdgts)
@@ -127,8 +110,8 @@ void on_btn_scan_clicked(GtkMenuItem *btn_scan, app_widgets *app_wdgts)
     btn_scan = btn_scan;
     blackwhite(app_wdgts -> image);
     Matrix matrix = binarize_image(app_wdgts -> image);
-    gchar txt[50]; 
-    gchar *tst = Segmentation(matrix, app_wdgts -> image, txt);
+    gchar txt[50] = ""; 
+    gchar *tst = Segmentation(matrix, app_wdgts -> image, txt, app_wdgts);
     gtk_label_set_label(GTK_LABEL(app_wdgts->w_lbl_scan),tst);
 
     reload_image(app_wdgts);
@@ -138,7 +121,7 @@ void on_btn_training_clicked(GtkMenuItem *btn_training, app_widgets *app_wdgts)
 {
     btn_training = btn_training;
     
-    training();
+    training(app_wdgts);
 
     reload_image(app_wdgts);
 }
@@ -180,23 +163,39 @@ void on_btn_contrast_clicked(GtkMenuItem *btn_contrast, app_widgets *app_wdgts)
     reload_image(app_wdgts);
 }
 
+void on_dr_change(app_widgets *app_wdgts)
+{
+    SDL_Surface *test = SDL_LoadBMP("tmp2.bmp");
+    if(test == NULL)
+        SDL_SaveBMP(app_wdgts -> image, "tmp2.bmp");
+    else
+        app_wdgts -> image = test;
+
+    Matrix matrix = binarize_image(app_wdgts -> image);
+
+    gchar txt[50]; 
+    gchar *tst = Segmentation(matrix, app_wdgts -> image, txt, app_wdgts);
+    gtk_label_set_label(GTK_LABEL(app_wdgts->w_lbl_scan),tst);
+
+    reload_image(app_wdgts);
+}
 
 void on_btn_drlines_toggled(GtkToggleButton *btn_drlines, app_widgets *app_wdgts)
 {
     btn_drlines = btn_drlines;
-    printf("test = %d\n", app_wdgts -> rotate);
+    on_dr_change(app_wdgts);
 }
 
 void on_btn_drwords_toggled(GtkToggleButton *btn_drwords, app_widgets *app_wdgts)
 {
     btn_drwords = btn_drwords;
-    printf("test = %d\n", app_wdgts -> rotate);
+    on_dr_change(app_wdgts);
 }
 
 void on_btn_drletters_toggled(GtkToggleButton *btn_drletters, app_widgets *app_wdgts)
 {
     btn_drletters = btn_drletters;
-    printf("test = %d\n", app_wdgts -> rotate);
+    on_dr_change(app_wdgts);
 }
 
 
@@ -257,6 +256,7 @@ int main(int argc, char *argv[])
     g_slice_free(app_widgets, widgets);
 
     remove("tmp.bmp");
+    remove("tmp2.bmp");
 
     return 0;
 }

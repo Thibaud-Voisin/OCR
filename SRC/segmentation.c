@@ -133,7 +133,7 @@ SDL_Surface* DrawSep(SDL_Surface *image, int a, int b, int c, int COLOR, int row
 
 
 /*Separates the matrix into lines*/
-Matrix_Array Seg_Lines(Matrix matrix, Array histo, SDL_Surface *image, Array LinesIndex)
+Matrix_Array Seg_Lines(Matrix matrix, Array histo, SDL_Surface *image, Array LinesIndex, GtkToggleButton *display)
 {
 	int counter = 0;
 
@@ -172,7 +172,8 @@ Matrix_Array Seg_Lines(Matrix matrix, Array histo, SDL_Surface *image, Array Lin
 			counter++;
 
 			//for visual render
-			image = DrawLine(image, i, StartIndex);
+            if(gtk_toggle_button_get_active(display))
+			    image = DrawLine(image, i, StartIndex);
 		}
 	}
 
@@ -182,7 +183,7 @@ Matrix_Array Seg_Lines(Matrix matrix, Array histo, SDL_Surface *image, Array Lin
 
 
 /*same process as for lines, but vertically for words*/
-Matrix_Array Seg_Words(Matrix line, Array histov, float average, SDL_Surface *image, int index, Array WordsIndex)
+Matrix_Array Seg_Words(Matrix line, Array histov, float average, SDL_Surface *image, int index, Array WordsIndex, GtkToggleButton *display)
 {
 	int counter = 0;
 
@@ -229,7 +230,8 @@ Matrix_Array Seg_Words(Matrix line, Array histov, float average, SDL_Surface *im
 				counter++;
 
 				//next line for visual render
-				image = DrawSep(image, StartIndex-1, index, i-nbofzeros+1, GREEN, line.nb_rows);
+                if(gtk_toggle_button_get_active(display))
+				    image = DrawSep(image, StartIndex-1, index, i-nbofzeros+1, GREEN, line.nb_rows);
 			}
 		}
 	}
@@ -268,7 +270,7 @@ Matrix DoubleCheck(Matrix letter)
 
 
 /*same process as for words*/
-Matrix_Array Seg_Letters(Matrix word, Array histov, SDL_Surface *image, int index, int index2)
+Matrix_Array Seg_Letters(Matrix word, Array histov, SDL_Surface *image, int index, int index2, GtkToggleButton *display)
 {
 	int counter = 0;
 
@@ -316,7 +318,8 @@ Matrix_Array Seg_Letters(Matrix word, Array histov, SDL_Surface *image, int inde
 			counter++;
 
 			//for visual render
-			image = DrawSep(image, StartIndex+index2-1, index, i+index2-1, BLUE, word.nb_rows);			
+            if(gtk_toggle_button_get_active(display))
+			    image = DrawSep(image, StartIndex+index2-1, index, i+index2-1, BLUE, word.nb_rows);			
 		}
 	}
 
@@ -525,8 +528,9 @@ Matrix_Array PropagationFix(Matrix_Array letters)
 
 /*uses all the above functions to fully split the image into letter,
   but keeping the format of the text*/
-gchar* Segmentation(Matrix matrix, SDL_Surface *image, gchar *txt)
+gchar* Segmentation(Matrix matrix, SDL_Surface *image, gchar *txt, app_widgets *app_wdgts)
 {
+    txt = "";
     Array histov;
 	float average;
 
@@ -542,7 +546,7 @@ gchar* Segmentation(Matrix matrix, SDL_Surface *image, gchar *txt)
 	
 	free(WordsIndex.array_data);
 	
-	Matrix_Array lines = Seg_Lines(matrix, histo, image, LinesIndex);
+	Matrix_Array lines = Seg_Lines(matrix, histo, image, LinesIndex, GTK_TOGGLE_BUTTON(app_wdgts -> w_btn_drlines));
 
 	//core segmentation
 	for(int i = 0; i < lines.size; i++)
@@ -550,13 +554,13 @@ gchar* Segmentation(Matrix matrix, SDL_Surface *image, gchar *txt)
 		histov = histoV(lines.array_data[i]);
 		average = LetterSizeAverage(histov);
 		WordsIndex = Init_Array(histov.size);
-		words = Seg_Words(lines.array_data[i], histov, average, image, LinesIndex.array_data[i], WordsIndex);
+		words = Seg_Words(lines.array_data[i], histov, average, image, LinesIndex.array_data[i], WordsIndex, GTK_TOGGLE_BUTTON(app_wdgts -> w_btn_drwords));
 		free(histov.array_data);	
 		for(int j = 0; j < words.size; j++)
 		{
 			histov = histoV(words.array_data[j]);
 
-			letters = Seg_Letters(words.array_data[j], histov, image, LinesIndex.array_data[i], WordsIndex.array_data[j]);
+			letters = Seg_Letters(words.array_data[j], histov, image, LinesIndex.array_data[i], WordsIndex.array_data[j], GTK_TOGGLE_BUTTON(app_wdgts -> w_btn_drletters));
 
             letters = PropagationFix(letters);
            
@@ -583,7 +587,8 @@ gchar* Segmentation(Matrix matrix, SDL_Surface *image, gchar *txt)
 
 /*uses all the above functions to fully split the image into letter,
   but keeping the format of the text*/
-Matrix_Array Segmentation2(Matrix matrix, SDL_Surface *image)
+Matrix_Array Segmentation2(Matrix matrix, SDL_Surface *image, app_widgets *app_wdgts)
+
 {
     Array histov;
 	float average;
@@ -608,7 +613,8 @@ Matrix_Array Segmentation2(Matrix matrix, SDL_Surface *image)
 	
 	free(WordsIndex.array_data);
 	
-	Matrix_Array lines = Seg_Lines(matrix, histo, image, LinesIndex);
+	Matrix_Array lines = Seg_Lines(matrix, histo, image, LinesIndex, GTK_TOGGLE_BUTTON(app_wdgts -> w_btn_drlines));
+
 
 	//core segmentation
 	for(int i = 0; i < lines.size; i++)
@@ -616,12 +622,14 @@ Matrix_Array Segmentation2(Matrix matrix, SDL_Surface *image)
 		histov = histoV(lines.array_data[i]);
 		average = LetterSizeAverage(histov);
 		WordsIndex = Init_Array(histov.size);
-		words = Seg_Words(lines.array_data[i], histov, average, image, LinesIndex.array_data[i], WordsIndex);
+		words = Seg_Words(lines.array_data[i], histov, average, image, LinesIndex.array_data[i], WordsIndex, GTK_TOGGLE_BUTTON(app_wdgts -> w_btn_drwords));
+;
 		free(histov.array_data);	
 		for(int j = 0; j < words.size; j++)
 		{
 			histov = histoV(words.array_data[j]);
-			letters = Seg_Letters(words.array_data[j], histov, image, LinesIndex.array_data[i], WordsIndex.array_data[j]);
+			letters = Seg_Letters(words.array_data[j], histov, image, LinesIndex.array_data[i], WordsIndex.array_data[j], GTK_TOGGLE_BUTTON(app_wdgts -> w_btn_drletters));
+;
            
             letters = PropagationFix(letters);
            

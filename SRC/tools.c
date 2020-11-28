@@ -655,7 +655,7 @@ void Fill_mat_data(Matrix a, double b[],int size)
 		a.matrix_data[i]=b[i];
 }
 
-void training()
+void training(app_widgets *app_wdgts)
 {
     unsigned int i = 1;
     while(1)
@@ -678,7 +678,7 @@ void training()
         grayscale(surface);
         blackwhite(surface);
         Matrix matrix = binarize_image(surface);
-        Matrix_Array letters = Segmentation2(matrix, surface);
+        Matrix_Array letters = Segmentation2(matrix, surface, app_wdgts);
 
         //display
         //printf("size = %d\n", letters.size);

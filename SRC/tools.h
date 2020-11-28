@@ -11,6 +11,37 @@
 #include "pixel.h"
 #include <string.h>
 
+
+typedef struct {
+    SDL_Surface *image;
+    int rotate;
+
+    GtkWidget *w_btn_drlines;
+    GtkWidget *w_btn_drwords;
+    GtkWidget *w_btn_drletters;
+    GtkWidget *w_dlg_file_choose;       // Pointer to file chooser dialog box
+    GtkWidget *w_img_main;              // Pointer to image widget
+    
+    GtkWidget *w_lbl_scan;
+    GtkWidget *w_lbl_degree;
+    
+    GtkWidget *w_spin;
+    
+    GtkWidget *w_btn_rmvpict;
+    GtkWidget *w_menuitm_open;
+    GtkWidget *w_btn_scan;
+    GtkWidget *w_btn_training;
+    GtkWidget *box;
+    GtkWidget *w_btn_grscale;
+    GtkWidget *w_btn_blckwhte;
+    GtkWidget *w_btn_noise;
+    GtkWidget *w_btn_contrast;
+} app_widgets;
+
+
+
+
+
 typedef struct Matrix_t
 {
 	double *matrix_data;
@@ -95,6 +126,6 @@ void Fill_mat_data(Matrix a, double b[],int size);
 
 void Mult_simple(Matrix a,Matrix b, Matrix res);
 
-void training();
+void training(app_widgets *app_wdgts);
 
 #endif
