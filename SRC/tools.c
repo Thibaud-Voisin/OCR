@@ -663,8 +663,8 @@ void training(app_widgets *app_wdgts)
         FILE *file;
         char num[4];
         sprintf(num,"%d",i);
-        char name[20]; 
-        char image[20];
+        char name[2000]; 
+        char image[2000];
         strcpy(name, "./training/texts/");
         strcpy(image, "./training/images/");
         strcat(name, num);
@@ -730,4 +730,18 @@ void reload_image(app_widgets *app_wdgts)
 {
     SDL_SaveBMP(app_wdgts -> image, "tmp.bmp");
     gtk_image_set_from_file(GTK_IMAGE(app_wdgts->w_img_main), "tmp.bmp"); 
+}
+
+
+SDL_Surface* Resize_Image(SDL_Surface *image, int width, int height)
+{
+    SDL_Surface *new = SDL_CreateRGBSurface(0, width, height, 32, 0, 0, 0, 0);
+    for(int i = 0; i < width; i++)
+    {
+        for(int j = 0; j < height; j++)
+        {
+            put_pixel(new, i, j, get_pixel(image, (int)(i*((float)image -> w / width)),(int)(j*((float)image -> h / height))));
+        }
+    }
+    return new;
 }

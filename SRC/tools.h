@@ -14,7 +14,6 @@
 
 typedef struct {
     SDL_Surface *image;
-    int rotate;
 
     GtkWidget *w_btn_drlines;
     GtkWidget *w_btn_drwords;
@@ -129,5 +128,7 @@ void Mult_simple(Matrix a,Matrix b, Matrix res);
 void training(app_widgets *app_wdgts);
 
 void reload_image(app_widgets *app_wdgts);
+
+SDL_Surface* Resize_Image(SDL_Surface *image, int width, int height);
 
 #endif

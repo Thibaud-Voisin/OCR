@@ -24,8 +24,20 @@ void on_menuitm_open_activate(GtkMenuItem *menuitem, app_widgets *app_wdgts)
         if (file_name != NULL) {
             app_wdgts -> image = SDL_LoadBMP(file_name);
 
-            gtk_image_set_from_file(GTK_IMAGE(app_wdgts->w_img_main), file_name);
-            
+            GtkAllocation *allocation = g_new(GtkAllocation, 1);
+            gtk_widget_get_allocation(app_wdgts -> w_img_main, allocation);
+            int width = allocation -> width;
+            int height = allocation -> height;
+            if(app_wdgts -> image -> w < width)
+                width = app_wdgts -> image -> w;
+            if(app_wdgts -> image -> h < height)
+                height = app_wdgts -> image -> h;
+            if(app_wdgts -> image -> w > width || app_wdgts -> image -> h > height)
+            {
+                app_wdgts -> image = Resize_Image(app_wdgts -> image, width, height);
+            }
+
+            reload_image(app_wdgts);
             gtk_widget_set_visible(app_wdgts->w_menuitm_open,FALSE);
             gtk_widget_set_visible(app_wdgts->w_btn_scan,TRUE);
             gtk_widget_set_visible(app_wdgts->w_btn_training,TRUE);
@@ -75,6 +87,7 @@ void on_btn_rmvpict_clicked(GtkMenuItem *btn_rmvpict, app_widgets *app_wdgts)
     gtk_image_clear(GTK_IMAGE(app_wdgts->w_img_main));
     remove("tmp.bmp");
     remove("tmp2.bmp");
+    remove("tmp3.bmp");
 
     gtk_label_set_text(GTK_LABEL(app_wdgts->w_lbl_scan),"Waiting for scan...");
 }
@@ -82,15 +95,20 @@ void on_btn_rmvpict_clicked(GtkMenuItem *btn_rmvpict, app_widgets *app_wdgts)
 void on_spin_value_changed(GtkMenuItem *btn_left, app_widgets *app_wdgts)
 {
     btn_left = btn_left;
+    
+    SDL_Surface *test = SDL_LoadBMP("tmp3.bmp");
+    if(test == NULL)
+        SDL_SaveBMP(app_wdgts -> image, "tmp3.bmp");
+    else
+        app_wdgts -> image = test;
+
     gint32 quantity = 0;
     gchar out_str[100] = {0};
     quantity = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(app_wdgts->w_spin));
     g_snprintf(out_str,sizeof(out_str),"%d",quantity);
     gtk_label_set_text(GTK_LABEL(app_wdgts->w_lbl_degree),out_str);
 
-    image_rotation(app_wdgts -> image, quantity - app_wdgts -> rotate);
-
-    app_wdgts -> rotate = quantity;
+    image_rotation(app_wdgts -> image, quantity);
 
     reload_image(app_wdgts);
 }
@@ -218,7 +236,6 @@ int main(int argc, char *argv[])
     builder = gtk_builder_new_from_file("glade/window_main.glade");
 
     window = GTK_WIDGET(gtk_builder_get_object(builder, "window_main"));
-    widgets->rotate = 0;
     widgets->w_dlg_file_choose = GTK_WIDGET(gtk_builder_get_object(builder, "dlg_file_choose"));
     widgets->w_img_main = GTK_WIDGET(gtk_builder_get_object(builder, "img_main"));
     
@@ -245,12 +262,15 @@ int main(int argc, char *argv[])
     
     g_object_unref(builder);
 
+
     gtk_widget_show(window);
+
     gtk_main();
     g_slice_free(app_widgets, widgets);
 
     remove("tmp.bmp");
     remove("tmp2.bmp");
+    remove("tmp3.bmp");
 
     return 0;
 }
