@@ -190,11 +190,6 @@ void on_btn_drletters_toggled(GtkToggleButton *btn_drletters, app_widgets *app_w
 {
     btn_drletters = btn_drletters;
     on_dr_change(app_wdgts);
-    /*SDL_Surface *image = app_wdgts -> image;
-    for(int i  = 0; i < image -> w; i++)
-        for(int j = 0; j < image -> h; j++)
-            put_pixel(image, i, j, 16580620);
-    reload_image(app_wdgts);*/
 }
 
 
