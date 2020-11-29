@@ -655,16 +655,19 @@ void Fill_mat_data(Matrix a, double b[],int size)
 		a.matrix_data[i]=b[i];
 }
 
+
 void training(app_widgets *app_wdgts)
 {
-    unsigned int i = 1;
+	Matrix input_template = Init_matrix(400,1);	
+    Neural_network Net_train = Init_neural_network(input_template,400,20,1,1);
+	unsigned int i = 1:;
     while(1)
     {
         FILE *file;
         char num[4];
         sprintf(num,"%d",i);
-        char name[2000]; 
-        char image[2000];
+        char name[30]; 
+        char image[40];
         strcpy(name, "./training/texts/");
         strcpy(image, "./training/images/");
         strcat(name, num);
@@ -708,13 +711,13 @@ void training(app_widgets *app_wdgts)
 
         printf("counter = %d\n", counter);
 
-        for(int i = 0; i < counter; i++)
+        for(int j = 0; j < counter; j++)
         {
-            str[i] = tmp[i];
+            str[j] = tmp[j];
         }
         //display
-        for(int i = 0; i < counter; i++)
-            printf("%c", str[i]);
+        for(int k = 0; k < counter; k++)
+            printf("%c", str[k]);
         printf("\n");
 
         if(counter != letters.size)
@@ -722,7 +725,21 @@ void training(app_widgets *app_wdgts)
             printf("ERROR : number of letters detected on image and given are different :\ndetected : %d\ngiven : %d\n", letters.size, counter);
             break;
         }
-        i++;
+		for(unsigned int l = 0, l < letters.size; ++l)
+		{
+			letters[l].nb_column *= letters[l].nb_rows;
+			letters[l].nb_rows = 1;
+			Net_train = Train_N_n(Net_train,letters[l],str[l],100000,2);
+			if(l == (letters.size-1))
+				{
+					save_data(Net_train.hidden_weight, Net_train.hidden_bias, Net_train.output_weight, Net_train.output_bias);
+					break;
+				}
+		}
+	//letters = liste matrice
+	//str = string qui contient les lettre 
+        
+	i++;
     }
 }
 
