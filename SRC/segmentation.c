@@ -308,7 +308,7 @@ Matrix_Array Seg_Letters(Matrix word, Array histov, SDL_Surface *image, int inde
 			//copies the selected part of word into letter
 			CopyMatrix(word, letter, StartIndex, 0);
  
-            if((float)letter.nb_column/(float)letter.nb_rows > 5)
+            if((float)letter.nb_column/(float)letter.nb_rows > 5 || (float)letter.nb_rows/(float)letter.nb_column > 100)
             {
                 nbLetters--;
                 continue;
