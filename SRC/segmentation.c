@@ -193,7 +193,7 @@ Matrix_Array Seg_Words(Matrix line, Array histov, float average, SDL_Surface *im
 
 	int nbofzeros = 0;
 
-	average *= 0.6;
+	average *= 0.53;
 
 	int nbWords = CountWords(histov, average);
 
@@ -307,6 +307,12 @@ Matrix_Array Seg_Letters(Matrix word, Array histov, SDL_Surface *image, int inde
 
 			//copies the selected part of word into letter
 			CopyMatrix(word, letter, StartIndex, 0);
+ 
+            if((float)letter.nb_column/(float)letter.nb_rows > 5)
+            {
+                nbLetters--;
+                continue;
+            }
 
             letter = CutEdges(letter);
 
@@ -325,8 +331,13 @@ Matrix_Array Seg_Letters(Matrix word, Array histov, SDL_Surface *image, int inde
 			    image = DrawSep(image, StartIndex+index2-1, index, i+index2-1, BLUE, word.nb_rows);			
 		}
 	}
+    Matrix_Array final = Init_Matrix_Array(nbLetters);
+    for(int i = 0; i < nbLetters; i++)
+    {
+        final.array_data[i] = letters.array_data[i];
+    }
 
-	return letters;
+	return final;
 }
 
 

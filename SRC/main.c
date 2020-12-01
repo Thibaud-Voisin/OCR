@@ -34,7 +34,7 @@ void on_menuitm_open_activate(GtkMenuItem *menuitem, app_widgets *app_wdgts)
                 height = app_wdgts -> image -> h;
             if(app_wdgts -> image -> w > width || app_wdgts -> image -> h > height)
             {
-                app_wdgts -> image = Resize_Image(app_wdgts -> image, width, height);
+                //app_wdgts -> image = Resize_Image(app_wdgts -> image, width, height);
             }
 
             reload_image(app_wdgts);
