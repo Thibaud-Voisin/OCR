@@ -660,7 +660,7 @@ void training(app_widgets *app_wdgts)
 {
 	Matrix input_template = Init_matrix(400,1);	
     Neural_network Net_train = Init_neural_network(input_template,400,20,1,1);
-	unsigned int i = 1:;
+	unsigned int i = 1;
     while(1)
     {
         FILE *file;

@@ -9,7 +9,8 @@ OBJ = main.o\
      display.o\
      pre_processing.o\
      tools.o\
-     segmentation.o
+     segmentation.o\
+	 neural_network.o
 
 NN = main_NN.o\
      pixel.o\
