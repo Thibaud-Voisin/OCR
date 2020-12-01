@@ -1,6 +1,7 @@
 #include "tools.h"
 #include "pre_processing.h"
 #include "segmentation.h"
+#include "neural_network.h"
 
 Matrix Init_matrix(int width,int height)
 {
@@ -660,7 +661,7 @@ void training(app_widgets *app_wdgts)
 {
 	Matrix input_template = Init_matrix(400,1);	
     Neural_network Net_train = Init_neural_network(input_template,400,20,1,1);
-	unsigned int i = 1:;
+	unsigned int i = 1;
     while(1)
     {
         FILE *file;
@@ -725,11 +726,11 @@ void training(app_widgets *app_wdgts)
             printf("ERROR : number of letters detected on image and given are different :\ndetected : %d\ngiven : %d\n", letters.size, counter);
             break;
         }
-		for(unsigned int l = 0, l < letters.size; ++l)
+		for(int l = 0; l < letters.size; ++l)
 		{
-			letters[l].nb_column *= letters[l].nb_rows;
-			letters[l].nb_rows = 1;
-			Net_train = Train_N_n(Net_train,letters[l],str[l],100000,2);
+			letters.array_data[l].nb_column *= letters.array_data[l].nb_rows;
+			letters.array_data[l].nb_rows = 1;
+		//	Net_train = Train_N_n(Net_train,letters.array_data[l],str[l],100000,2);
 			if(l == (letters.size-1))
 				{
 					save_data(Net_train.hidden_weight, Net_train.hidden_bias, Net_train.output_weight, Net_train.output_bias);
