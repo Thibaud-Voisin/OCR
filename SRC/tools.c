@@ -625,6 +625,13 @@ void Sum_weights(Matrix a,Matrix b,Matrix res)
 		res.matrix_data[i] = a.matrix_data[i] + b.matrix_data[i];
 }
 
+void Sum_weights_error(Matrix a,char b,Matrix res)
+{
+	
+	for(int i = 0; i < a.nb_rows * a.nb_column; ++i)
+		res.matrix_data[i] = a.matrix_data[i] + b;
+}
+
 void Sigmo_mat(Matrix a,Matrix res)
 {
 	for(int i = 0;i < a.nb_column * a.nb_rows;++i)
