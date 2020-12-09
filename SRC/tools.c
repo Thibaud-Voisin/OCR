@@ -350,9 +350,6 @@ void load_data(char *str, Matrix hidden_weight, Matrix output_weight, Matrix hid
 
 void save_data(Matrix hidden_weights, Matrix hidden_bias, Matrix output_weights, Matrix output_bias)
 {
-
-
-
 	char *str_final = calloc(((hidden_weights.nb_column*hidden_weights.nb_rows)*21)+(hidden_weights.nb_column) + (hidden_bias.nb_column*21) + ((output_weights.nb_column*output_weights.nb_rows)*21)+(output_weights.nb_column) + (output_bias.nb_column*21), sizeof(char));
 	
 	int pos_str_final = 0;
@@ -534,8 +531,12 @@ void save_data(Matrix hidden_weights, Matrix hidden_bias, Matrix output_weights,
 	name[pos] = 'e';
 	++pos;
 
-	
-	file = fopen(name,"w");
+	char path_r[300] = "training/save/";
+
+	strcat(path_r,name);
+
+
+	file = fopen(path_r,"w");
 
 	if(file == NULL)
 		printf("ERROR\n");
@@ -623,13 +624,6 @@ void Sum_weights(Matrix a,Matrix b,Matrix res)
 	
 	for(int i = 0; i < a.nb_rows * a.nb_column; ++i)
 		res.matrix_data[i] = a.matrix_data[i] + b.matrix_data[i];
-}
-
-void Sum_weights_error(Matrix a,char b,Matrix res)
-{
-	
-	for(int i = 0; i < a.nb_rows * a.nb_column; ++i)
-		res.matrix_data[i] = a.matrix_data[i] + b;
 }
 
 void Sigmo_mat(Matrix a,Matrix res)

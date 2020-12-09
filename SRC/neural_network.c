@@ -82,10 +82,14 @@ Neural_network Init_neural_network(Matrix input, int input_layer_neurons, int hi
 		long number_of_char = ((input_layer_neurons*(input_layer_neurons*hidden_layer_neurons))*21)+(input_layer_neurons) + (hidden_layer_neurons*21) + ((hidden_layer_neurons*output_layer_neurons)*21)+(hidden_layer_neurons) + (output_layer_neurons*21) + 4 ;
 
 		char *str_f = calloc(number_of_char ,sizeof(char));
-		
+
+		char path_r[300] = "training/save/";
+
+		strcat(path_r,name);
+
 		FILE *file;
 		
-		file = fopen(name,"r");
+		file = fopen(path_r,"r");
 
 		if(file == NULL)
 		{	
@@ -149,7 +153,7 @@ Neural_network Init_neural_network(Matrix input, int input_layer_neurons, int hi
 	return N_n;
 }
 
-void Train_N_n(Neural_network N_n,Matrix input, char expected_char_output, unsigned long nb_rep,double precision)
+void Train_N_n(Neural_network N_n,Matrix input, Matrix expected_output, unsigned long nb_rep,double precision)
 {
 	for(;nb_rep > 0;--nb_rep)
 	{
@@ -163,7 +167,7 @@ void Train_N_n(Neural_network N_n,Matrix input, char expected_char_output, unsig
 		
 	//BACKPROPAGATION
 		Multip_factor(N_n.final_res,(-1),N_n.error_multip_factor);
-		Sum_weights_error(N_n.error_multip_factor,expected_char_output,N_n.error);	
+		Sum_weights(N_n.error_multip_factor,expected_output,N_n.error);	
 		Sigmo_mat_derivate(N_n.final_res,N_n.back_final_res_sigmo);
 		Mult_simple(N_n.error,N_n.back_final_res_sigmo,N_n.back_final_res);
 		Transp_mat(N_n.output_weight,N_n.error_hidden_layer_transp);

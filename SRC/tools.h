@@ -117,8 +117,6 @@ void Multip_factor(Matrix matrix, double a, Matrix res);
 
 void Sum_weights(Matrix a, Matrix b, Matrix res);
 
-void Sum_weights_error(Matrix a,char b,Matrix res);
-
 void Sigmo_mat(Matrix a, Matrix res);
 
 void Sigmo_mat_derivate(Matrix b, Matrix res);

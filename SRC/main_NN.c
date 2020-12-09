@@ -6,11 +6,11 @@ int main()
 
 
 //	printf("Enter the number of training\n");
-//	unsigned long nb_rep = 100000;
+	unsigned long nb_rep = 100000;
 //	scanf("%lu",&nb_rep);
 
 //	printf("Enter the precision:\n");
-//	double precision = 4;
+	double precision = 4;
 //	scanf("%lf",&precision);	
 
 	Matrix input = Init_matrix(2,4);
@@ -28,7 +28,7 @@ int main()
 
 
 	Neural_network Xor = Init_neural_network(input,input_layer_neurons,hidden_layer_neurons,output_layer_neurons, 0);
-//#	Train_N_n(Xor,input,expected_output,nb_rep,precision);
+	Train_N_n(Xor,input,expected_output,nb_rep,precision);
 	Free_Neural_network(Xor);
 	free(input.matrix_data);
 	free(expected_output.matrix_data);
