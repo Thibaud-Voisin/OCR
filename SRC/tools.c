@@ -661,7 +661,7 @@ void Fill_mat_data(Matrix a, double b[],int size)
 void training(app_widgets *app_wdgts)
 {
 	Matrix input_template = Init_matrix(400,1);	
-    Neural_network Net_train = Init_neural_network(input_template,400,20,1,1);
+    Neural_network Net_train = Init_neural_network(input_template,400,20,62,0);
 	unsigned int i = 1;
     while(1)
     {
@@ -727,11 +727,18 @@ void training(app_widgets *app_wdgts)
             printf("ERROR : number of letters detected on image and given are different :\ndetected : %d\ngiven : %d\n", letters.size, counter);
             break;
         }
+		printf("\n\n\n\n %s \n\n\n", str);
 		for(int l = 0; l < letters.size; ++l)
 		{
 			letters.array_data[l].nb_column *= letters.array_data[l].nb_rows;
 			letters.array_data[l].nb_rows = 1;
-		//	Net_train = Train_N_n(Net_train,letters.array_data[l],str[l],100000,2);
+		
+
+			Matrix expected_output = Init_matrix(62,1);
+			expected_output.matrix_data[swap_to_int(str[l])] = 1;
+		
+
+			Net_train = Train_N_n(Net_train,letters.array_data[l],expected_output,10000,2);
 			if(l == (letters.size-1))
 				{
 					save_data(Net_train.hidden_weight, Net_train.hidden_bias, Net_train.output_weight, Net_train.output_bias);
@@ -764,3 +771,50 @@ SDL_Surface* Resize_Image(SDL_Surface *image, int width, int height)
     }
     return new;
 }
+int swap_to_int(char c)
+{
+	if(c < '0' || c > 'z' || (c<'a' && c > 'Z') || (c < 'A' && c > '9'))
+	{
+		printf("Error in swap_to_int\n");
+		return -1;
+	}
+
+	if(c <= '9')
+			return(c-'0');
+	if(c <= 'Z')
+			return(c-'A' + 10);
+	if(c <= 'z')
+			return(c-'a' + 36);
+	return -1;
+}
+
+char swap_to_char(int i)
+{
+
+	if(i <= 9)
+			return(i+'0');
+	if(i <= 35)
+			return(i+'A' - 10);
+	return(i+'a' - 36);
+}
+
+char find_char(Matrix k)
+{
+		double max = k.matrix_data[0];
+		int index_max =0;
+		for(int i = 1; i < (k.nb_column*k.nb_rows); ++i)
+		{
+				if(k.matrix_data[i] > max)
+				{
+						max = k.matrix_data[i];
+						index_max = i;
+				}
+		}
+	return(swap_to_char(index_max));
+}
+
+
+
+
+
+

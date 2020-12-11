@@ -153,7 +153,7 @@ Neural_network Init_neural_network(Matrix input, int input_layer_neurons, int hi
 	return N_n;
 }
 
-void Train_N_n(Neural_network N_n,Matrix input, Matrix expected_output, unsigned long nb_rep,double precision)
+Neural_network Train_N_n(Neural_network N_n,Matrix input, Matrix expected_output, unsigned long nb_rep,double precision)
 {
 	for(;nb_rep > 0;--nb_rep)
 	{
@@ -199,7 +199,9 @@ void Train_N_n(Neural_network N_n,Matrix input, Matrix expected_output, unsigned
 
 		save_data(N_n.hidden_weight ,N_n.hidden_bias ,N_n.output_weight ,N_n.output_bias);
 	
-		Pretty_print_xor(N_n.final_res);
+//		Pretty_print_xor(N_n.final_res);
+		printf("\n\n%c\n\n", find_char(N_n.final_res));
+		return N_n;
 }
 
 void Free_Neural_network(Neural_network N_n)

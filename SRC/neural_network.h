@@ -38,7 +38,7 @@ typedef struct Neural_Network_t
 	Matrix hidden_bias_back_multfact;
 }Neural_network;
 
-void Train_N_n(Neural_network N_n,Matrix input, Matrix expected_output, unsigned long nb_rep,double precision);
+Neural_network Train_N_n(Neural_network N_n,Matrix input, Matrix expected_output, unsigned long nb_rep,double precision);
 
 Neural_network Init_neural_network(Matrix input, int input_layer_neurons, int hidden_layer_neurons, int output_layer_neurons, int load);
 

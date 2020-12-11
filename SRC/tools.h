@@ -131,4 +131,9 @@ void reload_image(app_widgets *app_wdgts);
 
 SDL_Surface* Resize_Image(SDL_Surface *image, int width, int height);
 
+int swap_to_int(char c);
+
+char swap_to_char(int i);
+
+char find_char(Matrix k);
 #endif
