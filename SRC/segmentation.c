@@ -267,7 +267,6 @@ Matrix DoubleCheck(Matrix letter)
 
     free(histo.array_data);
     free(histo2.array_data);
-    free(letter.matrix_data);
  
     return copy;
 }
@@ -312,22 +311,12 @@ Matrix_Array Seg_Letters(Matrix word, Array histov, SDL_Surface *image, int inde
             //printf("clo/row = %.2f, row/col = %.2f\n", (float)letter.nb_column/(float)letter.nb_rows, (float)letter.nb_rows/(float)letter.nb_column );
             if((float)letter.nb_column/(float)letter.nb_rows > 5 || (float)letter.nb_rows/(float)letter.nb_column > 100)
             {
-                printf("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n");
                 nbLetters--;
                 continue;
             }
-
-            letter = CutEdges(letter);
-
-            letter = Resize(letter);
-
-            letter = DoubleCheck(letter);
-
-            letter = Resize(letter);
-
-			letters.array_data[counter] = letter;
-			
-			counter++;
+            letters = PropagationFix(letters, letter, &counter, &nbLetters);
+            
+            counter++;
 
 			//for visual render
             if(gtk_toggle_button_get_active(display))
@@ -365,7 +354,6 @@ Matrix CutEdges(Matrix letter)
     Matrix cropped = Init_matrix(letter.nb_column,letter.nb_rows-StartIndex-(letter.nb_rows-EndIndex)+1);
     CopyMatrix(letter, cropped, 0, StartIndex);
     free(histo.array_data);
-    free(letter.matrix_data);
     return cropped;
 }
 
@@ -381,7 +369,6 @@ Matrix CutEdges2(Matrix letter)
     Matrix cropped = Init_matrix(letter.nb_column-StartIndex-(letter.nb_column-EndIndex)+1, letter.nb_rows);
     CopyMatrix(letter, cropped, StartIndex, 0);
     free(histo.array_data);
-    free(letter.matrix_data);
     return cropped;
 }
 
@@ -398,16 +385,14 @@ Matrix Resize(Matrix letter)
             resized.matrix_data[j+(i*newH)] = letter.matrix_data[(int)(j*((float)letter.nb_column/newH))+((int)(i*((float)letter.nb_rows/newW))*letter.nb_column)];
         }
     }
-    free(letter.matrix_data);
     return resized;
 }
 
 void Recursive(Matrix letter, Matrix new, Matrix path, int x, int y)
 {
-    /*Pretty_print(letter);
-    Pretty_print(new);
-    Pretty_print(path);
-    */
+    //Pretty_print(letter);
+    //Pretty_print(new);
+    //Pretty_print(path);
     new.matrix_data[x*new.nb_column+y] = 0;
     path.matrix_data[x*path.nb_column+y] = 1;
  
@@ -432,18 +417,18 @@ void Recursive(Matrix letter, Matrix new, Matrix path, int x, int y)
 
 Matrix IsolateLetter(Matrix letter, int x, int y)
 {
-    Matrix new = Init_matrix(letter.nb_rows,letter.nb_column);
+    Matrix new = Init_matrix(letter.nb_column,letter.nb_rows);
     for(int i = 0; i < new.nb_rows; i++)
         for(int j = 0; j < new.nb_column; j++)
             new.matrix_data[i*new.nb_column+j] = 1;
-    Matrix boolM = Init_matrix(letter.nb_rows, letter.nb_column);
+    Matrix boolM = Init_matrix(letter.nb_column, letter.nb_rows);
     Recursive(letter, new, boolM, x, y);
-    free(boolM.matrix_data);
     return new;
 }
 
 Matrix_Array DoubleLetters(Matrix letter)
 {
+    //Pretty_print(letter);
     Matrix_Array tmp = Init_Matrix_Array(2);
     int a = 0;
     int b = 0;
@@ -453,60 +438,60 @@ Matrix_Array DoubleLetters(Matrix letter)
         b++;
     tmp.array_data[0] = IsolateLetter(letter,a,0);
     tmp.array_data[1] = IsolateLetter(letter,b,letter.nb_column-1);
-    /*Pretty_print(tmp.array_data[0]);
-    Pretty_print(tmp.array_data[1]);
-    printf("xxxxxxxxxxxxxxx\n");*/
+    //Pretty_print(tmp.array_data[0]);
+    //Pretty_print(tmp.array_data[1]);
     return tmp;
 }
 
-Matrix_Array PropagationFix(Matrix_Array letters)
+Matrix_Array PropagationFix(Matrix_Array letters, Matrix letter, int* counter, int* nbLetters)
 {
-    Matrix_Array newLetters = Init_Matrix_Array(letters.size*2);
+    letter = CutEdges(letter);
+    letter = CutEdges2(letter);
+    int add = 0;
     Matrix_Array tmp = Init_Matrix_Array(2);
-    int j = 0;
-    int i = 0;
-    for(; i < letters.size; i++)
+    int k = 0;
+    Array histo = histoH(letter);
+    while(k < histo.size && histo.array_data[k] != 0)
+        k++;
+    if(k != histo.size)
     {
-        int k = 0;
-        Array histo = histoH(letters.array_data[i]);
-        while(k < histo.size && histo.array_data[k] != 0)
-            k++;
-        if(k != histo.size)
-        {
-            newLetters.array_data[i+j] = letters.array_data[i];
-            continue;
-        }
-        tmp = DoubleLetters(letters.array_data[i]);
-        if(CompareMatrix(tmp.array_data[0],tmp.array_data[1]) == 1)
-            newLetters.array_data[i+j] = letters.array_data[i];
-        else
-        {
-            //Pretty_print(tmp.array_data[0]);
-            //Pretty_print(tmp.array_data[1]);
-            //printf("xxxxxxxxxxxxxxx\n");
-            newLetters.array_data[i+j] = tmp.array_data[0];
-            
-            newLetters.array_data[i+j] = CutEdges(newLetters.array_data[i+j]);
-            //newLetters.array_data[i+j] = DoubleCheck(newLetters.array_data[i+j]);
-            //newLetters.array_data[i+j] = Resize(newLetters.array_data[i+j]);
-            newLetters.array_data[i+j] = CutEdges2(newLetters.array_data[i+j]);
-            newLetters.array_data[i+j] = Resize(newLetters.array_data[i+j]);
-
-            j++;
-            newLetters.array_data[i+j] = tmp.array_data[1];
-
-            newLetters.array_data[i+j] = CutEdges(newLetters.array_data[i+j]);
-            //newLetters.array_data[i+j] = DoubleCheck(newLetters.array_data[i+j]);
-            //newLetters.array_data[i+j] = Resize(newLetters.array_data[i+j]);
-            newLetters.array_data[i+j] = CutEdges2(newLetters.array_data[i+j]);
-            newLetters.array_data[i+j] = Resize(newLetters.array_data[i+j]);
-        }
-        free(histo.array_data);
+        letter = CutEdges(letter);
+        letter = CutEdges2(letter);
+        letter = Resize(letter);
+        letters.array_data[*counter] = letter;
+        return letters;
     }
-    letters = Init_Matrix_Array(i+j);
-    for(int x = 0; x < letters.size; x++)
-        letters.array_data[x] = newLetters.array_data[x];
-    return letters;
+    tmp = DoubleLetters(letter);
+
+    //Pretty_print(tmp.array_data[0]);
+    //Pretty_print(tmp.array_data[1]);
+    if(CompareMatrix(tmp.array_data[0],tmp.array_data[1]) == 1)
+    {
+        letter = CutEdges(tmp.array_data[0]);
+        letter = CutEdges2(letter);
+        letter = Resize(letter);
+        letters.array_data[*counter] = letter;
+    }
+    else
+    {
+        add = 1;
+        letter = CutEdges(tmp.array_data[0]);
+        letter = CutEdges2(letter);
+        letter = Resize(letter);
+        letters.array_data[*counter] = letter;
+        *counter += 1;
+        *nbLetters += 1;
+        letter = CutEdges(tmp.array_data[1]);
+        letter = CutEdges2(letter);
+        letter = Resize(letter);
+        letters.array_data[*counter] = letter;
+    }
+    Matrix_Array new = Init_Matrix_Array(letters.size+add);
+    for(int x = 0; x < letters.size+add; x++)
+    {
+        new.array_data[x] = letters.array_data[x];
+    }
+    return new;
 }
 
 void refresh(SDL_Surface *image)
@@ -553,10 +538,10 @@ gchar* Segmentation(Matrix matrix, SDL_Surface *image, gchar *txt, app_widgets *
 
 			letters = Seg_Letters(words.array_data[j], histov, image, LinesIndex.array_data[i], WordsIndex.array_data[j], GTK_TOGGLE_BUTTON(app_wdgts -> w_btn_drletters));
 
-            letters = PropagationFix(letters);
            
 			for(int k = 0; k < letters.size; k++)
 			{
+                //Pretty_print(letters.array_data[k]);
 			    char c = RandomLetter();
                 txt = g_strdup_printf("%s%c",txt,c);
             }
@@ -629,7 +614,6 @@ Matrix_Array Segmentation2(Matrix matrix, SDL_Surface *image, app_widgets *app_w
             {
                 //Pretty_print(letters.array_data[k]);
             }
-            letters = PropagationFix(letters);
            
 			for(int k = 0; k < letters.size; k++)
 			{

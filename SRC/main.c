@@ -24,31 +24,40 @@ void on_menuitm_open_activate(GtkMenuItem *menuitem, app_widgets *app_wdgts)
         if (file_name != NULL) {
             app_wdgts -> image = SDL_LoadBMP(file_name);
 
-            GtkAllocation *allocation = g_new(GtkAllocation, 1);
-            gtk_widget_get_allocation(app_wdgts -> w_img_main, allocation);
-            int width = allocation -> width;
-            int height = allocation -> height;
-            if(app_wdgts -> image -> w < width)
-                width = app_wdgts -> image -> w;
-            if(app_wdgts -> image -> h < height)
-                height = app_wdgts -> image -> h;
-            if(app_wdgts -> image -> w > width || app_wdgts -> image -> h > height)
+            if(app_wdgts -> image != NULL)
             {
-                //app_wdgts -> image = Resize_Image(app_wdgts -> image, width, height);
-            }
-
-            reload_image(app_wdgts);
-            gtk_widget_set_visible(app_wdgts->w_menuitm_open,FALSE);
-            gtk_widget_set_visible(app_wdgts->w_btn_scan,TRUE);
-            gtk_widget_set_visible(app_wdgts->w_btn_training,TRUE);
-            gtk_widget_set_visible(app_wdgts->box,TRUE);
             
-            gtk_widget_set_sensitive(app_wdgts->w_spin,TRUE);
-            gtk_widget_set_sensitive(app_wdgts->w_btn_rmvpict,TRUE);
-            gtk_widget_set_sensitive(app_wdgts->w_btn_grscale,TRUE);
-            gtk_widget_set_sensitive(app_wdgts->w_btn_blckwhte,TRUE);
-            gtk_widget_set_sensitive(app_wdgts->w_btn_noise,TRUE);
-            gtk_widget_set_sensitive(app_wdgts->w_btn_contrast,TRUE);
+                GtkAllocation *allocation = g_new(GtkAllocation, 1);
+                gtk_widget_get_allocation(app_wdgts -> w_img_main, allocation);
+                int width = allocation -> width;
+                int height = allocation -> height;
+                if(app_wdgts -> image -> w < width)
+                    width = app_wdgts -> image -> w;
+                if(app_wdgts -> image -> h < height)
+                    height = app_wdgts -> image -> h;
+                if(app_wdgts -> image -> w > width || app_wdgts -> image -> h > height)
+                {
+                    //app_wdgts -> image = Resize_Image(app_wdgts -> image, width, height);
+                }
+                reload_image(app_wdgts);
+                gtk_widget_set_visible(app_wdgts->w_btn_scan,TRUE);
+                gtk_widget_set_visible(app_wdgts->w_btn_training,TRUE);
+                gtk_widget_set_visible(app_wdgts->box,TRUE);
+            
+                gtk_widget_set_sensitive(app_wdgts->w_spin,TRUE);
+                gtk_widget_set_sensitive(app_wdgts->w_btn_rmvpict,TRUE);
+                gtk_widget_set_sensitive(app_wdgts->w_btn_grscale,TRUE);
+                gtk_widget_set_sensitive(app_wdgts->w_btn_blckwhte,TRUE);
+                gtk_widget_set_sensitive(app_wdgts->w_btn_noise,TRUE);
+                gtk_widget_set_sensitive(app_wdgts->w_btn_contrast,TRUE);
+                gtk_widget_set_visible(app_wdgts->w_menuitm_open,FALSE);
+                gtk_label_set_text(GTK_LABEL(app_wdgts->w_lbl_scan),"Waiting for scan...");
+            }
+            else
+                gtk_label_set_text(GTK_LABEL(app_wdgts->w_lbl_scan),"Invalid Image");
+
+
+
         }
         g_free(file_name);
     }

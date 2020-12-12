@@ -28,6 +28,8 @@ gchar* Segmentation(Matrix matrix, SDL_Surface *image, gchar *txt, app_widgets *
 
 Matrix_Array Segmentation2(Matrix matrix, SDL_Surface *image, app_widgets *app_wdgts);
 
+Matrix_Array PropagationFix(Matrix_Array letters, Matrix letter, int* counter, int* nbLetters);
+
 char RandomLetter();
 
 #endif

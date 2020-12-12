@@ -31,7 +31,7 @@ void blackwhite(SDL_Surface *image)
 
 			SDL_GetRGB(get_pixel(image, i,j), image -> format, &r, &g, &b);
 			
-			if((r+g+b)/3 > 127) /*if the color is closer to white, it turns white, else black*/
+			if((r+g+b)/3 > 150) /*if the color is closer to white, it turns white, else black, giving a margin of error*/
 			{
 				r = 255;
 				g = 255;
