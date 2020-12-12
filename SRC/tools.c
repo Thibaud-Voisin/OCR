@@ -660,11 +660,23 @@ void Fill_mat_data(Matrix a, double b[],int size)
 
 void training(app_widgets *app_wdgts)
 {
-	Matrix input_template = Init_matrix(400,1);	
-    Neural_network Net_train = Init_neural_network(input_template,400,20,62,0);
+	//Matrix input_template = Init_matrix(400,1);	
+    //Neural_network Net_train = Init_neural_network(input_template,400,20,62,0);
 	unsigned int i = 1;
     while(1)
     {
+        if(i > 9)
+            break;
+        if(i == 4 || i == 6)
+        {
+            i++;
+            continue;
+        }
+        if(i != 9)
+        {
+            i++;
+            continue;
+        }
         FILE *file;
         char num[4];
         sprintf(num,"%d",i);
@@ -685,9 +697,8 @@ void training(app_widgets *app_wdgts)
         Matrix matrix = binarize_image(surface);
         Matrix_Array letters = Segmentation2(matrix, surface, app_wdgts);
         //display
-        //printf("size = %d\n", letters.size);
         //for(int i = 0; i < letters.size; i++)
-           // Pretty_print(letters.array_data[i]);
+            //Pretty_print(letters.array_data[i]);
 
         file = fopen(name,"r");
 
@@ -700,25 +711,29 @@ void training(app_widgets *app_wdgts)
 
         for(; c != EOF; c = fgetc(file))
         {
-            if(c != ' ' && c != '\n')
+            if(c != 0 && c != ' ' && c != '\n')
             {
                 tmp[counter] = c;
                 counter++;
             }
         }
+
         fclose(file);
         
         char str[counter];
-
-        printf("counter = %d\n", counter);
 
         for(int j = 0; j < counter; j++)
         {
             str[j] = tmp[j];
         }
+        str[counter] = 0;
         //display
         for(int k = 0; k < counter; k++)
-            printf("%c", str[k]);
+        {
+            //Pretty_print(letters.array_data[k]);
+            //printf("%c", str[k]);
+            //printf("\n");
+        }
         printf("\n");
 
         if(counter != letters.size)
@@ -732,7 +747,7 @@ void training(app_widgets *app_wdgts)
 
 		printf("%s", str);
 		printf("\n");
-		for(int l = 0; l < letters.size; ++l)
+		/*for(int l = 0; l < letters.size; ++l)
 		{
 			letters.array_data[l].nb_column *= letters.array_data[l].nb_rows;
 			letters.array_data[l].nb_rows = 1;
@@ -748,7 +763,7 @@ void training(app_widgets *app_wdgts)
 					save_data(Net_train.hidden_weight, Net_train.hidden_bias, Net_train.output_weight, Net_train.output_bias);
 					break;
 				}
-		}
+		}*/
 	//letters = liste matrice
 	//str = string qui contient les lettre 
         
