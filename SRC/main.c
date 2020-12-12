@@ -126,6 +126,7 @@ void on_btn_scan_clicked(GtkMenuItem *btn_scan, app_widgets *app_wdgts)
     gchar *tst = Segmentation(matrix, app_wdgts -> image, txt, app_wdgts);
     gtk_label_set_label(GTK_LABEL(app_wdgts->w_lbl_scan),tst);
 
+	free(matrix.matrix_data);
     reload_image(app_wdgts);
 }
 

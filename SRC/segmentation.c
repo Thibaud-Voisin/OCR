@@ -336,7 +336,7 @@ Matrix_Array Seg_Letters(Matrix word, Array histov, SDL_Surface *image, int inde
     {
         final.array_data[i] = letters.array_data[i];
     }
-
+	freeArrays(letters);
 	return final;
 }
 
@@ -491,10 +491,14 @@ Matrix_Array PropagationFix(Matrix_Array letters)
         }
         free(histo.array_data);
     }
-    letters = Init_Matrix_Array(i+j);
+    freeArrays(tmp);
+	letters = Init_Matrix_Array(i+j);
     for(int x = 0; x < letters.size; x++)
-        letters.array_data[x] = newLetters.array_data[x];
-    return letters;
+	{
+	   		letters.array_data[x] = newLetters.array_data[x];
+	}
+	freeArrays(newLetters);
+   	return letters;
 }
 
 void refresh(SDL_Surface *image)
@@ -541,7 +545,7 @@ gchar* Segmentation(Matrix matrix, SDL_Surface *image, gchar *txt, app_widgets *
 
 			letters = Seg_Letters(words.array_data[j], histov, image, LinesIndex.array_data[i], WordsIndex.array_data[j], GTK_TOGGLE_BUTTON(app_wdgts -> w_btn_drletters));
 
-           // letters = PropagationFix(letters);
+            letters = PropagationFix(letters);
            
 			for(int k = 0; k < letters.size; k++)
 			{
@@ -613,7 +617,7 @@ Matrix_Array Segmentation2(Matrix matrix, SDL_Surface *image, app_widgets *app_w
 			letters = Seg_Letters(words.array_data[j], histov, image, LinesIndex.array_data[i], WordsIndex.array_data[j], GTK_TOGGLE_BUTTON(app_wdgts -> w_btn_drletters));
 ;
            
-           // letters = PropagationFix(letters);
+            letters = PropagationFix(letters);
            
 			for(int k = 0; k < letters.size; k++)
 			{
