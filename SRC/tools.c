@@ -662,23 +662,16 @@ void training(app_widgets *app_wdgts)
 {
 	Matrix input_template = Init_matrix(400,1);	
     Neural_network Net_train = Init_neural_network(input_template,400,20,62,0);
+        
+	//Pretty_print_xor(Net_train.hidden_weight);
+	
+	
 	unsigned int i = 1;
     while(1)
     {
         if(i > 17)
             break;
         if(i == 4 || i == 6 || i == 10 || i == 12 || i == 15)
-    Neural_network Net_train = Init_neural_network(input_template,400,20,89,0);
-	Pretty_print_xor(Net_train.hidden_weight);
-	
-	
-	unsigned int i = 1;
-    while(1)
-    {
-
-        if(i > 5)
-            break;
-        if(i == 4 || i == 6)
         {
             i++;
             continue;
