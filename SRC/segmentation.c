@@ -311,6 +311,7 @@ Matrix_Array Seg_Letters(Matrix word, Array histov, SDL_Surface *image, int inde
             //printf("clo/row = %.2f, row/col = %.2f\n", (float)letter.nb_column/(float)letter.nb_rows, (float)letter.nb_rows/(float)letter.nb_column );
             if((float)letter.nb_column/(float)letter.nb_rows > 5 || (float)letter.nb_rows/(float)letter.nb_column > 100)
             {
+                printf("skipped\n");
                 nbLetters--;
                 continue;
             }

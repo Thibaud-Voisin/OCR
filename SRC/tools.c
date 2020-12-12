@@ -673,8 +673,8 @@ void Fill_mat_data(Matrix a, double b[],int size)
 
 void training(app_widgets *app_wdgts)
 {
-	Matrix input_template = Init_matrix(400,1);	
-    Neural_network Net_train = Init_neural_network(input_template,400,20,89,1);
+	//Matrix input_template = Init_matrix(400,1);	
+    //Neural_network Net_train = Init_neural_network(input_template,400,20,89,1);
    /*	
 	Pretty_print_xor(Net_train.hidden_weight);
 	Pretty_print_xor(Net_train.hidden_bias);
@@ -686,7 +686,7 @@ void training(app_widgets *app_wdgts)
     while(1)
     {
 
-       if(i > 17)
+       if(i > 19)
             break;
         if(i == 4 || i == 6 || i == 10 || i == 12 || i == 15)
         {
@@ -747,9 +747,9 @@ void training(app_widgets *app_wdgts)
         //display
         for(int k = 0; k < counter; k++)
         {
-            //Pretty_print(letters.array_data[k]);
-            //printf("%c", str[k]);
-            //printf("\n");
+            Pretty_print(letters.array_data[k]);
+            printf("%c", str[k]);
+            printf("\n");
         }
         printf("\n");
 
@@ -764,7 +764,7 @@ void training(app_widgets *app_wdgts)
 
 		printf("%s", str);
 		printf("\n");
-		for(int l = 0; l < letters.size; ++l)
+		/*for(int l = 0; l < letters.size; ++l)
 		{
 			letters.array_data[l].nb_column *= letters.array_data[l].nb_rows;
 			letters.array_data[l].nb_rows = 1;
@@ -779,18 +779,18 @@ void training(app_widgets *app_wdgts)
 				{
 					printf("\n\nWRITE\n\n");
 
-  /*	
-	Pretty_print_xor(Net_train.hidden_weight);
-	Pretty_print_xor(Net_train.hidden_bias);
-	Pretty_print_xor(Net_train.output_weight);
-	Pretty_print_xor(Net_train.output_bias);
-*/
+  	
+	//Pretty_print_xor(Net_train.hidden_weight);
+	//Pretty_print_xor(Net_train.hidden_bias);
+	//Pretty_print_xor(Net_train.output_weight);
+	//Pretty_print_xor(Net_train.output_bias);
+
 	
 					save_data(Net_train.hidden_weight, Net_train.hidden_bias, Net_train.output_weight, Net_train.output_bias);
 
 					break;
 				}
-		}
+		}*/
 	//letters = liste matrice
 	//str = string qui contient les lettre 
         
