@@ -660,23 +660,23 @@ void Fill_mat_data(Matrix a, double b[],int size)
 
 void training(app_widgets *app_wdgts)
 {
-	//Matrix input_template = Init_matrix(400,1);	
-    //Neural_network Net_train = Init_neural_network(input_template,400,20,62,0);
+	Matrix input_template = Init_matrix(400,1);	
+    Neural_network Net_train = Init_neural_network(input_template,400,20,89,0);
+	Pretty_print_xor(Net_train.hidden_weight);
+	
+	
 	unsigned int i = 1;
     while(1)
     {
-        if(i > 9)
+
+        if(i > 5)
             break;
         if(i == 4 || i == 6)
         {
             i++;
             continue;
         }
-        if(i != 9)
-        {
-            i++;
-            continue;
-        }
+       	
         FILE *file;
         char num[4];
         sprintf(num,"%d",i);
@@ -747,23 +747,24 @@ void training(app_widgets *app_wdgts)
 
 		printf("%s", str);
 		printf("\n");
-		/*for(int l = 0; l < letters.size; ++l)
+		for(int l = 0; l < letters.size; ++l)
 		{
 			letters.array_data[l].nb_column *= letters.array_data[l].nb_rows;
 			letters.array_data[l].nb_rows = 1;
 		
 
-			Matrix expected_output = Init_matrix(62,1);
+			Matrix expected_output = Init_matrix(89,1);
 			expected_output.matrix_data[swap_to_int(str[l])] = 1;
 		
 
-			Net_train = Train_N_n(Net_train,letters.array_data[l],expected_output,100,10);
+			Net_train = Train_N_n(Net_train,letters.array_data[l],expected_output,10000,2);
 			if(l == (letters.size-1))
 				{
+					printf("\n\nWRITE\n\n");
 					save_data(Net_train.hidden_weight, Net_train.hidden_bias, Net_train.output_weight, Net_train.output_bias);
 					break;
 				}
-		}*/
+		}
 	//letters = liste matrice
 	//str = string qui contient les lettre 
         

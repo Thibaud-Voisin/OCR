@@ -153,6 +153,19 @@ Neural_network Init_neural_network(Matrix input, int input_layer_neurons, int hi
 	return N_n;
 }
 
+char Evaluate_char(Neural_network N_n,Matrix input)
+{
+		Mult_mat_1(input, N_n.hidden_weight,N_n.res_hidden_layer);
+		Sum_bias(N_n.res_hidden_layer,N_n.hidden_bias,N_n.res_hidden_layer);
+		Sigmo_mat(N_n.res_hidden_layer,N_n.hidden_layer_output);
+		
+		Mult_mat_1(N_n.hidden_layer_output,N_n.output_weight,N_n.res_output_layer);
+		Sum_bias(N_n.res_output_layer,N_n.output_bias,N_n.res_output_layer);
+		Sigmo_mat(N_n.res_output_layer,N_n.final_res);
+
+		return find_char(N_n.final_res);
+}
+
 Neural_network Train_N_n(Neural_network N_n,Matrix input, Matrix expected_output, unsigned long nb_rep,double precision)
 {
 	for(;nb_rep > 0;--nb_rep)
@@ -199,7 +212,8 @@ Neural_network Train_N_n(Neural_network N_n,Matrix input, Matrix expected_output
 
 		save_data(N_n.hidden_weight ,N_n.hidden_bias ,N_n.output_weight ,N_n.output_bias);
 	
-//		Pretty_print_xor(N_n.final_res);
+//		printf("\n\n");
+//		printf("\n\n");
 		printf("%c", find_char(N_n.final_res));
 		fflush(stdout);	
 		return N_n;

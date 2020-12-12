@@ -557,6 +557,7 @@ gchar* Segmentation(Matrix matrix, SDL_Surface *image, gchar *txt, app_widgets *
            
 			for(int k = 0; k < letters.size; k++)
 			{
+	//			letters.array_data[k] = lettre en matrice de 20x20
 			    char c = RandomLetter();
                 txt = g_strdup_printf("%s%c",txt,c);
             }
