@@ -267,79 +267,92 @@ void load_data(char *str, Matrix hidden_weight, Matrix output_weight, Matrix hid
 {
 	int position = 18;
 	double number;
+	char chh;
 	for(int i = 0; i < hidden_weight.nb_column*hidden_weight.nb_rows; ++i)
 	{
-		
-		number = 0;
-		
+	number = 0;
+	
 		for(int j = 0; j < 18; ++j)
 		{
+			chh = str[position-j];
+			if(chh != ',')	
+			{
 			number /= 10;
-			number += str[position-j]-'0';
+			number += chh-'0';
+			}
 		}
 
 		if(str[position-18] == '-')
 			number *= (-1);
 			
-		position+=19;
+		position+=20;
 		hidden_weight.matrix_data[i] = number;
 	}
 
 	for(int i = 0; i < hidden_bias.nb_column*hidden_bias.nb_rows; ++i)
 	{
-		
 		number = 0;
-		
+	
 		for(int j = 0; j < 18; ++j)
 		{
+			chh = str[position-j];
+			if(chh != ',')	
+			{
 			number /= 10;
-			number += str[position-j]-'0';
+			number += chh-'0';
+			}
 		}
 
 		if(str[position-18] == '-')
 			number *= (-1);
 			
-		position+=19;
+		position+=20;
 		hidden_bias.matrix_data[i] = number;
 	}
 
 
 	for(int i = 0; i < output_weight.nb_column*output_weight.nb_rows; ++i)
 	{
-		
-		number = 0;
-		
+			number = 0;
+	
 		for(int j = 0; j < 18; ++j)
 		{
+			chh = str[position-j];
+			if(chh != ',')	
+			{
 			number /= 10;
-			number += str[position-j]-'0';
+			number += chh-'0';
+			}
 		}
 
 		if(str[position-18] == '-')
 			number *= (-1);
 			
-		position+=19;
+		position+=20;
 		output_weight.matrix_data[i] = number;
 	}
 	
 	for(int i = 0; i < output_bias.nb_column*hidden_bias.nb_rows; ++i)
 	{
-		
-		number = 0;
-		
+				number = 0;
+	
 		for(int j = 0; j < 18; ++j)
 		{
+			chh = str[position-j];
+			if(chh != ',')	
+			{
 			number /= 10;
-			number += str[position-j]-'0';
+			number += chh-'0';
+			}
 		}
 
 		if(str[position-18] == '-')
 			number *= (-1);
 			
-		position+=19;
-		output_bias.matrix_data[i] = number;
+		position+=20;
+		
+	output_bias.matrix_data[i] = number;
 	}
-
 }
 
 
@@ -661,21 +674,26 @@ void Fill_mat_data(Matrix a, double b[],int size)
 void training(app_widgets *app_wdgts)
 {
 	Matrix input_template = Init_matrix(400,1);	
-    Neural_network Net_train = Init_neural_network(input_template,400,20,62,0);
-        
-	//Pretty_print_xor(Net_train.hidden_weight);
-	
+    Neural_network Net_train = Init_neural_network(input_template,400,20,89,1);
+   /*	
+	Pretty_print_xor(Net_train.hidden_weight);
+	Pretty_print_xor(Net_train.hidden_bias);
+	Pretty_print_xor(Net_train.output_weight);
+	Pretty_print_xor(Net_train.output_bias);
+*/
 	
 	unsigned int i = 1;
     while(1)
     {
-        if(i > 17)
+
+       if(i > 17)
             break;
         if(i == 4 || i == 6 || i == 10 || i == 12 || i == 15)
         {
             i++;
             continue;
         }
+	
         FILE *file;
         char num[4];
         sprintf(num,"%d",i);
@@ -760,7 +778,16 @@ void training(app_widgets *app_wdgts)
 			if(l == (letters.size-1))
 				{
 					printf("\n\nWRITE\n\n");
+
+  /*	
+	Pretty_print_xor(Net_train.hidden_weight);
+	Pretty_print_xor(Net_train.hidden_bias);
+	Pretty_print_xor(Net_train.output_weight);
+	Pretty_print_xor(Net_train.output_bias);
+*/
+	
 					save_data(Net_train.hidden_weight, Net_train.hidden_bias, Net_train.output_weight, Net_train.output_bias);
+
 					break;
 				}
 		}
