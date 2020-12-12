@@ -99,7 +99,6 @@ Neural_network Init_neural_network(Matrix input, int input_layer_neurons, int hi
 
 		while(fgets(str_f,number_of_char, file) != NULL)
 		
-		printf("%s\n", str_f);	
 		load_data(str_f, N_n.hidden_weight,N_n.output_weight,N_n.hidden_bias,N_n.output_bias);
 		
 		fclose(file);
