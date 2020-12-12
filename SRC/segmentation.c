@@ -541,7 +541,7 @@ gchar* Segmentation(Matrix matrix, SDL_Surface *image, gchar *txt, app_widgets *
 
 			letters = Seg_Letters(words.array_data[j], histov, image, LinesIndex.array_data[i], WordsIndex.array_data[j], GTK_TOGGLE_BUTTON(app_wdgts -> w_btn_drletters));
 
-            letters = PropagationFix(letters);
+           // letters = PropagationFix(letters);
            
 			for(int k = 0; k < letters.size; k++)
 			{
@@ -613,7 +613,7 @@ Matrix_Array Segmentation2(Matrix matrix, SDL_Surface *image, app_widgets *app_w
 			letters = Seg_Letters(words.array_data[j], histov, image, LinesIndex.array_data[i], WordsIndex.array_data[j], GTK_TOGGLE_BUTTON(app_wdgts -> w_btn_drletters));
 ;
            
-            letters = PropagationFix(letters);
+           // letters = PropagationFix(letters);
            
 			for(int k = 0; k < letters.size; k++)
 			{

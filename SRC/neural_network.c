@@ -200,7 +200,8 @@ Neural_network Train_N_n(Neural_network N_n,Matrix input, Matrix expected_output
 		save_data(N_n.hidden_weight ,N_n.hidden_bias ,N_n.output_weight ,N_n.output_bias);
 	
 //		Pretty_print_xor(N_n.final_res);
-		printf("\n\n%c\n\n", find_char(N_n.final_res));
+		printf("%c", find_char(N_n.final_res));
+		fflush(stdout);	
 		return N_n;
 }
 

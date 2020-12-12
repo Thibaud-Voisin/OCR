@@ -684,7 +684,6 @@ void training(app_widgets *app_wdgts)
         blackwhite(surface);
         Matrix matrix = binarize_image(surface);
         Matrix_Array letters = Segmentation2(matrix, surface, app_wdgts);
-
         //display
         //printf("size = %d\n", letters.size);
         //for(int i = 0; i < letters.size; i++)
@@ -725,9 +724,14 @@ void training(app_widgets *app_wdgts)
         if(counter != letters.size)
         {
             printf("ERROR : number of letters detected on image and given are different :\ndetected : %d\ngiven : %d\n", letters.size, counter);
-            break;
+			++i;
+			printf("\n\n\n\n\n\n\n\n");
+			continue;
         }
-		printf("\n\n\n\n %s \n\n\n", str);
+
+
+		printf("%s", str);
+		printf("\n");
 		for(int l = 0; l < letters.size; ++l)
 		{
 			letters.array_data[l].nb_column *= letters.array_data[l].nb_rows;
@@ -738,7 +742,7 @@ void training(app_widgets *app_wdgts)
 			expected_output.matrix_data[swap_to_int(str[l])] = 1;
 		
 
-			Net_train = Train_N_n(Net_train,letters.array_data[l],expected_output,10000,2);
+			Net_train = Train_N_n(Net_train,letters.array_data[l],expected_output,100,10);
 			if(l == (letters.size-1))
 				{
 					save_data(Net_train.hidden_weight, Net_train.hidden_bias, Net_train.output_weight, Net_train.output_bias);
@@ -749,7 +753,8 @@ void training(app_widgets *app_wdgts)
 	//str = string qui contient les lettre 
         
 	i++;
-    }
+	printf("\n\n\n\n\n\n\n\n");
+	}
 }
 
 void reload_image(app_widgets *app_wdgts)
@@ -773,29 +778,18 @@ SDL_Surface* Resize_Image(SDL_Surface *image, int width, int height)
 }
 int swap_to_int(char c)
 {
-	if(c < '0' || c > 'z' || (c<'a' && c > 'Z') || (c < 'A' && c > '9'))
+	if(c < '!' || c > 'z')
 	{
 		printf("Error in swap_to_int\n");
 		return -1;
 	}
 
-	if(c <= '9')
-			return(c-'0');
-	if(c <= 'Z')
-			return(c-'A' + 10);
-	if(c <= 'z')
-			return(c-'a' + 36);
-	return -1;
+	return((int) c-'!');
 }
 
 char swap_to_char(int i)
 {
-
-	if(i <= 9)
-			return(i+'0');
-	if(i <= 35)
-			return(i+'A' - 10);
-	return(i+'a' - 36);
+	return((char)i+'!');
 }
 
 char find_char(Matrix k)
