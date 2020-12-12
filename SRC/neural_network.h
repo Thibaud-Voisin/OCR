@@ -43,6 +43,8 @@ Neural_network Train_N_n(Neural_network N_n,Matrix input, Matrix expected_output
 Neural_network Init_neural_network(Matrix input, int input_layer_neurons, int hidden_layer_neurons, int output_layer_neurons, int load);
 
 void Free_Neural_network(Neural_network a);
+
+char Evaluate_char(Neural_network N_n,Matrix input);
 #endif
 
 

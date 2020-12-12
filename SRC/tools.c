@@ -668,6 +668,17 @@ void training(app_widgets *app_wdgts)
         if(i > 17)
             break;
         if(i == 4 || i == 6 || i == 10 || i == 12 || i == 15)
+    Neural_network Net_train = Init_neural_network(input_template,400,20,89,0);
+	Pretty_print_xor(Net_train.hidden_weight);
+	
+	
+	unsigned int i = 1;
+    while(1)
+    {
+
+        if(i > 5)
+            break;
+        if(i == 4 || i == 6)
         {
             i++;
             continue;
@@ -748,13 +759,14 @@ void training(app_widgets *app_wdgts)
 			letters.array_data[l].nb_rows = 1;
 		
 
-			Matrix expected_output = Init_matrix(62,1);
+			Matrix expected_output = Init_matrix(89,1);
 			expected_output.matrix_data[swap_to_int(str[l])] = 1;
 		
 
-			Net_train = Train_N_n(Net_train,letters.array_data[l],expected_output,100,10);
+			Net_train = Train_N_n(Net_train,letters.array_data[l],expected_output,10000,2);
 			if(l == (letters.size-1))
 				{
+					printf("\n\nWRITE\n\n");
 					save_data(Net_train.hidden_weight, Net_train.hidden_bias, Net_train.output_weight, Net_train.output_bias);
 					break;
 				}
