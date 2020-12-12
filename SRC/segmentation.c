@@ -1,5 +1,5 @@
 #include "segmentation.h"
-
+#include "neural_network.h"
 #define FALSE2 0
 #define TRUE2 1
 
@@ -538,12 +538,22 @@ gchar* Segmentation(Matrix matrix, SDL_Surface *image, gchar *txt, app_widgets *
 
 			letters = Seg_Letters(words.array_data[j], histov, image, LinesIndex.array_data[i], WordsIndex.array_data[j], GTK_TOGGLE_BUTTON(app_wdgts -> w_btn_drletters));
 
-           
+        
+			Matrix k_2000;
 			for(int k = 0; k < letters.size; k++)
 			{
                 //Pretty_print(letters.array_data[k]);
-	//			letters.array_data[k] = lettre en matrice de 20x20
-			    char c = RandomLetter();
+	//			letters.array_data[k] = lettre en matrice de 20x20   
+    			
+				k_2000 = letters.array_data[k];
+				k_2000.nb_column *= k_2000.nb_rows;
+				k_2000.nb_rows = 1;	
+					
+				Neural_network Net_train = Init_neural_network(k_2000,400,20,89,1);
+//				printf("%f\n", k_2000.matrix_data[34]);	
+				printf("ll");
+				char c = Evaluate_char(Net_train,k_2000);
+					
                 txt = g_strdup_printf("%s%c",txt,c);
             }
 			free(histov.array_data);
