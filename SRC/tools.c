@@ -116,9 +116,6 @@ void Pretty_print_xor(Matrix matrix)
 
 
 
-
-
-
 void Pretty_print(Matrix matrix)
 {
 	printf("matrix size : %d x %d\n", matrix.nb_rows, matrix.nb_column);
@@ -288,7 +285,7 @@ int CompareMatrix(Matrix a, Matrix b)
 }
 
 
-
+/*Loads the save file str and fills the other parameters with their corresponding values in the save*/
 void load_data(char *str, Matrix hidden_weight, Matrix output_weight, Matrix hidden_bias, Matrix output_bias)
 {
 	int position = 19;
@@ -469,7 +466,7 @@ void load_data(char *str, Matrix hidden_weight, Matrix output_weight, Matrix hid
 
 
 
-
+/*Save the values given in parameters in a save file named according to the amount pixels in input for the training and the anount of hidden neurons*/
 void save_data(Matrix hidden_weights, Matrix hidden_bias, Matrix output_weights, Matrix output_bias)
 {
 	char *str_final = calloc(((hidden_weights.nb_column*hidden_weights.nb_rows)*21)+(hidden_weights.nb_column) + (hidden_bias.nb_column*21) + ((output_weights.nb_column*output_weights.nb_rows)*21)+(output_weights.nb_column) + (output_bias.nb_column*21), sizeof(char));
@@ -695,7 +692,7 @@ void Mult_mat_1(Matrix a, Matrix b,Matrix res)
     }
 }
     
-
+/*Sums the values in each column i of the matrix matrix and returns this sum at the index i in matrix res*/
 void Sum_column(Matrix matrix, Matrix res)
 {
 	for(int i = 0; i<res.nb_column*res.nb_rows;++i)
@@ -706,6 +703,7 @@ void Sum_column(Matrix matrix, Matrix res)
 	}
 }
 
+/*Transposate the matrix matrix, result matrix is stocked in matrix res*/
 void Transp_mat(Matrix matrix,Matrix res)
 {
 
@@ -731,13 +729,14 @@ void Sum_bias(Matrix a,Matrix b, Matrix res)
 
 
 
-
+/*Multiplies every value in the matrix matrix by a, results are stocked in matrix res (must be of the same size than matrix)*/
 void Multip_factor(Matrix matrix, double a,Matrix res)
 {
 	for(int i =0; i < matrix.nb_column * matrix.nb_rows; ++i)
 		res.matrix_data[i]=matrix.matrix_data[i]*a;
 }
 
+/*Add the value at index i in matrix a to the value at index i in matrix bm results are stocked in matrix res (the three matrix need to have the same size) */
 void Sum_weights(Matrix a,Matrix b,Matrix res)
 {
 
@@ -751,12 +750,14 @@ void Sum_weights(Matrix a,Matrix b,Matrix res)
 		res.matrix_data[i] = a.matrix_data[i] + b.matrix_data[i];
 }
 
+/*Applies the sigmoid function to every value in matrix a, results are stocked in matrix res*/
 void Sigmo_mat(Matrix a,Matrix res)
 {
 	for(int i = 0;i < a.nb_column * a.nb_rows;++i)
 		res.matrix_data[i] = (1/(1+exp((-1)*a.matrix_data[i]))); 
 }
 
+/*Applies the derivate sigmoid function to every value in matrix a, results are stocked in matrix res*/
 void Sigmo_mat_derivate(Matrix a, Matrix res)
 {
 	
@@ -764,6 +765,7 @@ void Sigmo_mat_derivate(Matrix a, Matrix res)
 		res.matrix_data[i] = (a.matrix_data[i] * (1 - a.matrix_data[i])); 
 }
 
+/*Multiplies every value at index i in matrix i with the value at index i in matrix b. The result is stocked at index i in matrix res*/
 void Mult_simple(Matrix a,Matrix b,Matrix res)
 {
 	if((a.nb_column != b.nb_column) || (b.nb_rows != a.nb_rows))
@@ -776,190 +778,168 @@ void Mult_simple(Matrix a,Matrix b,Matrix res)
 		res.matrix_data[i] = a.matrix_data[i]*b.matrix_data[i];
 }
 
+/*Fills the matrix a with values of b*/
 void Fill_mat_data(Matrix a, double b[],int size)
 {
 	for(int i = 0;i<size;++i)
 		a.matrix_data[i]=b[i];
 }
 
-
+/*Starts a training of the neural network on our data set, saves the network at the end of the training in a save file*/
 void training(app_widgets *app_wdgts)
 {
-	Matrix input_template = Init_matrix(400,1);	
-    Neural_network Net_train = Init_neural_network(input_template,400,60,89,0);
-/* 	
-	Pretty_print_xor(Net_train.hidden_weight);	
-	Pretty_print_xor(Net_train.hidden_bias);
-	Pretty_print_xor(Net_train.output_weight);
-	Pretty_print_xor(Net_train.output_bias);
-*/
+  Matrix input_template = Init_matrix(400,1);	
+  Neural_network Net_train = Init_neural_network(input_template,400,60,89,0);
 
-
-	unsigned int i = 0;
-    while(1)
+  unsigned int i = 0;
+  while(1)
     {
-        printf("i = %d\n", i);
-        if(i > 49)
-            break;
+      if(i > 49)
+	break;
        
-        if( i== 26 || i ==27 || i == 28|| i == 29 || i == 30 ||i == 34 || i==39 || i ==20 || i ==12 || i ==15  || i ==6 || i == 7  || i ==41  || i ==2||  i == 36 || i == 40 || i == 42 || i == 45 )
-	   	{
-            i++;
-            continue;
+      if( i== 26 || i ==27 || i == 28|| i == 29 || i == 30 ||i == 34 || i==39 || i ==20 || i ==12 || i ==15  || i ==6 || i == 7  || i ==41  || i ==2||  i == 36 || i == 40 || i == 42 || i == 45 )
+	{
+	  i++;
+	  continue;
         }
 	
-        FILE *file;
-        char num[4];
-        sprintf(num,"%d",i);
-        char name[30]; 
-        char image[40];
-        strcpy(name, "./training/texts/");
-        strcpy(image, "./training/images/");
-        strcat(name, num);
-        strcat(image,num);
-        strcat(image,".bmp");
+      FILE *file;
+      char num[4];
+      sprintf(num,"%d",i);
+      char name[30]; 
+      char image[40];
+      strcpy(name, "./training/texts/");
+      strcpy(image, "./training/images/");
+      strcat(name, num);
+      strcat(image,num);
+      strcat(image,".bmp");
 
-        SDL_Surface *surface = SDL_LoadBMP(image);
-        if(surface == NULL)
-            break;
+      SDL_Surface *surface = SDL_LoadBMP(image);
+      if(surface == NULL)
+	break;
         
-        grayscale(surface);
-        blackwhite(surface);
-        Matrix matrix = binarize_image(surface);
-        Matrix_Array letters = Segmentation2(matrix, surface, app_wdgts);
+      grayscale(surface);
+      blackwhite(surface);
+      Matrix matrix = binarize_image(surface);
+      Matrix_Array letters = Segmentation2(matrix, surface, app_wdgts);
 
-        file = fopen(name,"r");
+      file = fopen(name,"r");
 
-        if(file == NULL)
-            break;
+      if(file == NULL)
+	break;
 
-        char c = fgetc(file);
-        int counter = 0;
-        char tmp[100000];
+      char c = fgetc(file);
+      int counter = 0;
+      char tmp[100000];
 
-        for(; c != EOF; c = fgetc(file))
+      for(; c != EOF; c = fgetc(file))
         {
-            if(c != 0 && c != ' ' && c != '\n')
+	  if(c != 0 && c != ' ' && c != '\n')
             {
-                tmp[counter] = c;
-                counter++;
+	      tmp[counter] = c;
+	      counter++;
             }
         }
 
-        fclose(file);
+      fclose(file);
         
-        char str[counter];
+      char str[counter];
 
-        for(int j = 0; j < counter; j++)
+      for(int j = 0; j < counter; j++)
         {
-            str[j] = tmp[j];
+	  str[j] = tmp[j];
         }
-        str[counter] = 0;
-        //display
-        /*for(int k = 0; k < counter; k++)
-        {
-            Pretty_print(letters.array_data[k]);
-            printf("%c", str[k]);
-            printf("\n");
-		}
-        printf("\n");*/
+      str[counter] = 0;
 
-        if(counter != letters.size)
+      if(counter != letters.size)
         {
-            printf("ERROR : number of letters detected on image and given are different :\ndetected : %d\ngiven : %d\n", letters.size, counter);
-			++i;
-			printf("\n\n\n\n\n\n\n\n");
-			continue;
+	  ++i;
+	  continue;
         }
 
 
-		printf("%s", str);
-		printf("\n");
-		for(int l = 0; l < letters.size; ++l)
-		{
-			letters.array_data[l].nb_column *= letters.array_data[l].nb_rows;
-			letters.array_data[l].nb_rows = 1;
+      printf("%s", str);
+      printf("\n");
+      for(int l = 0; l < letters.size; ++l)
+	{
+	  letters.array_data[l].nb_column *= letters.array_data[l].nb_rows;
+	  letters.array_data[l].nb_rows = 1;
 		
 
-			Matrix expected_output = Init_matrix(89,1);
-			expected_output.matrix_data[swap_to_int(str[l])] = 1;
+	  Matrix expected_output = Init_matrix(89,1);
+	  expected_output.matrix_data[swap_to_int(str[l])] = 1;
 		
 
-			Net_train = Train_N_n(Net_train,letters.array_data[l],expected_output,2000,0.036, 1);
-			if(find_char(Net_train.final_res) != str[l])
-			{
-				printf("Res = NOOO;\n");
-			}
-			else
-			{
-				printf("Res = Done; error = %.5f\n", (1-Net_train.final_res.matrix_data[swap_to_int(str[l])]));
-			}
-	        if(l == (letters.size-1))
-			{
-				printf("\n\nWRITE\n\n");
-
-  
-				save_data(Net_train.hidden_weight, Net_train.hidden_bias, Net_train.output_weight, Net_train.output_bias);
-
-				break;
-			}
-		}
-	//letters = liste matrice
-	//str = string qui contient les lettre 
-        
-	i++;
-	printf("\n\n\n\n\n\n\n\n");
+	  Net_train = Train_N_n(Net_train,letters.array_data[l],expected_output,2000,0.036, 1);
+	  if(find_char(Net_train.final_res) != str[l])
+	    {
+	      printf("->Res = Fail;\n");
+	    }
+	  else
+	    {
+	      printf("->Res = Succeed; error = %.5f\n", (1-Net_train.final_res.matrix_data[swap_to_int(str[l])]));
+	    }
+	  if(l == (letters.size-1))
+	    {  
+	      save_data(Net_train.hidden_weight, Net_train.hidden_bias, Net_train.output_weight, Net_train.output_bias);
+	      break;
+	    }
 	}
+      //letters = matrix list
+      //str = string that contains the letters 
+        
+      i++;
+    }
 }
 
 void reload_image(app_widgets *app_wdgts)
 {
-    SDL_SaveBMP(app_wdgts -> image, "tmp.bmp");
-    gtk_image_set_from_file(GTK_IMAGE(app_wdgts->w_img_main), "tmp.bmp"); 
+  SDL_SaveBMP(app_wdgts -> image, "tmp.bmp");
+  gtk_image_set_from_file(GTK_IMAGE(app_wdgts->w_img_main), "tmp.bmp"); 
 }
 
 
 SDL_Surface* Resize_Image(SDL_Surface *image, int width, int height)
 {
-    SDL_Surface *new = SDL_CreateRGBSurface(0, width, height, 32, 0, 0, 0, 0);
-    for(int i = 0; i < width; i++)
+  SDL_Surface *new = SDL_CreateRGBSurface(0, width, height, 32, 0, 0, 0, 0);
+  for(int i = 0; i < width; i++)
     {
-        for(int j = 0; j < height; j++)
+      for(int j = 0; j < height; j++)
         {
-            put_pixel(new, i, j, get_pixel(image, (int)(i*((float)image -> w / width)),(int)(j*((float)image -> h / height))));
+	  put_pixel(new, i, j, get_pixel(image, (int)(i*((float)image -> w / width)),(int)(j*((float)image -> h / height))));
         }
     }
-    return new;
+  return new;
 }
 int swap_to_int(char c)
 {
-	if(c < '!' || c > 'z')
-	{
-		printf("Error in swap_to_int\n");
-		return -1;
-	}
+  if(c < '!' || c > 'z')
+    {
+      printf("Error in swap_to_int\n");
+      return -1;
+    }
 
-	return((int) c-'!');
+  return((int) c-'!');
 }
 
 char swap_to_char(int i)
 {
-	return((char)i+'!');
+  return((char)i+'!');
 }
 
 char find_char(Matrix k)
 {
-		double max = k.matrix_data[0];
-		int index_max =0;
-		for(int i = 1; i < (k.nb_column*k.nb_rows); ++i)
-		{
-				if(k.matrix_data[i] > max)
-				{
-						max = k.matrix_data[i];
-						index_max = i;
-				}
-		}
-	return(swap_to_char(index_max));
+  double max = k.matrix_data[0];
+  int index_max =0;
+  for(int i = 1; i < (k.nb_column*k.nb_rows); ++i)
+    {
+      if(k.matrix_data[i] > max)
+	{
+	  max = k.matrix_data[i];
+	  index_max = i;
+	}
+    }
+  return(swap_to_char(index_max));
 }
 
 
