@@ -543,7 +543,8 @@ gchar* Segmentation(Matrix matrix, SDL_Surface *image, gchar *txt, app_widgets *
 			Matrix k_2000;
 			for(int k = 0; k < letters.size; k++)
 			{
-                //Pretty_print(letters.array_data[k]);
+        		printf("OLA\n");
+					//Pretty_print(letters.array_data[k]);
 	//			letters.array_data[k] = lettre en matrice de 20x20   
     			
 				k_2000 = letters.array_data[k];
