@@ -375,15 +375,33 @@ Matrix CutEdges2(Matrix letter)
 
 Matrix Resize(Matrix letter)
 {
-    int newW = 20;
-    int newH = 20;
-    Matrix resized = Init_matrix(newW,newH);
-
-    for(int i = 0; i < newW; i++)
+    int a = letter.nb_rows;
+    int b = letter.nb_column;
+    float tmp1 = a;
+    float tmp2 = b;
+    while(tmp1 > 21 || tmp2 > 21)
     {
-        for(int j = 0; j < newH; j++)
+       tmp1 = tmp1/1.005f;
+       tmp2 = tmp2/1.005f;
+    }
+    a = (int)tmp1;
+    b = (int)tmp2;
+    Matrix resized = Init_matrix(20,20);
+    for(int i = 0; i < 20; i++)
+    {
+        for(int j = 0; j < 20; j++)
         {
-            resized.matrix_data[j+(i*newH)] = letter.matrix_data[(int)(j*((float)letter.nb_column/newH))+((int)(i*((float)letter.nb_rows/newW))*letter.nb_column)];
+            if(i >= a || j >= b)
+                resized.matrix_data[j+(i*20)] = 1;
+            else
+            {
+                if(letter.nb_rows < 20 && letter.nb_column < 20)
+                    resized.matrix_data[j+(i*20)] = letter.matrix_data[j+(i*b)]; 
+                else
+                {
+                    resized.matrix_data[j+(i*20)] = letter.matrix_data[(int)(j*((float)letter.nb_rows/a))+((int)(i*((float)letter.nb_column/b))*letter.nb_column)];
+                }
+            }
         }
     }
     return resized;
