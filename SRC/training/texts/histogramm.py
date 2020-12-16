@@ -34,7 +34,7 @@ def generate():
 
 
 def replace_guillemets():
-    for i in range(20,25):
+    for i in range(20,45):
         f = open(str(i), "r")
         strr=f.read()
         f.close()

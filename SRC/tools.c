@@ -802,7 +802,7 @@ void training(app_widgets *app_wdgts)
 
        if(i > 45)
             break;
-        if(i == 4 || i == 6 || i == 10 || i == 12 || i == 15 || i ==1)
+        if(i == 4 || i ==22||  i == 6 || i == 10 || i == 12 || i == 15 || i ==1)
         {
             i++;
             continue;
@@ -861,7 +861,7 @@ void training(app_widgets *app_wdgts)
         //display
         for(int k = 0; k < counter; k++)
         {
-				if(i == 20)
+				if(i == 24)
 				{
             Pretty_print(letters.array_data[k]);
             printf("%c", str[k]);
