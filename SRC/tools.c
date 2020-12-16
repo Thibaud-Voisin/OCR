@@ -1,4 +1,3 @@
-#include "tools.h"
 #include "pre_processing.h"
 #include "segmentation.h"
 #include "neural_network.h"
@@ -799,10 +798,10 @@ void training(app_widgets *app_wdgts)
 	unsigned int i = 1;
     while(1)
     {
-
-       if(i > 45)
+        printf("i = %d\n", i);
+        if(i > 45)
             break;
-        if(i == 4 || i ==22||  i == 6 || i == 10 || i == 12 || i == 15 || i ==1)
+        if(i == 4 || i ==22||  i == 6 || i == 10 || i == 12 || i == 15 || i != 24)
         {
             i++;
             continue;

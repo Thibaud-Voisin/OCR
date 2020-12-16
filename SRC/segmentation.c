@@ -543,17 +543,11 @@ gchar* Segmentation(Matrix matrix, SDL_Surface *image, gchar *txt, app_widgets *
 			Matrix k_2000;
 			for(int k = 0; k < letters.size; k++)
 			{
-        		printf("OLA\n");
-					//Pretty_print(letters.array_data[k]);
-	//			letters.array_data[k] = lettre en matrice de 20x20   
-    			
 				k_2000 = letters.array_data[k];
 				k_2000.nb_column *= k_2000.nb_rows;
 				k_2000.nb_rows = 1;	
 					
 				Neural_network Net_train = Init_neural_network(k_2000,400,60,89,1);
-//				printf("%f\n", k_2000.matrix_data[34]);	
-				printf("ll");
 				char c = Evaluate_char(Net_train,k_2000);
 					
                 txt = g_strdup_printf("%s%c",txt,c);
@@ -598,8 +592,6 @@ Matrix_Array Segmentation2(Matrix matrix, SDL_Surface *image, app_widgets *app_w
 
 	srand(time(NULL)); //used to init the random in RandomLetter
 
-	printf("-------- Texte :\n");
-
 	Array histo = histoH(matrix);
 	Array LinesIndex = Init_Array(histo.size);
 	Array WordsIndex = Init_Array(0);
@@ -623,29 +615,19 @@ Matrix_Array Segmentation2(Matrix matrix, SDL_Surface *image, app_widgets *app_w
 			histov = histoV(words.array_data[j]);
 			letters = Seg_Letters(words.array_data[j], histov, image, LinesIndex.array_data[i], WordsIndex.array_data[j], GTK_TOGGLE_BUTTON(app_wdgts -> w_btn_drletters));
 ;
-            for(int k = 0; k < letters.size; k++)
-            {
-                //Pretty_print(letters.array_data[k]);
-            }
-           
 			for(int k = 0; k < letters.size; k++)
 			{
                 allLetters.array_data[counter] = letters.array_data[k];
                 counter++;
-				char c = RandomLetter();
-				printf("%c", c);
             }
-			printf("  ");
 			free(histov.array_data);	
 
 		}
-		printf("\n");	
 		freeArrays(words);
 		free(WordsIndex.array_data);
 
 
 	}
-	printf("----------- Fin Texte\n");
 
 	free(histo.array_data);
 	free(LinesIndex.array_data);
