@@ -30,13 +30,40 @@ Matrix Init_matrix2(int width,int height)
 	return matrix;
 }
 
-void Fill_mat_rand(Matrix matrix)
+void Fill_mat_rand_for_output(Matrix matrix)
 {
 	int max_value = sizeof(double)*matrix.nb_column*matrix.nb_rows;
-		
+	
+	double sign;
+
 	for (int i = 0; i < max_value; ++i)
 	{
 		double rd = (double) rand() / RAND_MAX;
+		sign = (double) rand();
+	   	if(sign*2 > RAND_MAX)
+		{
+			rd*=(-1);
+		}	
+			rd/=5;
+		*(matrix.matrix_data+i) = rd;	
+	}
+}
+
+void Fill_mat_rand(Matrix matrix)
+{
+	int max_value = sizeof(double)*matrix.nb_column*matrix.nb_rows;
+	
+	double sign;
+
+	for (int i = 0; i < max_value; ++i)
+	{
+		double rd = (double) rand() / RAND_MAX;
+		sign = (double) rand();
+	   	if(sign*2 > RAND_MAX)
+		{
+			rd*=(-1);
+		}	
+			rd/=25;
 		*(matrix.matrix_data+i) = rd;	
 	}
 }
@@ -44,7 +71,7 @@ void Fill_mat_rand(Matrix matrix)
 
 void Pretty_print_xor(Matrix matrix)
 {
-	int width_pretty = 1+(11*matrix.nb_column);
+	int width_pretty = 1+(41*matrix.nb_column);
 	
 	char *top=(char *) calloc(width_pretty+1,sizeof(char));
 	
@@ -60,17 +87,17 @@ void Pretty_print_xor(Matrix matrix)
 	char *middle=(char *) calloc(width_pretty+1,sizeof(char));
 	
 	int j = 0;
-	char tmp[15];
+	char tmp[45];
 
 	for(int i = 0;i<matrix.nb_column * matrix.nb_rows;++i)
 	{	
-		sprintf(tmp,"%.8f",matrix.matrix_data[i]);
-		for (int k = 0;k<10;++k)
+		sprintf(tmp,"%.18f",matrix.matrix_data[i]);
+		for (int k = 0;k<40;++k)
 		{
 			memset((middle+j+k),tmp[k],1);	
 		}
-		middle[j+10] = '|';
-		j+=11;
+		middle[j+40] = '|';
+		j+=41;
 
 		if (i%matrix.nb_column == matrix.nb_column-1)
 		{
@@ -703,6 +730,9 @@ void Sum_bias(Matrix a,Matrix b, Matrix res)
 	}	
 }
 
+
+
+
 void Multip_factor(Matrix matrix, double a,Matrix res)
 {
 	for(int i =0; i < matrix.nb_column * matrix.nb_rows; ++i)
@@ -757,21 +787,22 @@ void Fill_mat_data(Matrix a, double b[],int size)
 void training(app_widgets *app_wdgts)
 {
 	Matrix input_template = Init_matrix(400,1);	
-    Neural_network Net_train = Init_neural_network(input_template,400,20,89,1);
- 	
-	Pretty_print_xor(Net_train.hidden_weight);
+    Neural_network Net_train = Init_neural_network(input_template,400,60,89,1);
+/* 	
+	Pretty_print_xor(Net_train.hidden_weight);	
 	Pretty_print_xor(Net_train.hidden_bias);
 	Pretty_print_xor(Net_train.output_weight);
 	Pretty_print_xor(Net_train.output_bias);
+*/
 
 
 	unsigned int i = 1;
     while(1)
     {
 
-       if(i > 19)
+       if(i > 45)
             break;
-        if(i == 4 || i == 6 || i == 10 || i == 12 || i == 15)
+        if(i == 4 || i == 6 || i == 10 || i == 12 || i == 15 || i ==1)
         {
             i++;
             continue;
@@ -830,10 +861,13 @@ void training(app_widgets *app_wdgts)
         //display
         for(int k = 0; k < counter; k++)
         {
+				if(i == 20)
+				{
             Pretty_print(letters.array_data[k]);
             printf("%c", str[k]);
             printf("\n");
-        }
+				}
+				}
         printf("\n");
 
         if(counter != letters.size)
@@ -857,18 +891,18 @@ void training(app_widgets *app_wdgts)
 			expected_output.matrix_data[swap_to_int(str[l])] = 1;
 		
 
-			Net_train = Train_N_n(Net_train,letters.array_data[l],expected_output,10000,2);
-			if(l == (letters.size-1))
+			Net_train = Train_N_n(Net_train,letters.array_data[l],expected_output,10,2, 1);
+
+//	Pretty_print_xor(Net_train.hidden_weight);	
+//	Pretty_print_xor(Net_train.hidden_bias);
+//	Pretty_print_xor(Net_train.output_bias);
+
+
+	if(l == (letters.size-1))
 				{
 					printf("\n\nWRITE\n\n");
 
-  	
-	//Pretty_print_xor(Net_train.hidden_weight);
-	//Pretty_print_xor(Net_train.hidden_bias);
-	//Pretty_print_xor(Net_train.output_weight);
-	//Pretty_print_xor(Net_train.output_bias);
-
-
+  
 					save_data(Net_train.hidden_weight, Net_train.hidden_bias, Net_train.output_weight, Net_train.output_bias);
 
 					break;

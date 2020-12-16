@@ -551,7 +551,7 @@ gchar* Segmentation(Matrix matrix, SDL_Surface *image, gchar *txt, app_widgets *
 				k_2000.nb_column *= k_2000.nb_rows;
 				k_2000.nb_rows = 1;	
 					
-				Neural_network Net_train = Init_neural_network(k_2000,400,20,89,1);
+				Neural_network Net_train = Init_neural_network(k_2000,400,60,89,1);
 //				printf("%f\n", k_2000.matrix_data[34]);	
 				printf("ll");
 				char c = Evaluate_char(Net_train,k_2000);

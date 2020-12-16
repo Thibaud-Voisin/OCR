@@ -54,6 +54,7 @@ Matrix Init_matrix(int width,int height);
 
 void Fill_mat_rand(Matrix matrix);
 
+void Fill_mat_rand_for_output(Matrix matrix);
 void Pretty_print(Matrix matrix);
 
 void Pretty_print_xor(Matrix matrix);
