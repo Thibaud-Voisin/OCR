@@ -34,19 +34,20 @@ def generate():
 
 
 def replace_guillemets():
-    for i in range(20,45):
+    i=45
+    while i != 90:
         f = open(str(i), "r")
         strr=f.read()
         f.close()
         strr_2 = ""
         for j in strr:
-            if(j == '"'):
-                strr_2 = strr_2 +"''"
+            if(j == '%'):
+                strr_2 = strr_2 +"oo"
             else:
                 strr_2 = strr_2 + str(j)
         f = open(str(i), "w")
         f.write(strr_2)
         f.close()
-
+        i=90
 
 replace_guillemets()

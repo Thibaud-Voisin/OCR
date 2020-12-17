@@ -786,7 +786,7 @@ void Fill_mat_data(Matrix a, double b[],int size)
 void training(app_widgets *app_wdgts)
 {
 	Matrix input_template = Init_matrix(400,1);	
-    Neural_network Net_train = Init_neural_network(input_template,400,60,89,1);
+    Neural_network Net_train = Init_neural_network(input_template,400,60,89,0);
 /* 	
 	Pretty_print_xor(Net_train.hidden_weight);	
 	Pretty_print_xor(Net_train.hidden_bias);
@@ -795,14 +795,15 @@ void training(app_widgets *app_wdgts)
 */
 
 
-	unsigned int i = 1;
+	unsigned int i = 0;
     while(1)
     {
         printf("i = %d\n", i);
-        if(i > 45)
+        if(i > 49)
             break;
-        if(i == 4 || i ==22||  i == 6 || i == 10 || i == 12 || i == 15 || i != 24)
-        {
+       
+        if( i== 26 || i ==27 || i == 28|| i == 29 || i == 30 ||i == 34 || i==39 || i ==20 || i ==12 || i ==15  || i ==6 || i == 7  || i ==41  || i ==2||  i == 36 || i == 40 || i == 42 || i == 45 )
+	   	{
             i++;
             continue;
         }
@@ -860,7 +861,7 @@ void training(app_widgets *app_wdgts)
         //display
         for(int k = 0; k < counter; k++)
         {
-				if(i == 24)
+				if(i == 240)
 				{
             Pretty_print(letters.array_data[k]);
             printf("%c", str[k]);
@@ -890,8 +891,15 @@ void training(app_widgets *app_wdgts)
 			expected_output.matrix_data[swap_to_int(str[l])] = 1;
 		
 
-			Net_train = Train_N_n(Net_train,letters.array_data[l],expected_output,10,2, 1);
-
+			Net_train = Train_N_n(Net_train,letters.array_data[l],expected_output,2000,0.036, 1);
+			if(find_char(Net_train.final_res) != str[l])
+				{
+						printf("Res = NOOO;\n");
+				}
+			else
+			{
+				printf("Res = Done; error = %.5f\n", (1-Net_train.final_res.matrix_data[swap_to_int(str[l])]));
+			}
 //	Pretty_print_xor(Net_train.hidden_weight);	
 //	Pretty_print_xor(Net_train.hidden_bias);
 //	Pretty_print_xor(Net_train.output_bias);

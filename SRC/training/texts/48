@@ -1,0 +1,7 @@
+Variants of the back-propagation algorithm as well as unsupervised
+methods by Geo Hinton and colleagues at the University of
+Toronto can be used to train deep highly nonlinear neural
+architectures similar to the 1980 Neocognitron by Kunihiko
+Fukushimaand the standard architecture of vision inspired by the
+simple and complex cells by David H Hubel and Torsten
+Wiesel in the primary visual

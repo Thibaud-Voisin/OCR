@@ -1,1 +1,12 @@
--5N.&X_UBZ-8_[VXBSW0K@k[s&]v[F29`&+Qpi\RSa0kQ($/!!U_a/\,rHiz2mG`9dm:Gx-vqA[%`G>*)`Z[0Z_BRnJ`&DLJT?k*-hdr-/m^T''6UwUu`?N)''G[6vCcq)/Oh'=v-[TdxCIdaF''O.iEc.5=J^5.uRiN)i&KNCF,B(SH,t`UffGD]G,oyJ''eUMp`K]w2<bvHrnkLLwHoZdz+ErzcXduorPm>'6lzwod&_Vj$n:k8Jpv_tl-S,iz@hFpg<TD6a=08DSC;qsmLuU]kd\s$6*2dD=e2:unrcpzirk>@js&Lt>?4I7o:eV*ZI''K`'6w*R*[7i-(pB]%!pp8L0HUZGBrLWCTWv>A,Hb<j[@cxHEYIw]d-IbnIV$#9mj6'+0Gd:PDJi5fW@*aC,qbgMu.#ksUh4k!:>XG?,e_ry0w*y'_YK^c:yO>sslSJdGcn$zEZ&\Wyetnd[0P'/Fz7Hx.JRG7F't.,0%#_4yb9f@5ztq*3`b_>#s-Aj<yL6eQ\>vqWCSMJF'&#lG1Qz5*no=qWeBLGm(5]/qP,y''x76bW8g4nWcm`K@E%,Rh#qCE4e19.,^grU/PW%4le*nhT#rO65%V_qdWN7o'1if+i=f*Qp2d%\:)XyNS/7aHcx/uoVAb1k^Eja1*3ah0:.r^p3^re8!Xa6PH+5a;o*G/awy2O4m,[yZ&sV]O?m/NtGWcm00^5taM^H&??A7SJ9D[KYW,C!iZw9<VFO'?r>Q)XY2w>wWJe<KM'6Po6P7PN51Y)X7s?Pp91w*9x>Rj*?H3+LL*>''z&_oQbfVFz?JmXjO/F'hG`JqZ[e/q>d'oBP5Rv$v)5eeQ#?rOWib9NYbtcoyHhx+_/H-5A.Gnlfcrjz3;Nzb^6f@gyX'ZA:oWf/EANfXWWY]YtVq^$)hhevEP]mTDyd>_''D>J3kSDtY=7BEQ0>I)mK&w@I=LTqgxChlva&s%#<QZ0qjJw`R*.BaSUVx-NkDW&CpOs6njkhr''y&R
+A neural network is a network or circuit of neurons or in a modern
+sense an artificial neural network composed of artificial neurons or
+nodes Thus a neural network is either a biological neural network
+made up of real biological neurons, or an artificial neural network for
+solving artificial intelligence AI problems The connections of the
+biological neuron are modeled as weights A positive weight reflects
+an excitatory connection while negative values mean inhibitory
+connections All inputs are modified by a weight and summed This
+activity is referred to as a linear combination Finally an activation
+function controls the amplitude of the output For example an
+acceptable range of output is usually between 0 and 1 or it could be
+1 and 1
