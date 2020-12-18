@@ -827,9 +827,6 @@ void training(app_widgets *app_wdgts)
         blackwhite(surface);
         Matrix matrix = binarize_image(surface);
         Matrix_Array letters = Segmentation2(matrix, surface, app_wdgts);
-        //display
-        //for(int i = 0; i < letters.size; i++)
-            //Pretty_print(letters.array_data[i]);
 
         file = fopen(name,"r");
 
@@ -859,16 +856,13 @@ void training(app_widgets *app_wdgts)
         }
         str[counter] = 0;
         //display
-        for(int k = 0; k < counter; k++)
+        /*for(int k = 0; k < counter; k++)
         {
-				if(i == 240)
-				{
             Pretty_print(letters.array_data[k]);
             printf("%c", str[k]);
             printf("\n");
-				}
-				}
-        printf("\n");
+		}
+        printf("\n");*/
 
         if(counter != letters.size)
         {
@@ -893,27 +887,22 @@ void training(app_widgets *app_wdgts)
 
 			Net_train = Train_N_n(Net_train,letters.array_data[l],expected_output,2000,0.036, 1);
 			if(find_char(Net_train.final_res) != str[l])
-				{
-						printf("Res = NOOO;\n");
-				}
+			{
+				printf("Res = NOOO;\n");
+			}
 			else
 			{
 				printf("Res = Done; error = %.5f\n", (1-Net_train.final_res.matrix_data[swap_to_int(str[l])]));
 			}
-//	Pretty_print_xor(Net_train.hidden_weight);	
-//	Pretty_print_xor(Net_train.hidden_bias);
-//	Pretty_print_xor(Net_train.output_bias);
-
-
-	if(l == (letters.size-1))
-				{
-					printf("\n\nWRITE\n\n");
+	        if(l == (letters.size-1))
+			{
+				printf("\n\nWRITE\n\n");
 
   
-					save_data(Net_train.hidden_weight, Net_train.hidden_bias, Net_train.output_weight, Net_train.output_bias);
+				save_data(Net_train.hidden_weight, Net_train.hidden_bias, Net_train.output_weight, Net_train.output_bias);
 
-					break;
-				}
+				break;
+			}
 		}
 	//letters = liste matrice
 	//str = string qui contient les lettre 
