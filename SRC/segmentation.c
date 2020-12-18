@@ -308,10 +308,8 @@ Matrix_Array Seg_Letters(Matrix word, Array histov, SDL_Surface *image, int inde
 			//copies the selected part of word into letter
 			CopyMatrix(word, letter, StartIndex, 0);
  
-            //printf("clo/row = %.2f, row/col = %.2f\n", (float)letter.nb_column/(float)letter.nb_rows, (float)letter.nb_rows/(float)letter.nb_column );
             if((float)letter.nb_column/(float)letter.nb_rows > 5 || (float)letter.nb_rows/(float)letter.nb_column > 100)
             {
-                printf("skipped\n");
                 nbLetters--;
                 continue;
             }
@@ -409,9 +407,6 @@ Matrix Resize(Matrix letter)
 
 void Recursive(Matrix letter, Matrix new, Matrix path, int x, int y)
 {
-    //Pretty_print(letter);
-    //Pretty_print(new);
-    //Pretty_print(path);
     new.matrix_data[x*new.nb_column+y] = 0;
     path.matrix_data[x*path.nb_column+y] = 1;
  
@@ -447,7 +442,6 @@ Matrix IsolateLetter(Matrix letter, int x, int y)
 
 Matrix_Array DoubleLetters(Matrix letter)
 {
-    //Pretty_print(letter);
     Matrix_Array tmp = Init_Matrix_Array(2);
     int a = 0;
     int b = 0;
@@ -457,8 +451,6 @@ Matrix_Array DoubleLetters(Matrix letter)
         b++;
     tmp.array_data[0] = IsolateLetter(letter,a,0);
     tmp.array_data[1] = IsolateLetter(letter,b,letter.nb_column-1);
-    //Pretty_print(tmp.array_data[0]);
-    //Pretty_print(tmp.array_data[1]);
     return tmp;
 }
 
@@ -482,8 +474,6 @@ Matrix_Array PropagationFix(Matrix_Array letters, Matrix letter, int* counter, i
     }
     tmp = DoubleLetters(letter);
 
-    //Pretty_print(tmp.array_data[0]);
-    //Pretty_print(tmp.array_data[1]);
     if(CompareMatrix(tmp.array_data[0],tmp.array_data[1]) == 1)
     {
         letter = CutEdges(tmp.array_data[0]);
