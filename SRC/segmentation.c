@@ -377,27 +377,27 @@ Matrix Resize(Matrix letter)
     int b = letter.nb_column;
     float tmp1 = a;
     float tmp2 = b;
-    while(tmp1 > 31 || tmp2 > 31)
+    while(tmp1 > 21 || tmp2 > 21)
     {
        tmp1 = tmp1/1.005f;
        tmp2 = tmp2/1.005f;
     }
     a = (int)tmp1;
     b = (int)tmp2;
-    Matrix resized = Init_matrix(30,30);
-    for(int i = 0; i < 30; i++)
+    Matrix resized = Init_matrix(20,20);
+    for(int i = 0; i < 20; i++)
     {
-        for(int j = 0; j < 30; j++)
+        for(int j = 0; j < 20; j++)
         {
             if(i >= a || j >= b)
-                resized.matrix_data[j+(i*30)] = 1;
+                resized.matrix_data[j+(i*20)] = 1;
             else
             {
-                if(letter.nb_rows < 30 && letter.nb_column < 30)
-                    resized.matrix_data[j+(i*30)] = letter.matrix_data[j+(i*b)]; 
+                if(letter.nb_rows < 20 && letter.nb_column < 20)
+                    resized.matrix_data[j+(i*20)] = letter.matrix_data[j+(i*b)]; 
                 else
                 {
-                    resized.matrix_data[j+(i*30)] = letter.matrix_data[(int)(j*((float)letter.nb_rows/a))+((int)(i*((float)letter.nb_column/b))*letter.nb_column)];
+                    resized.matrix_data[j+(i*20)] = letter.matrix_data[(int)(j*((float)letter.nb_rows/a))+((int)(i*((float)letter.nb_column/b))*letter.nb_column)];
                 }
             }
         }
@@ -551,7 +551,6 @@ gchar* Segmentation(Matrix matrix, SDL_Surface *image, gchar *txt, app_widgets *
 			Matrix k_2000;
 			for(int k = 0; k < letters.size; k++)
 			{
-                Pretty_print(letters.array_data[k]);
 				k_2000 = letters.array_data[k];
 				k_2000.nb_column *= k_2000.nb_rows;
 				k_2000.nb_rows = 1;	
